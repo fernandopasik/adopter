@@ -1,0 +1,50 @@
+{
+  "name": "adopter",
+  "type": "module",
+  "description": "Auditing tool for increasing adoption of libraries",
+  "repository": "fernandopasik/adopter",
+  "author": "Fernando Pasik <fernando@pasik.com.ar>",
+  "license": "MIT",
+  "main": "adopter.js",
+  "module": "adopter.js",
+  "typings": "adopter.d.ts",
+  "files": [
+    "/adopter.*",
+    "/lib"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "check-types": "tsc --noEmit -p tsconfig.all.json",
+    "format": "prettier --write .",
+    "lint": "eslint . --ext js,ts",
+    "postpublish": "pinst --enable",
+    "prepare": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "verify": "yarn lint && yarn check-types && yarn test:coverage && yarn build"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "@types/jest": "^27.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.2",
+    "jest": "^27.1.0",
+    "lint-staged": "^11.1.2",
+    "pinst": "^2.1.6",
+    "prettier": "^2.3.2",
+    "prettier-plugin-organize-imports": "^2.3.3",
+    "prettier-plugin-pkg": "^0.10.0",
+    "ts-jest": "^27.0.5",
+    "typescript": "^4.4.2"
+  },
+  "sideEffects": false
+}

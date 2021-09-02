@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "airbnb-base",
+    "plugin:@typescript-eslint/all",
+    "plugin:import/typescript",
+    "plugin:jest/all",
+    "prettier"
+  ],
+  "env": { "node": true },
+  "overrides": [
+    {
+      "files": ["*.spec.*"],
+      "rules": {
+        "@typescript-eslint/no-magic-numbers": "off",
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+        "max-lines": "off",
+        "max-lines-per-function": "off"
+      }
+    }
+  ],
+  "parserOptions": { "project": "./tsconfig.all.json" },
+  "rules": {
+    "@typescript-eslint/no-magic-numbers": ["error", { "ignore": [0, 1] }],
+    "import/extensions": ["error", "never"],
+    "jest/no-hooks": "off",
+    "jest/prefer-expect-assertions": "off",
+    "max-lines": ["error", { "max": 130, "skipBlankLines": true, "skipComments": true }],
+    "max-lines-per-function": ["error", { "max": 20, "skipBlankLines": true, "skipComments": true }]
+  }
+}
