@@ -16,6 +16,7 @@
     "build": "tsc",
     "check-types": "tsc --noEmit -p tsconfig.all.json",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "eslint . --ext js,ts",
     "postpublish": "pinst --enable",
     "prepare": "husky install",
