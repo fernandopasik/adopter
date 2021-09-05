@@ -21,6 +21,7 @@
     "postpublish": "pinst --enable",
     "prepare": "husky install",
     "prepublishOnly": "pinst --disable",
+    "preversion": "yarn verify",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "verify": "yarn lint && yarn check-types && yarn test:coverage && yarn build"
