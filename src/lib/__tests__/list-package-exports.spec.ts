@@ -1,4 +1,4 @@
-import listPacakgeExports from '../list-package-exports.js';
+import listPackageExports from '../list-package-exports.js';
 
 describe('list package exports', () => {
   beforeEach(() => {
@@ -9,7 +9,7 @@ describe('list package exports', () => {
   it('with an empty module', async () => {
     jest.doMock('typescript', () => undefined);
 
-    const exports = await listPacakgeExports('typescript');
+    const exports = await listPackageExports('typescript');
 
     expect(exports).toStrictEqual({ default: 'undefined' });
   });
@@ -17,7 +17,7 @@ describe('list package exports', () => {
   it('with a default export', async () => {
     jest.doMock('typescript', () => (): null => null);
 
-    const exports = await listPacakgeExports('typescript');
+    const exports = await listPackageExports('typescript');
 
     expect(exports).toStrictEqual({ default: 'function' });
   });
@@ -31,7 +31,7 @@ describe('list package exports', () => {
       example2: (): null => null,
     }));
 
-    const exports = await listPacakgeExports('typescript');
+    const exports = await listPackageExports('typescript');
 
     expect(exports).toStrictEqual({
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -51,7 +51,7 @@ describe('list package exports', () => {
       example3: {},
     }));
 
-    const exports = await listPacakgeExports('typescript');
+    const exports = await listPackageExports('typescript');
 
     expect(exports).toStrictEqual({
       // eslint-disable-next-line @typescript-eslint/naming-convention
