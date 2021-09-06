@@ -351,6 +351,12 @@ Array [
     "named": undefined,
     "packageName": "dep1",
   },
+  Object {
+    "defaultName": "dep2",
+    "moduleSpecifier": "./dep2/example.ts",
+    "named": undefined,
+    "packageName": null,
+  },
 ]
 `);
     });

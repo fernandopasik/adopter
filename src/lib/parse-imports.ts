@@ -46,9 +46,7 @@ const parseImports = (source: ts.SourceFile): Import[] => {
       if (ts.isImportDeclaration(statement)) {
         const parsedImport = parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>);
 
-        if (!parsedImport.moduleSpecifier.startsWith('.')) {
-          imports.push(parsedImport);
-        }
+        imports.push(parsedImport);
       }
     },
   );
