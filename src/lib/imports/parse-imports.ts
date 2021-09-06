@@ -1,6 +1,6 @@
 import type { ReadonlyDeep } from 'type-fest';
 import ts from 'typescript';
-import { getPackageName } from './packages/index.js';
+import { getPackageName } from '../packages/index.js';
 
 export interface Import {
   moduleSpecifier: string;
