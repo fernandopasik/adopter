@@ -69,6 +69,7 @@ describe('parse imports', () => {
 
       expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
         moduleSpecifier: './dep.ts',
+        packageName: null,
         defaultName: undefined,
         named: undefined,
       });
@@ -81,6 +82,7 @@ describe('parse imports', () => {
 
       expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
         moduleSpecifier: './dep.ts',
+        packageName: null,
         defaultName: 'dep',
         named: undefined,
       });
@@ -97,6 +99,7 @@ describe('parse imports', () => {
 
       expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
         moduleSpecifier: './dep.ts',
+        packageName: null,
         defaultName: undefined,
         named: { dep: 'dep' },
       });
@@ -113,6 +116,7 @@ describe('parse imports', () => {
 
       expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
         moduleSpecifier: './dep.ts',
+        packageName: null,
         defaultName: undefined,
         named: { dep1: 'dep1', dep2: 'dep2' },
       });
@@ -129,6 +133,7 @@ describe('parse imports', () => {
 
       expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
         moduleSpecifier: './dep.ts',
+        packageName: null,
         defaultName: undefined,
         named: { dep1: 'dep3', dep2: 'dep2' },
       });
@@ -145,6 +150,7 @@ describe('parse imports', () => {
 
       expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
         moduleSpecifier: './dep.ts',
+        packageName: null,
         defaultName: 'dep',
         named: { dep1: 'dep1', dep2: 'dep2' },
       });
@@ -161,6 +167,7 @@ describe('parse imports', () => {
 
       expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
         moduleSpecifier: './dep.ts',
+        packageName: null,
         defaultName: 'dep',
         named: { dep1: 'dep1', dep2: 'dep3' },
       });
@@ -177,6 +184,7 @@ describe('parse imports', () => {
 
       expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
         moduleSpecifier: './dep.ts',
+        packageName: null,
         defaultName: undefined,
         named: {
           // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -200,11 +208,13 @@ Array [
     "defaultName": "dep1",
     "moduleSpecifier": "dep1",
     "named": undefined,
+    "packageName": "dep1",
   },
   Object {
     "defaultName": "dep2",
     "moduleSpecifier": "dep2",
     "named": undefined,
+    "packageName": "dep2",
   },
 ]
 `);
@@ -223,6 +233,7 @@ Array [
     "defaultName": "dep1",
     "moduleSpecifier": "dep1",
     "named": undefined,
+    "packageName": "dep1",
   },
   Object {
     "defaultName": undefined,
@@ -231,6 +242,7 @@ Array [
       "dep2": "dep2",
       "dep3": "dep3",
     },
+    "packageName": "dep2",
   },
 ]
 `);
@@ -249,6 +261,7 @@ Array [
     "defaultName": "dep1",
     "moduleSpecifier": "dep1",
     "named": undefined,
+    "packageName": "dep1",
   },
   Object {
     "defaultName": undefined,
@@ -257,11 +270,13 @@ Array [
       "dep2": "dep2",
       "dep3": "dep4",
     },
+    "packageName": "dep2",
   },
   Object {
     "defaultName": undefined,
     "moduleSpecifier": "dep5",
     "named": undefined,
+    "packageName": "dep5",
   },
 ]
 `);
@@ -280,6 +295,7 @@ Array [
     "defaultName": "dep1",
     "moduleSpecifier": "dep1",
     "named": undefined,
+    "packageName": "dep1",
   },
   Object {
     "defaultName": undefined,
@@ -287,6 +303,7 @@ Array [
     "named": Object {
       "dep2": "dep2",
     },
+    "packageName": "dep2",
   },
 ]
 `);
@@ -305,6 +322,7 @@ Array [
     "defaultName": "dep1",
     "moduleSpecifier": "dep1",
     "named": undefined,
+    "packageName": "dep1",
   },
   Object {
     "defaultName": undefined,
@@ -312,6 +330,7 @@ Array [
     "named": Object {
       "Dep2": "Dep2",
     },
+    "packageName": "dep2",
   },
 ]
 `);
@@ -330,6 +349,7 @@ Array [
     "defaultName": "dep1",
     "moduleSpecifier": "dep1",
     "named": undefined,
+    "packageName": "dep1",
   },
 ]
 `);
@@ -348,11 +368,13 @@ Array [
     "defaultName": "dep1",
     "moduleSpecifier": "dep1",
     "named": undefined,
+    "packageName": "dep1",
   },
   Object {
     "defaultName": "dep2",
     "moduleSpecifier": "dep2/example.ts",
     "named": undefined,
+    "packageName": "dep2",
   },
 ]
 `);

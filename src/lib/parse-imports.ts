@@ -1,8 +1,10 @@
 import type { ReadonlyDeep } from 'type-fest';
 import ts from 'typescript';
+import getPackageName from './get-package-name.js';
 
 export interface Import {
   moduleSpecifier: string;
+  packageName: string | null;
   defaultName?: string;
   named?: Record<string, string>;
 }
@@ -14,6 +16,7 @@ export const areNamedImports = (
 
 export const parseImport = (statement: ReadonlyDeep<ts.ImportDeclaration>): Import => {
   const { text: moduleSpecifier } = statement.moduleSpecifier as ts.LiteralExpression;
+  const packageName = getPackageName(moduleSpecifier);
   const { text: defaultName } = statement.importClause?.name ?? {};
   const { namedBindings } = statement.importClause ?? {};
 
@@ -30,7 +33,7 @@ export const parseImport = (statement: ReadonlyDeep<ts.ImportDeclaration>): Impo
         {},
       );
 
-  return { moduleSpecifier, defaultName, named };
+  return { moduleSpecifier, packageName, defaultName, named };
 };
 
 // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
