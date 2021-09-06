@@ -25,5 +25,9 @@ describe('find missing packages', () => {
     expect(await findMissingPackages(['typescriptzzz', 'typescript'])).toStrictEqual([
       'typescriptzzz',
     ]);
+
+    expect(await findMissingPackages(['typescript', 'typescriptzzz'])).toStrictEqual([
+      'typescriptzzz',
+    ]);
   });
 });
