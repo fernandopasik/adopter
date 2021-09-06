@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "globby": "^12.0.2",
-    "typescript": "^4.4.2"
+    "typescript": "^4.4.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
@@ -54,7 +54,7 @@
     "prettier-plugin-pkg": "^0.10.0",
     "prettier-plugin-sh": "^0.7.1",
     "ts-jest": "^27.0.5",
-    "type-fest": "^2.2.0"
+    "type-fest": "^2.3.2"
   },
   "sideEffects": false
 }
