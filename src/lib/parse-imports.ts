@@ -41,7 +41,11 @@ const parseImports = (source: ts.SourceFile): Import[] => {
   (Array.from(statements) as ReadonlyDeep<ts.Statement>[]).forEach(
     (statement: ReadonlyDeep<ts.Statement>): void => {
       if (ts.isImportDeclaration(statement)) {
-        imports.push(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>));
+        const parsedImport = parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>);
+
+        if (!parsedImport.moduleSpecifier.startsWith('.')) {
+          imports.push(parsedImport);
+        }
       }
     },
   );

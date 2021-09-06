@@ -190,7 +190,7 @@ describe('parse imports', () => {
     it('default imports', () => {
       const source = ts.createSourceFile(
         'example.ts',
-        'import dep1 from "./dep1.ts"; import dep2 from "./dep2.ts";',
+        'import dep1 from "dep1"; import dep2 from "dep2";',
         ts.ScriptTarget.Latest,
       );
 
@@ -198,12 +198,12 @@ describe('parse imports', () => {
 Array [
   Object {
     "defaultName": "dep1",
-    "moduleSpecifier": "./dep1.ts",
+    "moduleSpecifier": "dep1",
     "named": undefined,
   },
   Object {
     "defaultName": "dep2",
-    "moduleSpecifier": "./dep2.ts",
+    "moduleSpecifier": "dep2",
     "named": undefined,
   },
 ]
@@ -213,7 +213,7 @@ Array [
     it('default and named imports', () => {
       const source = ts.createSourceFile(
         'example.ts',
-        'import dep1 from "./dep1.ts"; import { dep2, dep3 } from "./dep2.ts";',
+        'import dep1 from "dep1"; import { dep2, dep3 } from "dep2";',
         ts.ScriptTarget.Latest,
       );
 
@@ -221,12 +221,12 @@ Array [
 Array [
   Object {
     "defaultName": "dep1",
-    "moduleSpecifier": "./dep1.ts",
+    "moduleSpecifier": "dep1",
     "named": undefined,
   },
   Object {
     "defaultName": undefined,
-    "moduleSpecifier": "./dep2.ts",
+    "moduleSpecifier": "dep2",
     "named": Object {
       "dep2": "dep2",
       "dep3": "dep3",
@@ -239,7 +239,7 @@ Array [
     it('unnamed, default and named imports with alias', () => {
       const source = ts.createSourceFile(
         'example.ts',
-        'import dep1 from "./dep1.ts"; import { dep2, dep3 as dep4 } from "./dep2.ts"; import "./dep5.ts"',
+        'import dep1 from "dep1"; import { dep2, dep3 as dep4 } from "dep2"; import "dep5"',
         ts.ScriptTarget.Latest,
       );
 
@@ -247,12 +247,12 @@ Array [
 Array [
   Object {
     "defaultName": "dep1",
-    "moduleSpecifier": "./dep1.ts",
+    "moduleSpecifier": "dep1",
     "named": undefined,
   },
   Object {
     "defaultName": undefined,
-    "moduleSpecifier": "./dep2.ts",
+    "moduleSpecifier": "dep2",
     "named": Object {
       "dep2": "dep2",
       "dep3": "dep4",
@@ -260,7 +260,7 @@ Array [
   },
   Object {
     "defaultName": undefined,
-    "moduleSpecifier": "./dep5.ts",
+    "moduleSpecifier": "dep5",
     "named": undefined,
   },
 ]
@@ -270,7 +270,7 @@ Array [
     it('imports and non imports', () => {
       const source = ts.createSourceFile(
         'example.ts',
-        'import dep1 from "./dep1.ts"; import { dep2 } from "./dep2.ts"; console.log(true)',
+        'import dep1 from "dep1"; import { dep2 } from "dep2"; console.log(true)',
         ts.ScriptTarget.Latest,
       );
 
@@ -278,12 +278,12 @@ Array [
 Array [
   Object {
     "defaultName": "dep1",
-    "moduleSpecifier": "./dep1.ts",
+    "moduleSpecifier": "dep1",
     "named": undefined,
   },
   Object {
     "defaultName": undefined,
-    "moduleSpecifier": "./dep2.ts",
+    "moduleSpecifier": "dep2",
     "named": Object {
       "dep2": "dep2",
     },
@@ -291,10 +291,11 @@ Array [
 ]
 `);
     });
+
     it('module imports and type imports', () => {
       const source = ts.createSourceFile(
         'example.ts',
-        'import dep1 from "./dep1.ts"; import type { Dep2 } from "./dep2.ts"; console.log(true)',
+        'import dep1 from "dep1"; import type { Dep2 } from "dep2"; console.log(true)',
         ts.ScriptTarget.Latest,
       );
 
@@ -302,15 +303,56 @@ Array [
 Array [
   Object {
     "defaultName": "dep1",
-    "moduleSpecifier": "./dep1.ts",
+    "moduleSpecifier": "dep1",
     "named": undefined,
   },
   Object {
     "defaultName": undefined,
-    "moduleSpecifier": "./dep2.ts",
+    "moduleSpecifier": "dep2",
     "named": Object {
       "Dep2": "Dep2",
     },
+  },
+]
+`);
+    });
+
+    it('relative imports', () => {
+      const source = ts.createSourceFile(
+        'example.ts',
+        'import dep1 from "dep1"; import dep2 from "./dep2/example.ts"',
+        ts.ScriptTarget.Latest,
+      );
+
+      expect(parseImports(source)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "defaultName": "dep1",
+    "moduleSpecifier": "dep1",
+    "named": undefined,
+  },
+]
+`);
+    });
+
+    it('internal files in package imports', () => {
+      const source = ts.createSourceFile(
+        'example.ts',
+        'import dep1 from "dep1"; import dep2 from "dep2/example.ts"',
+        ts.ScriptTarget.Latest,
+      );
+
+      expect(parseImports(source)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "defaultName": "dep1",
+    "moduleSpecifier": "dep1",
+    "named": undefined,
+  },
+  Object {
+    "defaultName": "dep2",
+    "moduleSpecifier": "dep2/example.ts",
+    "named": undefined,
   },
 ]
 `);
