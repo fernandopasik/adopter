@@ -28,8 +28,6 @@ jobs:
             task: yarn check-types
           - name: Unit Tests
             task: yarn test:coverage
-          - name: Build
-            task: yarn build
     runs-on: ubuntu-latest
     needs: [install]
     steps:
@@ -41,3 +39,16 @@ jobs:
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
       - run: ${{ matrix.task }}
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [check]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          check-latest: true
+          cache: 'yarn'
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
