@@ -1,6 +1,7 @@
 import type { ReadonlyDeep } from 'type-fest';
 import ts from 'typescript';
 import { getPackageName } from '../packages/index.js';
+import areNamedImports from './are-named-imports.js';
 
 export interface Import {
   moduleSpecifier: string;
@@ -8,11 +9,6 @@ export interface Import {
   defaultName?: string;
   named?: Record<string, string>;
 }
-
-export const areNamedImports = (
-  namedBindings?: ReadonlyDeep<ts.NamedImportBindings>,
-): namedBindings is ReadonlyDeep<ts.NamedImports> =>
-  typeof namedBindings !== 'undefined' && ts.isNamedImports(namedBindings);
 
 export const parseImport = (statement: ReadonlyDeep<ts.ImportDeclaration>): Import => {
   const { text: moduleSpecifier } = statement.moduleSpecifier as ts.LiteralExpression;
