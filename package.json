@@ -3,7 +3,7 @@
   "type": "module",
   "description": "Auditing tool for increasing adoption of libraries",
   "repository": "fernandopasik/adopter",
-  "author": "Fernando Pasik <fernando@pasik.com.ar>",
+  "author": "Fernando Pasik <fernando@pasik.com.ar> (https://fernandopasik.com)",
   "license": "MIT",
   "main": "adopter.js",
   "module": "adopter.js",
