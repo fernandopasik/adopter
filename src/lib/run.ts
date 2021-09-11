@@ -1,8 +1,8 @@
 import type { ReadonlyDeep } from 'type-fest';
 import buildExportsIndex from './build-exports-index.js';
+import { listFiles } from './files/index.js';
 import type { Import } from './imports/index.js';
 import { parseImports } from './imports/index.js';
-import listFiles from './list-files.js';
 import processFiles from './process-files.js';
 
 export interface Options {
