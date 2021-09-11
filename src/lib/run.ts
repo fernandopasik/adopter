@@ -2,7 +2,6 @@ import type { ReadonlyDeep } from 'type-fest';
 import buildExportsIndex from './build-exports-index.js';
 import { listFiles } from './files/index.js';
 import type { Import } from './imports/index.js';
-import { parseImports } from './imports/index.js';
 import processFiles from './process-files.js';
 
 export interface Options {
@@ -24,15 +23,15 @@ const run = async ({
   srcMatch,
 }: ReadonlyDeep<Options> = DEFAULT_OPTIONS): Promise<void> => {
   const exportsIndex = await buildExportsIndex(packages);
-  const imports: Import[] = [];
+  const allImports: Import[] = [];
 
-  processFiles(listFiles(srcMatch), (_filePath, _filename, _content, ast) => {
+  processFiles(listFiles(srcMatch), (_filePath, _filename, _content, ast, imports = []) => {
     if (typeof ast !== 'undefined') {
-      imports.push(...parseImports(ast));
+      allImports.push(...imports);
     }
   });
 
-  console.log(imports);
+  console.log(allImports);
   console.log(exportsIndex);
 };
 

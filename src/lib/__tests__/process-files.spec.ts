@@ -1,12 +1,18 @@
 import fs from 'fs';
 import type ts from 'typescript';
 import { parseAst } from '../files/index.js';
+import type { Import } from '../imports/index.js';
+import { parseImports } from '../imports/index.js';
 import processFiles from '../process-files.js';
 
 jest.mock('fs', () => ({ readFileSync: jest.fn() }));
 
 jest.mock('../files/index.js', () => ({
   parseAst: jest.fn(),
+}));
+
+jest.mock('../imports/index.js', () => ({
+  parseImports: jest.fn(),
 }));
 
 describe('process files', () => {
@@ -48,8 +54,20 @@ describe('process files', () => {
 
       processFiles(files, callback);
 
-      expect(callback).toHaveBeenCalledWith(files[0], expect.anything(), undefined, undefined);
-      expect(callback).toHaveBeenCalledWith(files[1], expect.anything(), undefined, undefined);
+      expect(callback).toHaveBeenCalledWith(
+        files[0],
+        expect.anything(),
+        undefined,
+        undefined,
+        undefined,
+      );
+      expect(callback).toHaveBeenCalledWith(
+        files[1],
+        expect.anything(),
+        undefined,
+        undefined,
+        undefined,
+      );
     });
 
     it('with filename', () => {
@@ -59,8 +77,20 @@ describe('process files', () => {
 
       processFiles(files, callback);
 
-      expect(callback).toHaveBeenCalledWith(files[0], filenames[0], undefined, undefined);
-      expect(callback).toHaveBeenCalledWith(files[1], filenames[1], undefined, undefined);
+      expect(callback).toHaveBeenCalledWith(
+        files[0],
+        filenames[0],
+        undefined,
+        undefined,
+        undefined,
+      );
+      expect(callback).toHaveBeenCalledWith(
+        files[1],
+        filenames[1],
+        undefined,
+        undefined,
+        undefined,
+      );
     });
 
     it('with file contents', () => {
@@ -74,8 +104,8 @@ describe('process files', () => {
 
       processFiles(files, callback);
 
-      expect(callback).toHaveBeenCalledWith(files[0], files[0], contents[0], undefined);
-      expect(callback).toHaveBeenCalledWith(files[1], files[1], contents[1], undefined);
+      expect(callback).toHaveBeenCalledWith(files[0], files[0], contents[0], undefined, undefined);
+      expect(callback).toHaveBeenCalledWith(files[1], files[1], contents[1], undefined, undefined);
     });
 
     it('with file asts', () => {
@@ -89,8 +119,28 @@ describe('process files', () => {
 
       processFiles(files, callback);
 
-      expect(callback).toHaveBeenCalledWith(files[0], files[0], undefined, asts[0]);
-      expect(callback).toHaveBeenCalledWith(files[1], files[1], undefined, asts[1]);
+      expect(callback).toHaveBeenCalledWith(files[0], files[0], undefined, asts[0], undefined);
+      expect(callback).toHaveBeenCalledWith(files[1], files[1], undefined, asts[1], undefined);
+    });
+
+    it('with file imports', () => {
+      const files = ['example1.js', 'example2.js'];
+      const asts = [{ fileName: files[0] }, { fileName: files[1] }];
+      const imports: Import[] = [
+        { moduleSpecifier: 'dep1', packageName: 'dep1', defaultName: 'dep1' },
+      ];
+      const callback = jest.fn();
+
+      (parseAst as jest.MockedFunction<typeof parseAst>)
+        .mockReturnValueOnce(asts[0] as ts.SourceFile)
+        .mockReturnValueOnce(asts[1] as ts.SourceFile);
+
+      (parseImports as jest.MockedFunction<typeof parseImports>).mockReturnValueOnce(imports);
+
+      processFiles(files, callback);
+
+      expect(callback).toHaveBeenCalledWith(files[0], files[0], undefined, asts[0], imports);
+      expect(callback).toHaveBeenCalledWith(files[1], files[1], undefined, asts[1], undefined);
     });
   });
 });
