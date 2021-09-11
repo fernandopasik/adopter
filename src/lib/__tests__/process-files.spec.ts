@@ -1,11 +1,13 @@
 import fs from 'fs';
 import type ts from 'typescript';
-import parseAst from '../parse-ast.js';
+import { parseAst } from '../files/index.js';
 import processFiles from '../process-files.js';
 
 jest.mock('fs', () => ({ readFileSync: jest.fn() }));
 
-jest.mock('../parse-ast', () => jest.fn());
+jest.mock('../files/index.js', () => ({
+  parseAst: jest.fn(),
+}));
 
 describe('process files', () => {
   beforeEach(() => {

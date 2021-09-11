@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import type ts from 'typescript';
-import parseAst from './parse-ast.js';
+import { parseAst } from './files/index.js';
 
 const processFiles = (
   filePaths: readonly string[] = [],
