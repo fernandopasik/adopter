@@ -9,11 +9,11 @@ const processFiles = (
 ): void => {
   filePaths.forEach((filePath) => {
     const content = fs.readFileSync(filePath, 'utf8');
-
     const filename = path.basename(filePath);
+    const ast = parseAst(filename, content);
 
     if (typeof callback === 'function') {
-      callback(filePath, filename, content, parseAst(filename, content));
+      callback(filePath, filename, content, ast);
     }
   });
 };
