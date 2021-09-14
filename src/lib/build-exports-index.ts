@@ -1,8 +1,10 @@
+import type { ReadonlyDeep } from 'type-fest';
+import type { Export } from './packages/index.js';
 import { findMissingPackages, installPackages, listPackageExports } from './packages/index.js';
 
 const buildExportsIndex = async (
   packages: readonly string[] = [],
-): Promise<Record<string, Record<string, string>>> => {
+): Promise<Record<string, ReadonlyDeep<Export[]>>> => {
   const missingImports = await findMissingPackages(packages);
 
   if (missingImports.length > 0) {
@@ -14,7 +16,7 @@ const buildExportsIndex = async (
   );
 
   return Object.fromEntries(
-    exportResults.map((packageExports: Readonly<Record<string, string>>, index) => [
+    exportResults.map((packageExports: ReadonlyDeep<Export[]>, index) => [
       packages[index],
       packageExports,
     ]),

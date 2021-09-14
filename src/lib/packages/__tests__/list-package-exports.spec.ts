@@ -11,7 +11,7 @@ describe('list package exports', () => {
 
     const exports = await listPackageExports('typescript');
 
-    expect(exports).toStrictEqual({ default: 'undefined' });
+    expect(exports).toStrictEqual([{ name: 'default', type: 'undefined' }]);
   });
 
   it('with a default export', async () => {
@@ -19,7 +19,7 @@ describe('list package exports', () => {
 
     const exports = await listPackageExports('typescript');
 
-    expect(exports).toStrictEqual({ default: 'function' });
+    expect(exports).toStrictEqual([{ name: 'default', type: 'function' }]);
   });
 
   it('with a default and named exports', async () => {
@@ -33,13 +33,12 @@ describe('list package exports', () => {
 
     const exports = await listPackageExports('typescript');
 
-    expect(exports).toStrictEqual({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      __esModule: 'boolean',
-      default: 'function',
-      example1: 'function',
-      example2: 'function',
-    });
+    expect(exports).toStrictEqual([
+      { name: '__esModule', type: 'boolean' },
+      { name: 'default', type: 'function' },
+      { name: 'example1', type: 'function' },
+      { name: 'example2', type: 'function' },
+    ]);
   });
 
   it('with named exports', async () => {
@@ -53,12 +52,11 @@ describe('list package exports', () => {
 
     const exports = await listPackageExports('typescript');
 
-    expect(exports).toStrictEqual({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      __esModule: 'boolean',
-      example1: 'string',
-      example2: 'function',
-      example3: 'object',
-    });
+    expect(exports).toStrictEqual([
+      { name: '__esModule', type: 'boolean' },
+      { name: 'example1', type: 'string' },
+      { name: 'example2', type: 'function' },
+      { name: 'example3', type: 'object' },
+    ]);
   });
 });

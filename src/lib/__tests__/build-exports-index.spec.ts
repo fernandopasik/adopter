@@ -50,8 +50,11 @@ describe('build exports index', () => {
 
   it('returns an index with packages and its exports', async () => {
     const packages = ['dep1', 'dep2'];
-    const dep1 = { a: 'string', b: 'function' };
-    const dep2 = { default: 'function' };
+    const dep1 = [
+      { name: 'a', type: 'string' },
+      { name: 'b', type: 'function' },
+    ];
+    const dep2 = [{ name: 'default', type: 'function' }];
 
     (listPackageExports as jest.MockedFunction<typeof listPackageExports>)
       .mockResolvedValueOnce(dep1)
