@@ -1,5 +1,4 @@
 import type { ReadonlyDeep } from 'type-fest';
-import buildExportsIndex from './build-exports-index.js';
 import { listFiles } from './files/index.js';
 import type { Import } from './imports/index.js';
 import processFiles from './process-files.js';
@@ -18,11 +17,7 @@ const DEFAULT_OPTIONS: Options = {
   srcIgnorePatterns: ['/(node_modules|.yarn)/'],
 };
 
-const run = async ({
-  packages,
-  srcMatch,
-}: ReadonlyDeep<Options> = DEFAULT_OPTIONS): Promise<void> => {
-  const exportsIndex = await buildExportsIndex(packages);
+const run = ({ packages, srcMatch }: ReadonlyDeep<Options> = DEFAULT_OPTIONS): void => {
   const allImports: Import[] = [];
 
   processFiles(listFiles(srcMatch), (_filePath, _filename, _content, ast, imports = []) => {
@@ -32,7 +27,7 @@ const run = async ({
   });
 
   console.log(allImports);
-  console.log(exportsIndex);
+  console.log(packages);
 };
 
 export default run;
