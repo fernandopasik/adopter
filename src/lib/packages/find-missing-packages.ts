@@ -11,6 +11,7 @@ interface ImportItem {
 
 const findMissingPackages = async (packages: readonly string[] = []): Promise<string[]> =>
   (await Promise.allSettled(packages.map(async (packageName: string) => import(packageName))))
+    // eslint-disable-next-line security/detect-object-injection
     .map((result, index) => ({ packageName: packages[index], result }))
     .filter(
       ({ result }: Readonly<ImportItem>) =>
