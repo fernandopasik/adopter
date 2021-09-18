@@ -1,17 +1,15 @@
 import fs from 'fs';
 import type ts from 'typescript';
-import { parseAst } from '../files/index.js';
-import type { Import } from '../imports/index.js';
-import { parseImports } from '../imports/index.js';
+import type { Import } from '../../imports/index.js';
+import { parseImports } from '../../imports/index.js';
+import parseAst from '../parse-ast.js';
 import processFiles from '../process-files.js';
 
 jest.mock('fs', () => ({ readFileSync: jest.fn() }));
 
-jest.mock('../files/index.js', () => ({
-  parseAst: jest.fn(),
-}));
+jest.mock('../parse-ast.js', () => jest.fn());
 
-jest.mock('../imports/index.js', () => ({
+jest.mock('../../imports/index.js', () => ({
   parseImports: jest.fn(),
 }));
 

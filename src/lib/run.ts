@@ -1,7 +1,6 @@
 import type { ReadonlyDeep } from 'type-fest';
-import { listFiles } from './files/index.js';
+import { listFiles, processFiles } from './files/index.js';
 import { getPackageExports } from './packages/index.js';
-import processFiles from './process-files.js';
 import { Usage } from './reports/index.js';
 
 export interface Options {
