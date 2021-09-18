@@ -17,10 +17,9 @@ const DEFAULT_OPTIONS: Options = {
   srcIgnorePatterns: ['/(node_modules|.yarn)/'],
 };
 
-const run = async ({
-  packages,
-  srcMatch,
-}: ReadonlyDeep<Options> = DEFAULT_OPTIONS): Promise<void> => {
+const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
+  const { packages, srcMatch } = Object.assign(DEFAULT_OPTIONS, options);
+
   const packageExports = await getPackageExports(packages);
 
   const usage = new Usage(packageExports);
