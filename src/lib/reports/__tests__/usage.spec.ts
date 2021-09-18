@@ -82,7 +82,6 @@ describe('usage report', () => {
           moduleSpecifier: 'dep1',
           packageName: 'dep1',
           defaultName: 'dep1',
-          // named?: Record<string, string>;
           moduleNames: ['default'],
         },
       ];
