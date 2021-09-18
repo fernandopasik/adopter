@@ -3,8 +3,14 @@ export interface Export {
   type: string;
 }
 
-export const listPackageExports = async (packageName: string): Promise<Export[]> => {
-  const pkg = (await import(packageName)) as Record<string, unknown>;
+export const listPackageExports = async (packageName: string): Promise<Export[] | null> => {
+  let pkg: Record<string, unknown> = {};
+
+  try {
+    pkg = (await import(packageName)) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
 
   const pkgExports = Object.entries(pkg);
 

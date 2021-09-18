@@ -19,8 +19,10 @@ const getPackageExports = async (packageNames: readonly string[]): Promise<Packa
     async (prev: Readonly<Promise<void>>, packageName) =>
       prev
         .then(async () => listPackageExports(packageName))
-        .then((exports: ReadonlyDeep<Export[]>) => {
-          packageExports.set(packageName, exports);
+        .then((exports: ReadonlyDeep<Export[]> | null) => {
+          if (exports !== null) {
+            packageExports.set(packageName, exports);
+          }
         }),
     Promise.resolve(),
   );

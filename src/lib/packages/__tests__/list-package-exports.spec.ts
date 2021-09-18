@@ -14,6 +14,12 @@ describe('list package exports', () => {
     expect(exports).toStrictEqual([{ name: 'default', type: 'undefined' }]);
   });
 
+  it('with a non installed module', async () => {
+    const exports = await listPackageExports('typescriptzzz');
+
+    expect(exports).toBeNull();
+  });
+
   it('with a default export', async () => {
     jest.doMock('typescript', () => (): null => null);
 
