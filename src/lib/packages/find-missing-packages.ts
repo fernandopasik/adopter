@@ -4,8 +4,7 @@ interface ImportError {
 }
 
 interface ImportItem {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  result: PromiseSettledResult<any>;
+  result: PromiseSettledResult<unknown>;
   packageName: string;
 }
 
