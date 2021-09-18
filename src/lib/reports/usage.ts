@@ -1,3 +1,4 @@
+import log from 'loglevel';
 import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../imports/index.js';
 import type { Export, PackageExports } from '../packages/index.js';
@@ -7,17 +8,24 @@ interface Module {
   importedFrom: string[];
 }
 
+interface Package {
+  isUsed: boolean;
+  modules: Map<string, Module>;
+}
+
+log.setDefaultLevel('INFO');
+
 class Usage {
-  private readonly storage: Map<string, Map<string, Module>>;
+  private readonly storage: Map<string, Package>;
 
   public constructor(packageExports: Readonly<PackageExports>) {
     this.storage = new Map();
 
     packageExports.forEach((exports, packageName) => {
-      this.storage.set(packageName, new Map<string, Module>());
+      this.storage.set(packageName, { isUsed: false, modules: new Map<string, Module>() });
 
       exports.forEach(({ name, type }: Readonly<Export>) => {
-        this.storage.get(packageName)?.set(name, { type, importedFrom: [] });
+        this.storage.get(packageName)?.modules.set(name, { type, importedFrom: [] });
       });
     });
   }
@@ -26,12 +34,12 @@ class Usage {
     return Array.from(this.storage.keys());
   }
 
-  public getPackage(packageName: string): Map<string, Module> | undefined {
+  public getPackage(packageName: string): Package | undefined {
     return this.storage.get(packageName);
   }
 
   public getModule(packageName: string, moduleName: string): Module | undefined {
-    return this.storage.get(packageName)?.get(moduleName);
+    return this.storage.get(packageName)?.modules.get(moduleName);
   }
 
   public hasPackage(packageName: string): boolean {
@@ -39,7 +47,7 @@ class Usage {
   }
 
   public hasModule(packageName: string, moduleName: string): boolean {
-    return Boolean(this.storage.get(packageName)?.has(moduleName));
+    return Boolean(this.storage.get(packageName)?.modules.has(moduleName));
   }
 
   public addImports(filepath: string, imports: ReadonlyDeep<Import[]>): void {
@@ -49,9 +57,10 @@ class Usage {
 
         if (typeof pkg !== 'undefined') {
           moduleNames.forEach((moduleName) => {
-            const module = pkg.get(moduleName);
+            const module = pkg.modules.get(moduleName);
 
             if (typeof module !== 'undefined') {
+              pkg.isUsed = true;
               module.importedFrom.push(filepath);
             }
           });

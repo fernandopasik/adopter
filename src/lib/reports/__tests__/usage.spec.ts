@@ -28,9 +28,10 @@ describe('usage report', () => {
   it('get package', () => {
     const usage = new Usage(packageExports);
 
-    expect(usage.getPackage('dep1')).toStrictEqual(
-      new Map([['default', { type: 'function', importedFrom: [] }]]),
-    );
+    expect(usage.getPackage('dep1')).toStrictEqual({
+      isUsed: false,
+      modules: new Map([['default', { type: 'function', importedFrom: [] }]]),
+    });
   });
 
   describe('has package', () => {
