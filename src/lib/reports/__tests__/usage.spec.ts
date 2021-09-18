@@ -1,0 +1,261 @@
+import Usage from '../usage.js';
+
+describe('usage report', () => {
+  const packageExports = new Map([
+    ['dep1', [{ name: 'default', type: 'function' }]],
+    [
+      'dep2',
+      [
+        { name: 'default', type: 'function' },
+        { name: 'methodA', type: 'function' },
+      ],
+    ],
+    [
+      'dep3',
+      [
+        { name: 'methodA', type: 'function' },
+        { name: 'methodB', type: 'function' },
+      ],
+    ],
+  ]);
+
+  it('get package names', () => {
+    const usage = new Usage(packageExports);
+
+    expect(usage.getPackageNames()).toStrictEqual(['dep1', 'dep2', 'dep3']);
+  });
+
+  it('get package', () => {
+    const usage = new Usage(packageExports);
+
+    expect(usage.getPackage('dep1')).toStrictEqual(
+      new Map([['default', { type: 'function', importedFrom: [] }]]),
+    );
+  });
+
+  describe('has package', () => {
+    it('finds a package', () => {
+      const usage = new Usage(packageExports);
+
+      expect(usage.hasPackage('dep2')).toBe(true);
+    });
+
+    it('does not find a package', () => {
+      const usage = new Usage(packageExports);
+
+      expect(usage.hasPackage('dep4')).toBe(false);
+    });
+  });
+
+  describe('has module', () => {
+    it('finds a default module', () => {
+      const usage = new Usage(packageExports);
+
+      expect(usage.hasModule('dep2', 'default')).toBe(true);
+    });
+
+    it('finds a named module', () => {
+      const usage = new Usage(packageExports);
+
+      expect(usage.hasModule('dep2', 'methodA')).toBe(true);
+    });
+
+    it('does not find a package', () => {
+      const usage = new Usage(packageExports);
+
+      expect(usage.hasModule('dep4', 'methodA')).toBe(false);
+    });
+
+    it('does not find a module', () => {
+      const usage = new Usage(packageExports);
+
+      expect(usage.hasModule('dep2', 'methodB')).toBe(false);
+    });
+  });
+
+  describe('add imports', () => {
+    it('with a default module', () => {
+      const usage = new Usage(packageExports);
+      const filePath = 'src/example.js';
+      const imports = [
+        {
+          moduleSpecifier: 'dep1',
+          packageName: 'dep1',
+          defaultName: 'dep1',
+          // named?: Record<string, string>;
+          moduleNames: ['default'],
+        },
+      ];
+
+      expect(usage.getModule('dep1', 'default')).toStrictEqual({
+        type: 'function',
+        importedFrom: [],
+      });
+
+      usage.addImports(filePath, imports);
+
+      expect(usage.getModule('dep1', 'default')).toStrictEqual({
+        type: 'function',
+        importedFrom: [filePath],
+      });
+    });
+
+    it('with a named module', () => {
+      const usage = new Usage(packageExports);
+      const filePath = 'src/example.js';
+      const imports = [
+        {
+          moduleSpecifier: 'dep3',
+          packageName: 'dep3',
+          named: { methodA: 'methodA' },
+          moduleNames: ['methodA'],
+        },
+      ];
+
+      expect(usage.getModule('dep3', 'methodA')).toStrictEqual({
+        type: 'function',
+        importedFrom: [],
+      });
+
+      usage.addImports(filePath, imports);
+
+      expect(usage.getModule('dep3', 'methodA')).toStrictEqual({
+        type: 'function',
+        importedFrom: [filePath],
+      });
+    });
+
+    it('with default and named modules', () => {
+      const usage = new Usage(packageExports);
+      const filePath = 'src/example.js';
+      const imports = [
+        {
+          moduleSpecifier: 'dep2',
+          packageName: 'dep2',
+          defaultName: 'dep2',
+          named: { methodA: 'methodA' },
+          moduleNames: ['default', 'methodA'],
+        },
+      ];
+
+      expect(usage.getModule('dep2', 'default')).toStrictEqual({
+        type: 'function',
+        importedFrom: [],
+      });
+
+      expect(usage.getModule('dep2', 'methodA')).toStrictEqual({
+        type: 'function',
+        importedFrom: [],
+      });
+
+      usage.addImports(filePath, imports);
+
+      expect(usage.getModule('dep2', 'default')).toStrictEqual({
+        type: 'function',
+        importedFrom: [filePath],
+      });
+
+      expect(usage.getModule('dep2', 'methodA')).toStrictEqual({
+        type: 'function',
+        importedFrom: [filePath],
+      });
+    });
+
+    it('with multiple imports', () => {
+      const usage = new Usage(packageExports);
+      const filePath = 'src/example.js';
+      const imports = [
+        {
+          moduleSpecifier: 'dep2',
+          packageName: 'dep2',
+          defaultName: 'dep2',
+          moduleNames: ['default'],
+        },
+        {
+          moduleSpecifier: 'dep3',
+          packageName: 'dep3',
+          named: { methodA: 'methodA' },
+          moduleNames: ['methodA'],
+        },
+      ];
+
+      expect(usage.getModule('dep2', 'default')).toStrictEqual({
+        type: 'function',
+        importedFrom: [],
+      });
+
+      expect(usage.getModule('dep3', 'methodA')).toStrictEqual({
+        type: 'function',
+        importedFrom: [],
+      });
+
+      usage.addImports(filePath, imports);
+
+      expect(usage.getModule('dep2', 'default')).toStrictEqual({
+        type: 'function',
+        importedFrom: [filePath],
+      });
+
+      expect(usage.getModule('dep3', 'methodA')).toStrictEqual({
+        type: 'function',
+        importedFrom: [filePath],
+      });
+    });
+
+    it('with a non tracked package', () => {
+      const usage = new Usage(packageExports);
+      const filePath = 'src/example.js';
+      const imports = [
+        {
+          moduleSpecifier: 'dep4',
+          packageName: 'dep4',
+          defaultName: 'dep4',
+          moduleNames: ['default'],
+        },
+      ];
+
+      expect(usage.getPackage('dep4')).toBeUndefined();
+      expect(usage.getModule('dep4', 'default')).toBeUndefined();
+
+      usage.addImports(filePath, imports);
+
+      expect(usage.getPackage('dep4')).toBeUndefined();
+      expect(usage.getModule('dep4', 'default')).toBeUndefined();
+    });
+
+    it('with a non tracked module', () => {
+      const usage = new Usage(packageExports);
+      const filePath = 'src/example.js';
+      const imports = [
+        {
+          moduleSpecifier: 'dep1',
+          packageName: 'dep1',
+          named: { methodA: 'methodA' },
+          moduleNames: ['methodA'],
+        },
+      ];
+
+      expect(usage.getPackage('dep1')).not.toBeUndefined();
+      expect(usage.getModule('dep1', 'methodA')).toBeUndefined();
+
+      usage.addImports(filePath, imports);
+
+      expect(usage.getModule('dep1', 'methodA')).toBeUndefined();
+    });
+  });
+
+  it('avoids duplicated modules', () => {
+    const packageExports2 = new Map([
+      ['dep1', [{ name: 'default', type: 'string' }]],
+      ['dep1', [{ name: 'default', type: 'function' }]],
+    ]);
+
+    const usage = new Usage(packageExports2);
+
+    expect(usage.hasModule('dep1', 'default')).toBe(true);
+    expect(usage.getModule('dep1', 'default')).toStrictEqual({
+      type: 'function',
+      importedFrom: [],
+    });
+  });
+});
