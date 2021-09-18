@@ -12,7 +12,8 @@ describe('get package exports', () => {
     jest.clearAllMocks();
   });
 
-  it('finds missing packages', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('finds missing packages', async () => {
     const packageNames = ['dep1', 'dep2'];
 
     await getPackageExports(packageNames);
@@ -21,7 +22,8 @@ describe('get package exports', () => {
     expect(findMissingPackages).toHaveBeenCalledWith(packageNames);
   });
 
-  it('if there are missing packages, installs them', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('if there are missing packages, installs them', async () => {
     const packages = ['dep1', 'dep2'];
     (findMissingPackages as jest.MockedFunction<typeof findMissingPackages>).mockResolvedValueOnce([
       'dep1',
