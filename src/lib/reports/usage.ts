@@ -17,8 +17,7 @@ class Usage {
       this.storage.set(packageName, new Map<string, Module>());
 
       exports.forEach(({ name, type }: Readonly<Export>) => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        this.storage.get(packageName)!.set(name, { type, importedFrom: [] });
+        this.storage.get(packageName)?.set(name, { type, importedFrom: [] });
       });
     });
   }
