@@ -13,12 +13,18 @@ describe('parse imports', () => {
 Array [
   Object {
     "defaultName": "dep1",
+    "moduleNames": Array [
+      "default",
+    ],
     "moduleSpecifier": "dep1",
     "named": undefined,
     "packageName": "dep1",
   },
   Object {
     "defaultName": "dep2",
+    "moduleNames": Array [
+      "default",
+    ],
     "moduleSpecifier": "dep2",
     "named": undefined,
     "packageName": "dep2",
@@ -38,12 +44,19 @@ Array [
 Array [
   Object {
     "defaultName": "dep1",
+    "moduleNames": Array [
+      "default",
+    ],
     "moduleSpecifier": "dep1",
     "named": undefined,
     "packageName": "dep1",
   },
   Object {
     "defaultName": undefined,
+    "moduleNames": Array [
+      "dep2",
+      "dep3",
+    ],
     "moduleSpecifier": "dep2",
     "named": Object {
       "dep2": "dep2",
@@ -66,12 +79,19 @@ Array [
 Array [
   Object {
     "defaultName": "dep1",
+    "moduleNames": Array [
+      "default",
+    ],
     "moduleSpecifier": "dep1",
     "named": undefined,
     "packageName": "dep1",
   },
   Object {
     "defaultName": undefined,
+    "moduleNames": Array [
+      "dep2",
+      "dep3",
+    ],
     "moduleSpecifier": "dep2",
     "named": Object {
       "dep2": "dep2",
@@ -81,6 +101,7 @@ Array [
   },
   Object {
     "defaultName": undefined,
+    "moduleNames": Array [],
     "moduleSpecifier": "dep5",
     "named": undefined,
     "packageName": "dep5",
@@ -100,12 +121,18 @@ Array [
 Array [
   Object {
     "defaultName": "dep1",
+    "moduleNames": Array [
+      "default",
+    ],
     "moduleSpecifier": "dep1",
     "named": undefined,
     "packageName": "dep1",
   },
   Object {
     "defaultName": undefined,
+    "moduleNames": Array [
+      "dep2",
+    ],
     "moduleSpecifier": "dep2",
     "named": Object {
       "dep2": "dep2",
@@ -127,12 +154,18 @@ Array [
 Array [
   Object {
     "defaultName": "dep1",
+    "moduleNames": Array [
+      "default",
+    ],
     "moduleSpecifier": "dep1",
     "named": undefined,
     "packageName": "dep1",
   },
   Object {
     "defaultName": undefined,
+    "moduleNames": Array [
+      "Dep2",
+    ],
     "moduleSpecifier": "dep2",
     "named": Object {
       "Dep2": "Dep2",
@@ -154,12 +187,18 @@ Array [
 Array [
   Object {
     "defaultName": "dep1",
+    "moduleNames": Array [
+      "default",
+    ],
     "moduleSpecifier": "dep1",
     "named": undefined,
     "packageName": "dep1",
   },
   Object {
     "defaultName": "dep2",
+    "moduleNames": Array [
+      "default",
+    ],
     "moduleSpecifier": "./dep2/example.ts",
     "named": undefined,
     "packageName": null,
@@ -179,12 +218,18 @@ Array [
 Array [
   Object {
     "defaultName": "dep1",
+    "moduleNames": Array [
+      "default",
+    ],
     "moduleSpecifier": "dep1",
     "named": undefined,
     "packageName": "dep1",
   },
   Object {
     "defaultName": "dep2",
+    "moduleNames": Array [
+      "default",
+    ],
     "moduleSpecifier": "dep2/example.ts",
     "named": undefined,
     "packageName": "dep2",

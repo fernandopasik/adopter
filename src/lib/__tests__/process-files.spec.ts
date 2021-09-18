@@ -127,7 +127,12 @@ describe('process files', () => {
       const files = ['example1.js', 'example2.js'];
       const asts = [{ fileName: files[0] }, { fileName: files[1] }];
       const imports: Import[] = [
-        { moduleSpecifier: 'dep1', packageName: 'dep1', defaultName: 'dep1' },
+        {
+          moduleSpecifier: 'dep1',
+          packageName: 'dep1',
+          defaultName: 'dep1',
+          moduleNames: ['default'],
+        },
       ];
       const callback = jest.fn();
 

@@ -2,12 +2,14 @@ import type { ReadonlyDeep } from 'type-fest';
 import type ts from 'typescript';
 import { getPackageName } from '../packages/index.js';
 import areNamedImports from './are-named-imports.js';
+import getImportModuleNames from './get-import-module-names.js';
 
 export interface Import {
   moduleSpecifier: string;
   packageName: string | null;
   defaultName?: string;
   named?: Record<string, string>;
+  moduleNames: string[];
 }
 
 const parseImport = (statement: ReadonlyDeep<ts.ImportDeclaration>): Import => {
@@ -29,7 +31,9 @@ const parseImport = (statement: ReadonlyDeep<ts.ImportDeclaration>): Import => {
         {},
       );
 
-  return { moduleSpecifier, packageName, defaultName, named };
+  const moduleNames = getImportModuleNames(defaultName, named);
+
+  return { moduleSpecifier, packageName, defaultName, named, moduleNames };
 };
 
 export default parseImport;

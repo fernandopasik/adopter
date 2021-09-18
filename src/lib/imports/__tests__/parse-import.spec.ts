@@ -13,6 +13,7 @@ describe('parse import', () => {
       packageName: null,
       defaultName: undefined,
       named: undefined,
+      moduleNames: [],
     });
   });
 
@@ -26,6 +27,7 @@ describe('parse import', () => {
       packageName: null,
       defaultName: 'dep',
       named: undefined,
+      moduleNames: ['default'],
     });
   });
 
@@ -39,6 +41,7 @@ describe('parse import', () => {
       packageName: null,
       defaultName: undefined,
       named: { dep: 'dep' },
+      moduleNames: ['dep'],
     });
   });
 
@@ -56,6 +59,7 @@ describe('parse import', () => {
       packageName: null,
       defaultName: undefined,
       named: { dep1: 'dep1', dep2: 'dep2' },
+      moduleNames: ['dep1', 'dep2'],
     });
   });
 
@@ -73,6 +77,7 @@ describe('parse import', () => {
       packageName: null,
       defaultName: undefined,
       named: { dep1: 'dep3', dep2: 'dep2' },
+      moduleNames: ['dep1', 'dep2'],
     });
   });
 
@@ -90,6 +95,7 @@ describe('parse import', () => {
       packageName: null,
       defaultName: 'dep',
       named: { dep1: 'dep1', dep2: 'dep2' },
+      moduleNames: ['default', 'dep1', 'dep2'],
     });
   });
 
@@ -107,6 +113,7 @@ describe('parse import', () => {
       packageName: null,
       defaultName: 'dep',
       named: { dep1: 'dep1', dep2: 'dep3' },
+      moduleNames: ['default', 'dep1', 'dep2'],
     });
   });
 
@@ -127,6 +134,7 @@ describe('parse import', () => {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         Dep: 'Dep',
       },
+      moduleNames: ['Dep'],
     });
   });
 });
