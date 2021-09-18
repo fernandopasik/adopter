@@ -1,4 +1,5 @@
 import findMissingPackages from '../find-missing-packages.js';
+import getPackageExports from '../get-package-exports.js';
 import getPackageName from '../get-package-name.js';
 import * as packages from '../index.js';
 import installPackages from '../install-packages.js';
@@ -11,6 +12,10 @@ describe('packages', () => {
 
   it('get package name', () => {
     expect(packages.getPackageName).toStrictEqual(getPackageName);
+  });
+
+  it('get package exports', () => {
+    expect(packages.getPackageExports).toStrictEqual(getPackageExports);
   });
 
   it('install packages', () => {
