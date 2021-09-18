@@ -13,7 +13,7 @@ export interface Options {
 const DEFAULT_OPTIONS: Options = {
   packages: [],
   rootDir: process.cwd(),
-  srcMatch: ['**/*.[j|t]s'],
+  srcMatch: ['**/*.[jt]s?(x)'],
   srcIgnorePatterns: ['/(node_modules|.yarn)/'],
 };
 
