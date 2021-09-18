@@ -1,4 +1,5 @@
 import log from 'loglevel';
+import { blue, bold } from 'nanocolors';
 import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../imports/index.js';
 import type { Export, PackageExports } from '../packages/index.js';
@@ -66,6 +67,31 @@ class Usage {
           });
         }
       }
+    });
+  }
+
+  public print(): void {
+    const packageAmount = this.getPackageNames().length;
+
+    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+    const packagesUsed = Array.from(this.storage.values()).filter((pkg) => pkg.isUsed).length;
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    const packagesUsage = (packagesUsed / packageAmount) * 100;
+
+    log.info(blue(bold('Usage Report\n')));
+    log.info(blue('Packages tracked: '), packageAmount);
+    log.info(blue('Packages used:    '), packagesUsed);
+    log.info(blue('Packages usage: '), `${packagesUsage}%`);
+    log.info('');
+
+    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+    this.storage.forEach((pkg, packageName) => {
+      log.info(`${pkg.isUsed ? '✅' : '❌'} ${packageName}\n`);
+      // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+      pkg.modules.forEach((module, moduleName) => {
+        log.info(`  ${module.importedFrom.length > 0 ? '✅' : '  '} ${moduleName}`);
+      });
+      log.info();
     });
   }
 }

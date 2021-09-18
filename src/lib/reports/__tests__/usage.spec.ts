@@ -1,4 +1,11 @@
+import log from 'loglevel';
 import Usage from '../usage.js';
+
+jest.mock('loglevel');
+jest.mock('nanocolors', () => ({
+  blue: (t: string): string => t,
+  bold: (t: string): string => t,
+}));
 
 describe('usage report', () => {
   const packageExports = new Map([
@@ -18,6 +25,10 @@ describe('usage report', () => {
       ],
     ],
   ]);
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   it('get package names', () => {
     const usage = new Usage(packageExports);
@@ -257,5 +268,14 @@ describe('usage report', () => {
       type: 'function',
       importedFrom: [],
     });
+  });
+
+  it('prints the report', () => {
+    const usage = new Usage(packageExports);
+
+    usage.print();
+
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(log.info).toHaveBeenNthCalledWith(1, 'Usage Report\n');
   });
 });

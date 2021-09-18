@@ -31,10 +31,7 @@ const run = async ({
     coverage.addFile(filePath, imports);
   });
 
-  // eslint-disable-next-line @typescript-eslint/dot-notation
-  console.log(usage['storage']);
-  // eslint-disable-next-line @typescript-eslint/dot-notation
-  console.log(coverage['storage']);
+  usage.print();
 };
 
 export default run;
