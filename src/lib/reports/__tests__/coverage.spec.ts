@@ -1,9 +1,20 @@
+import log from 'loglevel';
 import Coverage from '../coverage.js';
 import Usage from '../usage.js';
+
+jest.mock('loglevel');
+jest.mock('nanocolors', () => ({
+  blue: (t: string): string => t,
+  bold: (t: string): string => t,
+}));
 
 jest.mock('../usage');
 
 describe('coverage report', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('add file', () => {
     it('from tracked package', () => {
       const usage = new Usage(new Map());
@@ -92,5 +103,25 @@ describe('coverage report', () => {
       });
       spy.mockRestore();
     });
+  });
+
+  it('prints the report', () => {
+    const usage = new Usage(new Map());
+    const coverage = new Coverage(usage);
+    const filePath = 'src/example.js';
+    const imports = [
+      {
+        moduleSpecifier: 'dep1',
+        packageName: 'dep1',
+        defaultName: 'dep1',
+        moduleNames: ['default'],
+      },
+    ];
+
+    coverage.addFile(filePath, imports);
+
+    coverage.print();
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(log.info).toHaveBeenNthCalledWith(1, 'Coverage Report\n');
   });
 });

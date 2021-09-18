@@ -1,3 +1,5 @@
+import log from 'loglevel';
+import { blue, bold } from 'nanocolors';
 import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../imports/index.js';
 import type Usage from './usage.js';
@@ -43,6 +45,24 @@ class Coverage {
 
   public getFile(filepath: string): ImportAnalysis | undefined {
     return this.storage.get(filepath);
+  }
+
+  public print(): void {
+    const filesAmount = Array.from(this.storage.values()).length;
+    const filesWithImports = Array.from(this.storage.values()).filter(
+      // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+      (file) => file.librariesImports.length > 0,
+    ).length;
+
+    log.info(blue(bold('Coverage Report\n')));
+    log.info(blue('Files tracked:      '), filesAmount);
+    log.info(blue('Files with imports: '), filesWithImports);
+    log.info();
+
+    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+    this.storage.forEach((file, filePath) => {
+      log.info(`${file.librariesImports.length > 0 ? '✅' : '  '} ${filePath}`);
+    });
   }
 }
 

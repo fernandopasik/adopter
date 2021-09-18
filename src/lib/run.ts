@@ -32,6 +32,7 @@ const run = async ({
   });
 
   usage.print();
+  coverage.print();
 };
 
 export default run;
