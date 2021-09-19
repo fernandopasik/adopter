@@ -81,7 +81,7 @@ class Usage {
     log.info(blue(bold('Usage Report\n')));
     log.info(blue('Packages tracked: '), packageAmount);
     log.info(blue('Packages used:    '), packagesUsed);
-    log.info(blue('Packages usage: '), `${packagesUsage}%`);
+    log.info(blue('Packages usage:   '), `${packagesUsage}%`);
     log.info('');
 
     // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
