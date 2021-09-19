@@ -1,35 +1,11 @@
-import findMissingPackages from '../find-missing-packages.js';
 import getPackageExports from '../get-package-exports.js';
 import listPackageExports from '../list-package-exports.js';
 
-jest.mock('../find-missing-packages.js', () => jest.fn(() => []));
 jest.mock('../list-package-exports.js');
 
 describe('get package exports', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-  });
-
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('finds missing packages', async () => {
-    const packageNames = ['dep1', 'dep2'];
-
-    await getPackageExports(packageNames);
-
-    expect(findMissingPackages).toHaveBeenCalledTimes(1);
-    expect(findMissingPackages).toHaveBeenCalledWith(packageNames);
-  });
-
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('if there are missing packages, installs them', async () => {
-    const packages = ['dep1', 'dep2'];
-    (findMissingPackages as jest.MockedFunction<typeof findMissingPackages>).mockResolvedValueOnce([
-      'dep1',
-    ]);
-
-    await getPackageExports(packages);
-
-    expect(findMissingPackages).toHaveBeenCalledTimes(1);
   });
 
   it('lists exports from each package', async () => {
