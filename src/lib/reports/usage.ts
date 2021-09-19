@@ -76,7 +76,7 @@ class Usage {
     // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
     const packagesUsed = Array.from(this.storage.values()).filter((pkg) => pkg.isUsed).length;
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    const packagesUsage = (packagesUsed / packageAmount) * 100;
+    const packagesUsage = ((packagesUsed / packageAmount) * 100).toFixed(2);
 
     log.info(blue(bold('Usage Report\n')));
     log.info(blue('Packages tracked: '), packageAmount);
