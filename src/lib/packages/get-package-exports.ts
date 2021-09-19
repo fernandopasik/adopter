@@ -3,7 +3,7 @@ import type { Export } from './list-package-exports.js';
 import listPackageExports from './list-package-exports.js';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-export type PackageExports = Map<string, ReadonlyDeep<Export[]>>;
+export type PackageExports = Map<string, ReadonlyDeep<Export[]> | null>;
 
 const getPackageExports = async (packageNames: readonly string[]): Promise<PackageExports> => {
   const packageExports: PackageExports = new Map();
@@ -13,9 +13,7 @@ const getPackageExports = async (packageNames: readonly string[]): Promise<Packa
       prev
         .then(async () => listPackageExports(packageName))
         .then((exports: ReadonlyDeep<Export[]> | null) => {
-          if (exports !== null) {
-            packageExports.set(packageName, exports);
-          }
+          packageExports.set(packageName, exports);
         }),
     Promise.resolve(),
   );

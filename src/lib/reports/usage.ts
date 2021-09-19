@@ -25,9 +25,11 @@ class Usage {
     packageExports.forEach((exports, packageName) => {
       this.storage.set(packageName, { isUsed: false, modules: new Map<string, Module>() });
 
-      exports.forEach(({ name, type }: Readonly<Export>) => {
-        this.storage.get(packageName)?.modules.set(name, { type, importedFrom: [] });
-      });
+      if (exports !== null) {
+        exports.forEach(({ name, type }: Readonly<Export>) => {
+          this.storage.get(packageName)?.modules.set(name, { type, importedFrom: [] });
+        });
+      }
     });
   }
 

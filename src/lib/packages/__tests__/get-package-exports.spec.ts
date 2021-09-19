@@ -66,4 +66,24 @@ describe('get package exports', () => {
     expect(Array.from(packageExports.keys())).toStrictEqual(packages);
     expect(Array.from(packageExports.values())).toStrictEqual([dep1, dep2, dep3]);
   });
+
+  it('with non installed or non existent packages', async () => {
+    const packages = ['dep1', 'dep2', 'dep3'];
+    const dep1 = [
+      { name: 'default', type: 'function' },
+      { name: 'moduleA', type: 'function' },
+    ];
+    const dep2 = [{ name: 'moduleA', type: 'string' }];
+    const dep3 = null;
+
+    (listPackageExports as jest.MockedFunction<typeof listPackageExports>)
+      .mockResolvedValueOnce(dep1)
+      .mockResolvedValueOnce(dep2)
+      .mockResolvedValueOnce(dep3);
+
+    const packageExports = await getPackageExports(packages);
+
+    expect(Array.from(packageExports.keys())).toStrictEqual(packages);
+    expect(Array.from(packageExports.values())).toStrictEqual([dep1, dep2, dep3]);
+  });
 });
