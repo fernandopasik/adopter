@@ -1,10 +1,8 @@
 import findMissingPackages from '../find-missing-packages.js';
 import getPackageExports from '../get-package-exports.js';
-import installPackages from '../install-packages.js';
 import listPackageExports from '../list-package-exports.js';
 
 jest.mock('../find-missing-packages.js', () => jest.fn(() => []));
-jest.mock('../install-packages.js');
 jest.mock('../list-package-exports.js');
 
 describe('get package exports', () => {
@@ -32,8 +30,6 @@ describe('get package exports', () => {
     await getPackageExports(packages);
 
     expect(findMissingPackages).toHaveBeenCalledTimes(1);
-    expect(installPackages).toHaveBeenCalledTimes(1);
-    expect(installPackages).toHaveBeenCalledWith(packages);
   });
 
   it('lists exports from each package', async () => {

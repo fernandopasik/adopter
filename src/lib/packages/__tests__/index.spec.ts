@@ -2,7 +2,6 @@ import findMissingPackages from '../find-missing-packages.js';
 import getPackageExports from '../get-package-exports.js';
 import getPackageName from '../get-package-name.js';
 import * as packages from '../index.js';
-import installPackages from '../install-packages.js';
 import listPackageExports from '../list-package-exports.js';
 
 describe('packages', () => {
@@ -16,10 +15,6 @@ describe('packages', () => {
 
   it('get package exports', () => {
     expect(packages.getPackageExports).toStrictEqual(getPackageExports);
-  });
-
-  it('install packages', () => {
-    expect(packages.installPackages).toStrictEqual(installPackages);
   });
 
   it('list package exports', () => {
