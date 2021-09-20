@@ -5,7 +5,7 @@ import { parseImports } from '../../imports/index.js';
 import parseAst from '../parse-ast.js';
 import processFiles from '../process-files.js';
 
-jest.mock('fs', () => ({ readFileSync: jest.fn() }));
+jest.mock('fs');
 
 jest.mock('../parse-ast.js', () => jest.fn());
 
@@ -20,30 +20,40 @@ describe('process files', () => {
 
   it('reads reads from provided list', () => {
     const files = ['example1.js', 'folder/example2.js', '/another/example3.ts'];
+    const spy = jest.spyOn(fs, 'readFileSync');
 
     processFiles(files);
 
-    expect(fs.readFileSync).toHaveBeenCalledTimes(files.length);
-    expect(fs.readFileSync).toHaveBeenCalledWith(files[0], 'utf8');
-    expect(fs.readFileSync).toHaveBeenCalledWith(files[1], 'utf8');
-    expect(fs.readFileSync).toHaveBeenCalledWith(files[2], 'utf8');
+    expect(spy).toHaveBeenCalledTimes(files.length);
+    expect(spy).toHaveBeenCalledWith(files[0], 'utf8');
+    expect(spy).toHaveBeenCalledWith(files[1], 'utf8');
+    expect(spy).toHaveBeenCalledWith(files[2], 'utf8');
+
+    spy.mockRestore();
   });
 
   it('with empty list', () => {
+    const spy = jest.spyOn(fs, 'readFileSync');
+
     processFiles();
 
-    expect(fs.readFileSync).toHaveBeenCalledTimes(0);
+    expect(spy).toHaveBeenCalledTimes(0);
+
+    spy.mockRestore();
   });
 
   describe('executes callback', () => {
     it('on each file', () => {
       const files = ['example1.js', 'folder/example2.js', '/another/example3.ts'];
+      const spy = jest.spyOn(fs, 'readFileSync');
       const callback = jest.fn();
 
       processFiles(files, callback);
 
-      expect(fs.readFileSync).toHaveBeenCalledTimes(files.length);
+      expect(spy).toHaveBeenCalledTimes(files.length);
       expect(callback).toHaveBeenCalledTimes(files.length);
+
+      spy.mockRestore();
     });
 
     it('with file path', () => {
