@@ -16,6 +16,7 @@ const processFiles = (
   ) => void,
 ): void => {
   filePaths.forEach((filePath) => {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const content = fs.readFileSync(filePath, 'utf8');
     const filename = path.basename(filePath);
     const ast = parseAst(filename, content);
