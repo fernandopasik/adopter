@@ -273,6 +273,17 @@ describe('usage report', () => {
   it('prints the report', () => {
     const usage = new Usage(packageExports);
 
+    const imports = [
+      {
+        moduleSpecifier: 'dep1',
+        packageName: 'dep1',
+        defaultName: 'dep1',
+        moduleNames: ['default'],
+      },
+    ];
+
+    usage.addImports('example1.js', imports);
+
     usage.print();
 
     // eslint-disable-next-line @typescript-eslint/unbound-method

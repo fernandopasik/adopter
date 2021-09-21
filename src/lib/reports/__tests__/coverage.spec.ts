@@ -107,8 +107,10 @@ describe('coverage report', () => {
 
   it('prints the report', () => {
     const usage = new Usage(new Map());
+    const spy = jest.spyOn(usage, 'hasModule').mockReturnValueOnce(true);
     const coverage = new Coverage(usage);
-    const filePath = 'src/example.js';
+    const filePath1 = 'src/example1.js';
+    const filePath2 = 'src/example2.js';
     const imports = [
       {
         moduleSpecifier: 'dep1',
@@ -118,10 +120,13 @@ describe('coverage report', () => {
       },
     ];
 
-    coverage.addFile(filePath, imports);
+    coverage.addFile(filePath1, imports);
+    coverage.addFile(filePath2, []);
 
     coverage.print();
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(log.info).toHaveBeenNthCalledWith(1, 'Coverage Report\n');
+
+    spy.mockRestore();
   });
 });
