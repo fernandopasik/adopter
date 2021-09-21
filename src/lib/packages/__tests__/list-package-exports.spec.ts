@@ -7,11 +7,14 @@ describe('list package exports', () => {
   });
 
   it('with an empty module', async () => {
-    jest.doMock('typescript', () => undefined);
+    jest.doMock('typescript', () => ({
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      __esModule: true,
+    }));
 
     const exports = await listPackageExports('typescript');
 
-    expect(exports).toStrictEqual([{ name: 'default', type: 'undefined' }]);
+    expect(exports).toStrictEqual([{ name: '__esModule', type: 'boolean' }]);
   });
 
   it('with a non installed module', async () => {
