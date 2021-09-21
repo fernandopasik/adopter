@@ -53,6 +53,14 @@ class Usage {
     return Boolean(this.storage.get(packageName)?.modules.has(moduleName));
   }
 
+  public isPackageUsed(packageName: string): boolean {
+    return Boolean(this.getPackage(packageName)?.isUsed);
+  }
+
+  public isModuleUsed(packageName: string, moduleName: string): boolean {
+    return Boolean(this.getModule(packageName, moduleName)?.importedFrom.length);
+  }
+
   public addImports(filepath: string, imports: ReadonlyDeep<Import[]>): void {
     imports.forEach(({ packageName, moduleNames }) => {
       if (packageName !== null) {

@@ -98,17 +98,13 @@ describe('usage report', () => {
         },
       ];
 
-      expect(usage.getModule('dep1', 'default')).toStrictEqual({
-        type: 'function',
-        importedFrom: [],
-      });
+      expect(usage.isPackageUsed('dep1')).toBe(false);
+      expect(usage.isModuleUsed('dep1', 'default')).toBe(false);
 
       usage.addImports(filePath, imports);
 
-      expect(usage.getModule('dep1', 'default')).toStrictEqual({
-        type: 'function',
-        importedFrom: [filePath],
-      });
+      expect(usage.isPackageUsed('dep1')).toBe(true);
+      expect(usage.isModuleUsed('dep1', 'default')).toBe(true);
     });
 
     it('with a named module', () => {
@@ -123,17 +119,13 @@ describe('usage report', () => {
         },
       ];
 
-      expect(usage.getModule('dep3', 'methodA')).toStrictEqual({
-        type: 'function',
-        importedFrom: [],
-      });
+      expect(usage.isPackageUsed('dep3')).toBe(false);
+      expect(usage.isModuleUsed('dep3', 'methodA')).toBe(false);
 
       usage.addImports(filePath, imports);
 
-      expect(usage.getModule('dep3', 'methodA')).toStrictEqual({
-        type: 'function',
-        importedFrom: [filePath],
-      });
+      expect(usage.isPackageUsed('dep3')).toBe(true);
+      expect(usage.isModuleUsed('dep3', 'methodA')).toBe(true);
     });
 
     it('with default and named modules', () => {
@@ -149,27 +141,15 @@ describe('usage report', () => {
         },
       ];
 
-      expect(usage.getModule('dep2', 'default')).toStrictEqual({
-        type: 'function',
-        importedFrom: [],
-      });
-
-      expect(usage.getModule('dep2', 'methodA')).toStrictEqual({
-        type: 'function',
-        importedFrom: [],
-      });
+      expect(usage.isPackageUsed('dep2')).toBe(false);
+      expect(usage.isModuleUsed('dep2', 'default')).toBe(false);
+      expect(usage.isModuleUsed('dep2', 'methodA')).toBe(false);
 
       usage.addImports(filePath, imports);
 
-      expect(usage.getModule('dep2', 'default')).toStrictEqual({
-        type: 'function',
-        importedFrom: [filePath],
-      });
-
-      expect(usage.getModule('dep2', 'methodA')).toStrictEqual({
-        type: 'function',
-        importedFrom: [filePath],
-      });
+      expect(usage.isPackageUsed('dep2')).toBe(true);
+      expect(usage.isModuleUsed('dep2', 'default')).toBe(true);
+      expect(usage.isModuleUsed('dep2', 'methodA')).toBe(true);
     });
 
     it('with multiple imports', () => {
@@ -190,27 +170,17 @@ describe('usage report', () => {
         },
       ];
 
-      expect(usage.getModule('dep2', 'default')).toStrictEqual({
-        type: 'function',
-        importedFrom: [],
-      });
-
-      expect(usage.getModule('dep3', 'methodA')).toStrictEqual({
-        type: 'function',
-        importedFrom: [],
-      });
+      expect(usage.isPackageUsed('dep2')).toBe(false);
+      expect(usage.isPackageUsed('dep3')).toBe(false);
+      expect(usage.isModuleUsed('dep2', 'default')).toBe(false);
+      expect(usage.isModuleUsed('dep3', 'methodA')).toBe(false);
 
       usage.addImports(filePath, imports);
 
-      expect(usage.getModule('dep2', 'default')).toStrictEqual({
-        type: 'function',
-        importedFrom: [filePath],
-      });
-
-      expect(usage.getModule('dep3', 'methodA')).toStrictEqual({
-        type: 'function',
-        importedFrom: [filePath],
-      });
+      expect(usage.isPackageUsed('dep2')).toBe(true);
+      expect(usage.isPackageUsed('dep3')).toBe(true);
+      expect(usage.isModuleUsed('dep2', 'default')).toBe(true);
+      expect(usage.isModuleUsed('dep3', 'methodA')).toBe(true);
     });
 
     it('with a non tracked package', () => {
