@@ -1,3 +1,4 @@
+import log from 'loglevel';
 import listPackageExports from '../list-package-exports.js';
 
 describe('list package exports', () => {
@@ -18,9 +19,16 @@ describe('list package exports', () => {
   });
 
   it('with a non installed module', async () => {
-    const exports = await listPackageExports('typescriptzzz');
+    const spy = jest.spyOn(log, 'warn').mockImplementation();
+    const packageName = 'typescriptzzz';
 
+    const exports = await listPackageExports(packageName);
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(`Cannot import package ${packageName}`);
     expect(exports).toBeNull();
+
+    spy.mockRestore();
   });
 
   it('with a default export', async () => {

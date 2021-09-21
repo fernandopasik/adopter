@@ -1,3 +1,5 @@
+import log from 'loglevel';
+
 export interface Export {
   name: string;
   type: string;
@@ -9,6 +11,7 @@ export const listPackageExports = async (packageName: string): Promise<Export[] 
   try {
     pkg = (await import(packageName)) as Record<string, unknown>;
   } catch {
+    log.warn(`Cannot import package ${packageName}`);
     return null;
   }
 
