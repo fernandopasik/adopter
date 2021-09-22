@@ -63,19 +63,23 @@ describe('run', () => {
 
   it('prints usage', async () => {
     const packages = ['dep1', 'dep2'];
+    const spy = jest.spyOn(Usage.prototype, 'print');
 
     await run({ packages });
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(Usage.prototype.print).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    spy.mockRestore();
   });
 
   it('prints coverage', async () => {
     const packages = ['dep1', 'dep2'];
+    const spy = jest.spyOn(Coverage.prototype, 'print');
 
     await run({ packages });
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(Coverage.prototype.print).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    spy.mockRestore();
   });
 });
