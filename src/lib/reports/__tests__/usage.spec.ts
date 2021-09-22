@@ -195,13 +195,13 @@ describe('usage report', () => {
         },
       ];
 
-      expect(usage.getPackage('dep4')).toBeUndefined();
-      expect(usage.getModule('dep4', 'default')).toBeUndefined();
+      expect(usage.hasPackage('dep4')).toBe(false);
+      expect(usage.hasModule('dep4', 'default')).toBe(false);
 
       usage.addImports(filePath, imports);
 
-      expect(usage.getPackage('dep4')).toBeUndefined();
-      expect(usage.getModule('dep4', 'default')).toBeUndefined();
+      expect(usage.hasPackage('dep4')).toBe(false);
+      expect(usage.hasModule('dep4', 'default')).toBe(false);
     });
 
     it('with a non tracked module', () => {
@@ -216,12 +216,13 @@ describe('usage report', () => {
         },
       ];
 
-      expect(usage.getPackage('dep1')).not.toBeUndefined();
-      expect(usage.getModule('dep1', 'methodA')).toBeUndefined();
+      expect(usage.hasPackage('dep1')).toBe(true);
+      expect(usage.isPackageUsed('dep1')).toBe(false);
+      expect(usage.hasModule('dep1', 'methodA')).toBe(false);
 
       usage.addImports(filePath, imports);
 
-      expect(usage.getModule('dep1', 'methodA')).toBeUndefined();
+      expect(usage.hasModule('dep1', 'methodA')).toBe(false);
     });
   });
 
