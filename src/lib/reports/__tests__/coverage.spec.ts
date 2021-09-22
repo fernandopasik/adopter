@@ -1,4 +1,5 @@
 import log from 'loglevel';
+import type { Import } from '../../imports/index.js';
 import Coverage from '../coverage.js';
 import Usage from '../usage.js';
 
@@ -12,11 +13,25 @@ jest.mock('../usage');
 
 describe('coverage report', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe('add file', () => {
-    it('from tracked package', () => {
+    it('with no imports', () => {
+      const usage = new Usage(new Map());
+      const coverage = new Coverage(usage);
+      const filePath = 'src/example.js';
+      const imports: Import[] = [];
+
+      coverage.addFile(filePath, imports);
+
+      expect(coverage.getFile(filePath)).toStrictEqual({
+        all: imports,
+        librariesImports: [],
+      });
+    });
+
+    it('with tracked package import', () => {
       const usage = new Usage(new Map());
       const spy = jest.spyOn(usage, 'hasModule').mockReturnValueOnce(true);
       const coverage = new Coverage(usage);
@@ -41,10 +56,11 @@ describe('coverage report', () => {
           },
         ],
       });
+
       spy.mockRestore();
     });
 
-    it('from untracked package', () => {
+    it('with untracked package import', () => {
       const usage = new Usage(new Map());
       const spy = jest.spyOn(usage, 'hasModule').mockReturnValueOnce(false);
       const coverage = new Coverage(usage);
@@ -64,10 +80,11 @@ describe('coverage report', () => {
         all: imports,
         librariesImports: [],
       });
+
       spy.mockRestore();
     });
 
-    it('from tracked and untracked packages', () => {
+    it('with tracked and untracked package imports', () => {
       const usage = new Usage(new Map());
       const spy = jest
         .spyOn(usage, 'hasModule')
@@ -101,6 +118,31 @@ describe('coverage report', () => {
           },
         ],
       });
+
+      spy.mockRestore();
+    });
+
+    it('with null package import', () => {
+      const usage = new Usage(new Map());
+      const spy = jest.spyOn(usage, 'hasModule').mockReturnValueOnce(true);
+      const coverage = new Coverage(usage);
+      const filePath = 'src/example.js';
+      const imports = [
+        {
+          moduleSpecifier: 'dep',
+          packageName: null,
+          defaultName: 'dep',
+          moduleNames: ['default'],
+        },
+      ];
+
+      coverage.addFile(filePath, imports);
+
+      expect(coverage.getFile(filePath)).toStrictEqual({
+        all: imports,
+        librariesImports: [],
+      });
+
       spy.mockRestore();
     });
   });
