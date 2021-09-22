@@ -293,6 +293,7 @@ describe('usage report', () => {
   });
 
   it('prints the report', () => {
+    const spy = jest.spyOn(log, 'info').mockImplementation();
     const usage = new Usage(packageExports);
 
     const imports = [
@@ -308,7 +309,8 @@ describe('usage report', () => {
 
     usage.print();
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(log.info).toHaveBeenNthCalledWith(1, 'Usage Report\n');
+    expect(spy).toHaveBeenNthCalledWith(1, 'Usage Report\n');
+
+    spy.mockRestore();
   });
 });
