@@ -23,11 +23,12 @@ class Usage {
     this.storage = new Map();
 
     packageExports.forEach((exports, packageName) => {
-      this.storage.set(packageName, { isUsed: false, modules: new Map<string, Module>() });
-
       if (exports !== null) {
+        this.storage.set(packageName, { isUsed: false, modules: new Map<string, Module>() });
+
         exports.forEach(({ name, type }: Readonly<Export>) => {
-          this.storage.get(packageName)?.modules.set(name, { type, importedFrom: [] });
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          this.storage.get(packageName)!.modules.set(name, { type, importedFrom: [] });
         });
       }
     });

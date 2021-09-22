@@ -48,6 +48,13 @@ describe('usage report', () => {
 
       expect(usage.getPackage('dep4')).toBeUndefined();
     });
+
+    it('with non loaded', () => {
+      const packageExports2 = new Map([['dep4', null]]);
+      const usage = new Usage(packageExports2);
+
+      expect(usage.getPackage('dep4')).toBeUndefined();
+    });
   });
 
   describe('get module', () => {
@@ -62,6 +69,13 @@ describe('usage report', () => {
 
       expect(usage.getModule('dep4', 'default')).toBeUndefined();
     });
+
+    it('with non loaded', () => {
+      const packageExports2 = new Map([['dep4', null]]);
+      const usage = new Usage(packageExports2);
+
+      expect(usage.getModule('dep4', 'default')).toBeUndefined();
+    });
   });
 
   describe('has package', () => {
@@ -73,6 +87,13 @@ describe('usage report', () => {
 
     it('does not find a package', () => {
       const usage = new Usage(packageExports);
+
+      expect(usage.hasPackage('dep4')).toBe(false);
+    });
+
+    it('does not find a not loaded package', () => {
+      const packageExports2 = new Map([['dep4', null]]);
+      const usage = new Usage(packageExports2);
 
       expect(usage.hasPackage('dep4')).toBe(false);
     });
@@ -101,6 +122,13 @@ describe('usage report', () => {
       const usage = new Usage(packageExports);
 
       expect(usage.hasModule('dep2', 'methodB')).toBe(false);
+    });
+
+    it('does not find a not loaded module', () => {
+      const packageExports2 = new Map([['dep4', null]]);
+      const usage = new Usage(packageExports2);
+
+      expect(usage.hasModule('dep4', 'methodA')).toBe(false);
     });
   });
 
@@ -187,6 +215,45 @@ describe('usage report', () => {
       usage.addImports(filePath, imports);
 
       expect(usage.isPackageUsed('dep1')).toBe(true);
+    });
+
+    it('with non existent module', () => {
+      const packageExports2 = new Map([['dep4', null]]);
+      const usage = new Usage(packageExports2);
+      const filePath = 'src/example.js';
+
+      const imports = [
+        {
+          moduleSpecifier: 'dep4',
+          packageName: 'dep4',
+          moduleNames: [],
+        },
+      ];
+
+      expect(usage.isPackageUsed('dep4')).toBe(false);
+
+      usage.addImports(filePath, imports);
+
+      expect(usage.isPackageUsed('dep4')).toBe(false);
+    });
+
+    it('with null imports module', () => {
+      const usage = new Usage(packageExports);
+      const filePath = 'src/example.js';
+
+      const imports = [
+        {
+          moduleSpecifier: 'dep',
+          packageName: null,
+          moduleNames: [],
+        },
+      ];
+
+      expect(usage.isPackageUsed('dep')).toBe(false);
+
+      usage.addImports(filePath, imports);
+
+      expect(usage.isPackageUsed('dep')).toBe(false);
     });
 
     it('with multiple imports', () => {
