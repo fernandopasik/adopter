@@ -36,12 +36,17 @@ describe('usage report', () => {
     expect(usage.getPackageNames()).toStrictEqual(['dep1', 'dep2', 'dep3']);
   });
 
-  it('get package', () => {
-    const usage = new Usage(packageExports);
+  describe('get package', () => {
+    it('with existent', () => {
+      const usage = new Usage(packageExports);
 
-    expect(usage.getPackage('dep1')).toStrictEqual({
-      isUsed: false,
-      modules: new Map([['default', { type: 'function', importedFrom: [] }]]),
+      expect(usage.getPackage('dep1')).not.toBeUndefined();
+    });
+
+    it('with non existent', () => {
+      const usage = new Usage(packageExports);
+
+      expect(usage.getPackage('dep4')).toBeUndefined();
     });
   });
 
