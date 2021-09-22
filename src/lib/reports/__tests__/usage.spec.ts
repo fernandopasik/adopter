@@ -224,6 +224,57 @@ describe('usage report', () => {
 
       expect(usage.hasModule('dep1', 'methodA')).toBe(false);
     });
+
+    it('with tracked and non tracked packages', () => {
+      const usage = new Usage(packageExports);
+      const filePath = 'src/example.js';
+      const imports = [
+        {
+          moduleSpecifier: 'dep1',
+          packageName: 'dep1',
+          defaultName: 'dep1',
+          moduleNames: ['default'],
+        },
+        {
+          moduleSpecifier: 'dep4',
+          packageName: 'dep4',
+          defaultName: 'dep4',
+          moduleNames: ['default'],
+        },
+      ];
+
+      expect(usage.isPackageUsed('dep1')).toBe(false);
+      expect(usage.isPackageUsed('dep4')).toBe(false);
+
+      usage.addImports(filePath, imports);
+
+      expect(usage.isPackageUsed('dep1')).toBe(true);
+      expect(usage.isPackageUsed('dep4')).toBe(false);
+    });
+
+    it('with tracked and non tracked module', () => {
+      const usage = new Usage(packageExports);
+      const filePath = 'src/example.js';
+      const imports = [
+        {
+          moduleSpecifier: 'dep1',
+          packageName: 'dep1',
+          defaultName: 'dep1',
+          named: { methodA: 'methodA' },
+          moduleNames: ['default', 'methodA'],
+        },
+      ];
+
+      expect(usage.isPackageUsed('dep1')).toBe(false);
+      expect(usage.isModuleUsed('dep1', 'default')).toBe(false);
+      expect(usage.isModuleUsed('dep1', 'methodA')).toBe(false);
+
+      usage.addImports(filePath, imports);
+
+      expect(usage.isPackageUsed('dep1')).toBe(true);
+      expect(usage.isModuleUsed('dep1', 'default')).toBe(true);
+      expect(usage.isModuleUsed('dep1', 'methodA')).toBe(false);
+    });
   });
 
   it('avoids duplicated modules', () => {
