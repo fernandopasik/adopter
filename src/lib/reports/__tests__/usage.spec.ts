@@ -40,7 +40,7 @@ describe('usage report', () => {
     it('with existent', () => {
       const usage = new Usage(packageExports);
 
-      expect(usage.getPackage('dep1')).not.toBeUndefined();
+      expect(usage.getPackage('dep1')).toBeDefined();
     });
 
     it('with non existent', () => {
@@ -61,7 +61,7 @@ describe('usage report', () => {
     it('with existent', () => {
       const usage = new Usage(packageExports);
 
-      expect(usage.getModule('dep1', 'default')).not.toBeUndefined();
+      expect(usage.getModule('dep1', 'default')).toBeDefined();
     });
 
     it('with non existent', () => {
