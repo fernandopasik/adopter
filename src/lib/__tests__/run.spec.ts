@@ -7,13 +7,22 @@ jest.mock('globby', () => ({
   globbySync: jest.fn(),
 }));
 
-jest.mock('../files/index.js');
+jest.mock('../files/index.js', () => ({
+  listFiles: jest.fn(),
+  processFiles: jest.fn((files: readonly string[] = [], callback?: (file: string) => void) => {
+    files.forEach((file) => {
+      if (typeof callback === 'function') {
+        callback(file);
+      }
+    });
+  }),
+}));
 jest.mock('../packages/index.js');
 jest.mock('../reports/index.js');
 
 describe('run', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   it('gets packages exports', async () => {
@@ -59,6 +68,34 @@ describe('run', () => {
 
     expect(processFiles).toHaveBeenCalledTimes(1);
     expect(processFiles).toHaveBeenCalledWith(files, expect.any(Function));
+  });
+
+  it('add each file import to usage', async () => {
+    const packages = ['dep1', 'dep2'];
+    const files = ['example1.js', 'example2.js'];
+    const spy = jest.spyOn(Usage.prototype, 'addImports');
+
+    (listFiles as jest.MockedFunction<typeof listFiles>).mockReturnValueOnce(files);
+
+    await run({ packages });
+
+    expect(spy).toHaveBeenCalledTimes(2);
+
+    spy.mockRestore();
+  });
+
+  it('add each file to coverage', async () => {
+    const packages = ['dep1', 'dep2'];
+    const files = ['example1.js', 'example2.js'];
+    const spy = jest.spyOn(Coverage.prototype, 'addFile');
+
+    (listFiles as jest.MockedFunction<typeof listFiles>).mockReturnValueOnce(files);
+
+    await run({ packages });
+
+    expect(spy).toHaveBeenCalledTimes(2);
+
+    spy.mockRestore();
   });
 
   it('prints usage', async () => {
