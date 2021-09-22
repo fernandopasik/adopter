@@ -171,6 +171,24 @@ describe('usage report', () => {
       expect(usage.isModuleUsed('dep2', 'methodA')).toBe(true);
     });
 
+    it('with no modules', () => {
+      const usage = new Usage(packageExports);
+      const filePath = 'src/example.js';
+      const imports = [
+        {
+          moduleSpecifier: 'dep1',
+          packageName: 'dep1',
+          moduleNames: [],
+        },
+      ];
+
+      expect(usage.isPackageUsed('dep1')).toBe(false);
+
+      usage.addImports(filePath, imports);
+
+      expect(usage.isPackageUsed('dep1')).toBe(true);
+    });
+
     it('with multiple imports', () => {
       const usage = new Usage(packageExports);
       const filePath = 'src/example.js';
@@ -271,7 +289,7 @@ describe('usage report', () => {
       expect(usage.isPackageUsed('dep4')).toBe(false);
     });
 
-    it('with tracked and non tracked module', () => {
+    it('with tracked and non tracked modules', () => {
       const usage = new Usage(packageExports);
       const filePath = 'src/example.js';
       const imports = [

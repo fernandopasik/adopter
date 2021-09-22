@@ -67,11 +67,12 @@ class Usage {
         const pkg = this.storage.get(packageName);
 
         if (typeof pkg !== 'undefined') {
+          pkg.isUsed = true;
+
           moduleNames.forEach((moduleName) => {
             const module = pkg.modules.get(moduleName);
 
             if (typeof module !== 'undefined') {
-              pkg.isUsed = true;
               module.importedFrom.push(filepath);
             }
           });
