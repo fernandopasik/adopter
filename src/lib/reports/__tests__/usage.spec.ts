@@ -45,6 +45,20 @@ describe('usage report', () => {
     });
   });
 
+  describe('get module', () => {
+    it('with existent', () => {
+      const usage = new Usage(packageExports);
+
+      expect(usage.getModule('dep1', 'default')).not.toBeUndefined();
+    });
+
+    it('with non existent', () => {
+      const usage = new Usage(packageExports);
+
+      expect(usage.getModule('dep4', 'default')).toBeUndefined();
+    });
+  });
+
   describe('has package', () => {
     it('finds a package', () => {
       const usage = new Usage(packageExports);
