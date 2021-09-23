@@ -1,6 +1,6 @@
 import type { ReadonlyDeep } from 'type-fest';
 import type ts from 'typescript';
-import { getPackageName } from '../packages/index.js';
+import { extractPackageName } from '../packages/index.js';
 import areNamedImports from './are-named-imports.js';
 import getImportModuleNames from './get-import-module-names.js';
 
@@ -14,7 +14,7 @@ export interface Import {
 
 const parseImport = (statement: ReadonlyDeep<ts.ImportDeclaration>): Import => {
   const { text: moduleSpecifier } = statement.moduleSpecifier as ts.LiteralExpression;
-  const packageName = getPackageName(moduleSpecifier);
+  const packageName = extractPackageName(moduleSpecifier);
   const { text: defaultName } = statement.importClause?.name ?? {};
   const { namedBindings } = statement.importClause ?? {};
 
