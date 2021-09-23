@@ -9,14 +9,8 @@ export interface Options {
   srcMatch?: string[];
 }
 
-const DEFAULT_OPTIONS: Options = {
-  packages: [],
-  rootDir: process.cwd(),
-  srcMatch: ['**/*.[jt]s?(x)'],
-};
-
 const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
-  const { packages, srcMatch } = Object.assign(DEFAULT_OPTIONS, options);
+  const { packages = [], srcMatch = ['**/*.[jt]s?(x)'] } = options;
 
   const packageExports = await getPackageExports(packages);
 
