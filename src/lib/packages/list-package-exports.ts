@@ -1,4 +1,5 @@
 import log from 'loglevel';
+import resolvePackage from './resolve-package.js';
 
 export interface Export {
   name: string;
@@ -9,7 +10,9 @@ export const listPackageExports = async (packageName: string): Promise<Export[] 
   let pkg: Record<string, unknown> = {};
 
   try {
-    pkg = (await import(packageName)) as Record<string, unknown>;
+    const packageUrl = await resolvePackage(packageName);
+
+    pkg = (await import(packageUrl)) as Record<string, unknown>;
   } catch {
     log.warn(`Cannot import package ${packageName}`);
     return null;
