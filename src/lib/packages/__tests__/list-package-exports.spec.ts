@@ -1,7 +1,9 @@
 import log from 'loglevel';
 import listPackageExports from '../list-package-exports.js';
 
-jest.mock('../resolve-package.js', () => jest.fn((specifier: string) => specifier));
+jest.mock('../resolve-package.js', () =>
+  jest.fn(async (specifier: string) => Promise.resolve(specifier)),
+);
 jest.mock('loglevel');
 jest.mock('nanocolors', () => ({
   yellow: (t: string): string => t,
