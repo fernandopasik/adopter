@@ -14,8 +14,6 @@ interface Package {
   modules: Map<string, Module>;
 }
 
-log.setDefaultLevel('INFO');
-
 class Usage {
   private readonly storage: Map<string, Package>;
 
@@ -83,6 +81,9 @@ class Usage {
   }
 
   public print(): void {
+    const currentLogLevel = log.getLevel();
+    log.setLevel('INFO');
+
     const packageAmount = this.getPackageNames().length;
 
     // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
@@ -105,6 +106,8 @@ class Usage {
       });
       log.info();
     });
+
+    log.setLevel(currentLogLevel);
   }
 }
 

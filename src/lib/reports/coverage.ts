@@ -48,6 +48,9 @@ class Coverage {
   }
 
   public print(): void {
+    const currentLogLevel = log.getLevel();
+    log.setLevel('INFO');
+
     const filesAmount = Array.from(this.storage.values()).length;
     const filesWithImports = Array.from(this.storage.values()).filter(
       // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
@@ -63,6 +66,8 @@ class Coverage {
     this.storage.forEach((file, filePath) => {
       log.info(`${file.librariesImports.length > 0 ? '✅' : '  '} ${filePath}`);
     });
+
+    log.setLevel(currentLogLevel);
   }
 }
 
