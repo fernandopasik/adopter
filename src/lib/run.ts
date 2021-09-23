@@ -1,3 +1,4 @@
+import log from 'loglevel';
 import path from 'path';
 import type { ReadonlyDeep } from 'type-fest';
 import { listFiles, processFiles } from './files/index.js';
@@ -9,6 +10,8 @@ export interface Options {
   rootDir?: string;
   srcMatch?: string[];
 }
+
+log.setDefaultLevel('ERROR');
 
 const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
   const { packages, rootDir = '.', srcMatch = ['**/*.[jt]s?(x)'] } = options;
