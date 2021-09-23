@@ -1,5 +1,5 @@
 export default {
-  collectCoverageFrom: ['src/**/*.{j,t}s'],
+  collectCoverageFrom: ['src/**/*.{j,t}s', '!src/bin/*'],
   globals: { 'ts-jest': { tsconfig: 'tsconfig.all.json', useESM: true } },
   moduleNameMapper: { '(.*)\\.js': '$1' },
   preset: 'ts-jest/presets/js-with-ts-esm',
