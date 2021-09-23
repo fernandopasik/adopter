@@ -19,6 +19,7 @@ const cli = async (processArgs: readonly string[]): Promise<void> => {
     })
     .wrap(MAX_FORMAT_WIDTH)
     .parseSync();
+
   const packages = argList.map((arg) => String(arg));
 
   await run({ packages, rootDir });
