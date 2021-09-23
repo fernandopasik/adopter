@@ -3,6 +3,8 @@ import { getPackageExports } from '../packages/index.js';
 import { Coverage, Usage } from '../reports/index.js';
 import run from '../run.js';
 
+jest.mock('../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
+
 jest.mock('globby', () => ({
   globbySync: jest.fn(),
 }));

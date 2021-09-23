@@ -1,6 +1,8 @@
 import ts from 'typescript';
 import parseImports from '../parse-imports.js';
 
+jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
+
 describe('parse imports', () => {
   it('default imports', () => {
     const source = ts.createSourceFile(

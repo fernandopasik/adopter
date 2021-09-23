@@ -3,6 +3,8 @@ import listFiles from '../list-files.js';
 import parseAst from '../parse-ast.js';
 import processFiles from '../process-files.js';
 
+jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
+
 jest.mock('globby', () => ({
   globbySync: jest.fn(),
 }));

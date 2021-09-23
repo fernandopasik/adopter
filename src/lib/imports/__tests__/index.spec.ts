@@ -4,6 +4,8 @@ import * as imports from '../index.js';
 import parseImport from '../parse-import.js';
 import parseImports from '../parse-imports.js';
 
+jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
+
 describe('packages', () => {
   it('are named imports', () => {
     expect(imports.areNamedImports).toStrictEqual(areNamedImports);

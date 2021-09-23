@@ -1,6 +1,8 @@
 import log from 'loglevel';
 import listPackageExports from '../list-package-exports.js';
 
+jest.mock('../resolve-package.js', () => jest.fn((specifier: string) => specifier));
+
 describe('list package exports', () => {
   beforeEach(() => {
     jest.resetModules();

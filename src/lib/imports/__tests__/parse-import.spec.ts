@@ -2,6 +2,8 @@ import type { ReadonlyDeep } from 'type-fest';
 import ts from 'typescript';
 import parseImport from '../parse-import.js';
 
+jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
+
 describe('parse import', () => {
   it('without default nor named imports', () => {
     const {

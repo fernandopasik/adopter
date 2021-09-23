@@ -3,6 +3,7 @@ import type { Export } from '../list-package-exports.js';
 import listPackageExports from '../list-package-exports.js';
 
 jest.mock('../list-package-exports.js');
+jest.mock('../resolve-package.js', () => jest.fn((specifier: string) => specifier));
 
 describe('get package exports', () => {
   beforeEach(() => {
