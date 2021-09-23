@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --experimental-import-meta-resolve
 
 import cli from '../lib/cli.js';
 
