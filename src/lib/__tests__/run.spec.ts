@@ -58,6 +58,17 @@ describe('run', () => {
     expect(listFiles).toHaveBeenCalledWith(srcMatch);
   });
 
+  it('can set a root directory', async () => {
+    const packages = ['dep1', 'dep2'];
+    const rootDir = 'src';
+    const srcMatch = ['*', '*.js'];
+
+    await run({ packages, rootDir, srcMatch });
+
+    expect(listFiles).toHaveBeenCalledTimes(1);
+    expect(listFiles).toHaveBeenCalledWith(['src/*', 'src/*.js']);
+  });
+
   it('processes all files', async () => {
     const packages = ['dep1', 'dep2'];
     const files = ['*'];
