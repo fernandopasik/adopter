@@ -1,6 +1,8 @@
 import yargs from 'yargs';
 import run from './run.js';
 
+const MAX_FORMAT_WIDTH = 120;
+
 const cli = async (processArgs: readonly string[]): Promise<void> => {
   const { _: argList, rootDir } = yargs(processArgs)
     .usage('$0 [options] package1 [package2] [packageN]')
@@ -16,6 +18,7 @@ const cli = async (processArgs: readonly string[]): Promise<void> => {
       describe: 'Glob patterns to match files for tracking packages',
       type: 'array',
     })
+    .wrap(MAX_FORMAT_WIDTH)
     .parseSync();
   const packages = argList.map((arg) => String(arg));
 
