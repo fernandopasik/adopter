@@ -1,4 +1,5 @@
 import log from 'loglevel';
+import { yellow } from 'nanocolors';
 import resolvePackage from './resolve-package.js';
 
 export interface Export {
@@ -15,7 +16,7 @@ export const listPackageExports = async (packageName: string): Promise<Export[] 
     pkg = (await import(packageUrl)) as Record<string, unknown>;
   } catch (error: unknown) {
     const { message } = error as { message: string };
-    log.warn(message);
+    log.warn(yellow(message));
     return null;
   }
 

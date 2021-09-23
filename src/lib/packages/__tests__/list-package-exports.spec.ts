@@ -2,6 +2,10 @@ import log from 'loglevel';
 import listPackageExports from '../list-package-exports.js';
 
 jest.mock('../resolve-package.js', () => jest.fn((specifier: string) => specifier));
+jest.mock('loglevel');
+jest.mock('nanocolors', () => ({
+  yellow: (t: string): string => t,
+}));
 
 describe('list package exports', () => {
   beforeEach(() => {
