@@ -1,5 +1,6 @@
 import log from 'loglevel';
 import { yellow } from 'nanocolors';
+import type { ReadonlyDeep } from 'type-fest';
 import resolvePackage from './resolve-package.js';
 
 export interface Export {
@@ -7,27 +8,21 @@ export interface Export {
   type: string;
 }
 
-export const listPackageExports = async (packageName: string): Promise<Export[] | null> => {
-  let pkg: Record<string, unknown> = {};
-
-  try {
-    const packageUrl = await resolvePackage(packageName);
-
-    pkg = (await import(packageUrl)) as Record<string, unknown>;
-  } catch (error: unknown) {
-    const { message } = error as { message: string };
-    log.warn(yellow(message));
-    return null;
-  }
-
-  const pkgExports = Object.entries(pkg);
-
-  return pkgExports.map(
-    ([name, value]: Readonly<[string, unknown]>): Export => ({
-      name,
-      type: typeof value,
-    }),
-  );
-};
+const listPackageExports = async (packageName: string): Promise<Export[] | null> =>
+  resolvePackage(packageName)
+    .then(async (packageUrl) => import(packageUrl) as Promise<Record<string, unknown>>)
+    .then((pkg: ReadonlyDeep<Record<string, unknown>>) =>
+      Object.entries(pkg).map(
+        ([name, value]: Readonly<[string, unknown]>): Export => ({
+          name,
+          type: typeof value,
+        }),
+      ),
+    )
+    .catch((error) => {
+      const { message } = error as { message: string };
+      log.warn(yellow(message));
+      return null;
+    });
 
 export default listPackageExports;
