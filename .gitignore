@@ -22,5 +22,6 @@ yarn-error.log
 coverage
 
 # build and temp folders
+/bin
 /lib
 /adopter.*

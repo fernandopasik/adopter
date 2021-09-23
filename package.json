@@ -6,11 +6,15 @@
   "repository": "fernandopasik/adopter",
   "author": "Fernando Pasik <fernando@pasik.com.ar> (https://fernandopasik.com)",
   "license": "MIT",
+  "bin": {
+    "adopter": "./bin/adopter.js"
+  },
   "main": "adopter.js",
   "module": "adopter.js",
   "typings": "adopter.d.ts",
   "files": [
     "/adopter.*",
+    "/bin",
     "/lib"
   ],
   "scripts": {
