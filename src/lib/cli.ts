@@ -13,7 +13,6 @@ const cli = async (processArgs: readonly string[]): Promise<void> => {
       type: 'string',
     })
     .option('srcMatch', {
-      array: true,
       default: ['**/*.[jt]s?(x)'],
       describe: 'Glob patterns to match files for tracking packages',
       type: 'array',
