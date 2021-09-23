@@ -13,8 +13,9 @@ export const listPackageExports = async (packageName: string): Promise<Export[] 
     const packageUrl = await resolvePackage(packageName);
 
     pkg = (await import(packageUrl)) as Record<string, unknown>;
-  } catch {
-    log.warn(`Cannot import package ${packageName}`);
+  } catch (error: unknown) {
+    const { message } = error as { message: string };
+    log.warn(message);
     return null;
   }
 

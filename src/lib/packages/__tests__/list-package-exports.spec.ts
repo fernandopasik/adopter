@@ -27,7 +27,9 @@ describe('list package exports', () => {
     const exports = await listPackageExports(packageName);
 
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(`Cannot import package ${packageName}`);
+    expect(spy).toHaveBeenCalledWith(
+      expect.stringContaining(`Cannot find module '${packageName}' from`),
+    );
     expect(exports).toBeNull();
 
     spy.mockRestore();
