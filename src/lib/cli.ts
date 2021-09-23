@@ -7,8 +7,14 @@ const cli = async (processArgs: readonly string[]): Promise<void> => {
     .demandCommand(1, 'You need to provide at least one package to track')
     .option('rootDir', {
       default: '.',
-      describe: 'Root directory for tracking files',
+      describe: 'Root directory containing files for tracking packages',
       type: 'string',
+    })
+    .option('srcMatch', {
+      array: true,
+      default: ['**/*.[jt]s?(x)'],
+      describe: 'Glob patterns to match files for tracking packages',
+      type: 'array',
     })
     .parseSync();
   const packages = argList.map((arg) => String(arg));
