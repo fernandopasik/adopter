@@ -53,7 +53,7 @@ describe('usage report', () => {
       const packageExports2 = new Map([['dep4', null]]);
       const usage = new Usage(packageExports2);
 
-      expect(usage.getPackage('dep4')).toBeUndefined();
+      expect(usage.getPackage('dep4')).toBeDefined();
     });
   });
 
@@ -91,11 +91,11 @@ describe('usage report', () => {
       expect(usage.hasPackage('dep4')).toBe(false);
     });
 
-    it('does not find a not loaded package', () => {
+    it('does find a not loaded package', () => {
       const packageExports2 = new Map([['dep4', null]]);
       const usage = new Usage(packageExports2);
 
-      expect(usage.hasPackage('dep4')).toBe(false);
+      expect(usage.hasPackage('dep4')).toBe(true);
     });
   });
 
@@ -218,8 +218,7 @@ describe('usage report', () => {
     });
 
     it('with non existent module', () => {
-      const packageExports2 = new Map([['dep4', null]]);
-      const usage = new Usage(packageExports2);
+      const usage = new Usage(packageExports);
       const filePath = 'src/example.js';
 
       const imports = [
