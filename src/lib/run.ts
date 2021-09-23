@@ -7,14 +7,12 @@ export interface Options {
   packages: string[];
   rootDir?: string;
   srcMatch?: string[];
-  srcIgnorePatterns?: string[];
 }
 
 const DEFAULT_OPTIONS: Options = {
   packages: [],
   rootDir: process.cwd(),
   srcMatch: ['**/*.[jt]s?(x)'],
-  srcIgnorePatterns: ['/(node_modules|.yarn)/'],
 };
 
 const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
