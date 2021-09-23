@@ -17,7 +17,16 @@ describe('adopter cli', () => {
     await cli(args);
 
     expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith({ packages: args });
+    expect(run).toHaveBeenCalledWith(expect.objectContaining({ packages: args }));
+  });
+
+  it('runs with default root directory', async () => {
+    const args = ['dep1', 'dep2'];
+
+    await cli(args);
+
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledWith(expect.objectContaining({ rootDir: '.' }));
   });
 
   it('can set root directory', async () => {
