@@ -10,13 +10,18 @@ jest.mock('globby', () => ({
 
 jest.mock('../files/index.js', () => ({
   listFiles: jest.fn(),
-  processFiles: jest.fn((files: readonly string[] = [], callback?: (file: string) => void) => {
-    files.forEach((file) => {
-      if (typeof callback === 'function') {
-        callback(file);
-      }
-    });
-  }),
+  processFiles: jest.fn(
+    (
+      files: readonly string[] = [],
+      callback?: (filePath: string, filename: string, content: string) => void,
+    ) => {
+      files.forEach((file) => {
+        if (typeof callback === 'function') {
+          callback(file, file, '');
+        }
+      });
+    },
+  ),
 }));
 jest.mock('../packages/index.js');
 jest.mock('../reports/index.js');
@@ -94,6 +99,20 @@ describe('run', () => {
     expect(spy).toHaveBeenCalledTimes(2);
 
     spy.mockRestore();
+  });
+
+  it('runs on file callback in options', async () => {
+    const packages = ['dep1', 'dep2'];
+    const files = ['example1.js', 'example2.js'];
+    const onFile = jest.fn();
+
+    (listFiles as jest.MockedFunction<typeof listFiles>).mockReturnValueOnce(files);
+
+    await run({ onFile, packages });
+
+    expect(onFile).toHaveBeenCalledTimes(2);
+    expect(onFile).toHaveBeenCalledWith(files[0], files[0], '', undefined, []);
+    expect(onFile).toHaveBeenCalledWith(files[1], files[1], '', undefined, []);
   });
 
   it('prints usage', async () => {
