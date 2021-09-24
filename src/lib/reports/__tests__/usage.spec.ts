@@ -1,4 +1,5 @@
 import log from 'loglevel';
+import * as packages from '../../packages/index.js';
 import Usage from '../usage.js';
 
 jest.mock('loglevel');
@@ -7,134 +8,129 @@ jest.mock('nanocolors', () => ({
   bold: (t: string): string => t,
 }));
 
-describe('usage report', () => {
-  const packagesExports = new Map([
-    ['dep1', [{ name: 'default', type: 'function' }]],
-    [
-      'dep2',
-      [
-        { name: 'default', type: 'function' },
-        { name: 'methodA', type: 'function' },
-      ],
-    ],
-    [
-      'dep3',
-      [
-        { name: 'methodA', type: 'function' },
-        { name: 'methodB', type: 'function' },
-      ],
-    ],
-  ]);
+jest.mock('../../packages', () => ({ getPackageModules: jest.fn(() => []) }));
+jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
 
+describe('usage report', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('get package names', () => {
-    const usage = new Usage(packagesExports);
+    const packageNames = ['dep1', 'dep2', 'dep3'];
+    const usage = new Usage(packageNames);
 
-    expect(usage.getPackageNames()).toStrictEqual(['dep1', 'dep2', 'dep3']);
+    expect(usage.getPackageNames()).toStrictEqual(packageNames);
   });
 
   describe('get package', () => {
-    it('with existent', () => {
-      const usage = new Usage(packagesExports);
+    it('with existent', async () => {
+      const usage = new Usage(['dep1']);
+      await usage.init();
 
       expect(usage.getPackage('dep1')).toBeDefined();
     });
 
-    it('with non existent', () => {
-      const usage = new Usage(packagesExports);
+    it('with non existent', async () => {
+      const usage = new Usage([]);
+      await usage.init();
 
       expect(usage.getPackage('dep4')).toBeUndefined();
-    });
-
-    it('with non loaded', () => {
-      const packagesExports2 = new Map([['dep4', null]]);
-      const usage = new Usage(packagesExports2);
-
-      expect(usage.getPackage('dep4')).toBeDefined();
     });
   });
 
   describe('get module', () => {
-    it('with existent', () => {
-      const usage = new Usage(packagesExports);
+    it('with existent', async () => {
+      const usage = new Usage(['dep1']);
+      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['default']);
+      await usage.init();
 
       expect(usage.getModule('dep1', 'default')).toBeDefined();
+
+      spy.mockRestore();
     });
 
-    it('with non existent', () => {
-      const usage = new Usage(packagesExports);
+    it('with non existent', async () => {
+      const usage = new Usage([]);
+      await usage.init();
 
       expect(usage.getModule('dep4', 'default')).toBeUndefined();
     });
 
-    it('with non loaded', () => {
-      const packagesExports2 = new Map([['dep4', null]]);
-      const usage = new Usage(packagesExports2);
+    it('with non loaded', async () => {
+      const usage = new Usage(['dep1']);
+      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(null);
+      await usage.init();
 
-      expect(usage.getModule('dep4', 'default')).toBeUndefined();
+      expect(usage.getModule('dep1', 'default')).toBeUndefined();
+
+      spy.mockRestore();
     });
   });
 
   describe('has package', () => {
     it('finds a package', () => {
-      const usage = new Usage(packagesExports);
+      const usage = new Usage(['dep2']);
 
       expect(usage.hasPackage('dep2')).toBe(true);
     });
 
     it('does not find a package', () => {
-      const usage = new Usage(packagesExports);
+      const usage = new Usage([]);
 
       expect(usage.hasPackage('dep4')).toBe(false);
-    });
-
-    it('does find a not loaded package', () => {
-      const packagesExports2 = new Map([['dep4', null]]);
-      const usage = new Usage(packagesExports2);
-
-      expect(usage.hasPackage('dep4')).toBe(true);
     });
   });
 
   describe('has module', () => {
-    it('finds a default module', () => {
-      const usage = new Usage(packagesExports);
+    it('finds a default module', async () => {
+      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['default']);
+      const usage = new Usage(['dep2']);
+      await usage.init();
 
       expect(usage.hasModule('dep2', 'default')).toBe(true);
+
+      spy.mockRestore();
     });
 
-    it('finds a named module', () => {
-      const usage = new Usage(packagesExports);
+    it('finds a named module', async () => {
+      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['methodA']);
+      const usage = new Usage(['dep2']);
+      await usage.init();
 
       expect(usage.hasModule('dep2', 'methodA')).toBe(true);
+
+      spy.mockRestore();
     });
 
     it('does not find a package', () => {
-      const usage = new Usage(packagesExports);
+      const usage = new Usage([]);
 
       expect(usage.hasModule('dep4', 'methodA')).toBe(false);
     });
 
     it('does not find a module', () => {
-      const usage = new Usage(packagesExports);
+      const usage = new Usage([]);
 
       expect(usage.hasModule('dep2', 'methodB')).toBe(false);
     });
 
-    it('does not find a not loaded module', () => {
-      const packagesExports2 = new Map([['dep4', null]]);
-      const usage = new Usage(packagesExports2);
+    it('with non loaded', async () => {
+      const usage = new Usage(['dep1']);
+      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(null);
+      await usage.init();
 
-      expect(usage.hasModule('dep4', 'methodA')).toBe(false);
+      expect(usage.hasModule('dep1', 'default')).toBe(false);
+
+      spy.mockRestore();
     });
   });
 
   describe('add imports', () => {
-    it('with a default module', () => {
-      const usage = new Usage(packagesExports);
+    it('with a default module', async () => {
+      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['default']);
+      const usage = new Usage(['dep1']);
+      await usage.init();
       const imports = [
         {
           moduleSpecifier: 'dep1',
@@ -151,10 +147,14 @@ describe('usage report', () => {
 
       expect(usage.isPackageUsed('dep1')).toBe(true);
       expect(usage.isModuleUsed('dep1', 'default')).toBe(true);
+
+      spy.mockRestore();
     });
 
-    it('with a named module', () => {
-      const usage = new Usage(packagesExports);
+    it('with a named module', async () => {
+      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['methodA']);
+      const usage = new Usage(['dep3']);
+      await usage.init();
       const imports = [
         {
           moduleSpecifier: 'dep3',
@@ -171,10 +171,16 @@ describe('usage report', () => {
 
       expect(usage.isPackageUsed('dep3')).toBe(true);
       expect(usage.isModuleUsed('dep3', 'methodA')).toBe(true);
+
+      spy.mockRestore();
     });
 
-    it('with default and named modules', () => {
-      const usage = new Usage(packagesExports);
+    it('with default and named modules', async () => {
+      const spy = jest
+        .spyOn(packages, 'getPackageModules')
+        .mockResolvedValueOnce(['default', 'methodA']);
+      const usage = new Usage(['dep2']);
+      await usage.init();
       const imports = [
         {
           moduleSpecifier: 'dep2',
@@ -194,10 +200,12 @@ describe('usage report', () => {
       expect(usage.isPackageUsed('dep2')).toBe(true);
       expect(usage.isModuleUsed('dep2', 'default')).toBe(true);
       expect(usage.isModuleUsed('dep2', 'methodA')).toBe(true);
+
+      spy.mockRestore();
     });
 
     it('with no modules', () => {
-      const usage = new Usage(packagesExports);
+      const usage = new Usage(['dep1']);
       const imports = [
         {
           moduleSpecifier: 'dep1',
@@ -214,7 +222,7 @@ describe('usage report', () => {
     });
 
     it('with non existent module', () => {
-      const usage = new Usage(packagesExports);
+      const usage = new Usage([]);
       const imports = [
         {
           moduleSpecifier: 'dep4',
@@ -231,7 +239,7 @@ describe('usage report', () => {
     });
 
     it('with null imports module', () => {
-      const usage = new Usage(packagesExports);
+      const usage = new Usage([]);
       const imports = [
         {
           moduleSpecifier: 'dep',
@@ -247,8 +255,13 @@ describe('usage report', () => {
       expect(usage.isPackageUsed('dep')).toBe(false);
     });
 
-    it('with multiple imports', () => {
-      const usage = new Usage(packagesExports);
+    it('with multiple imports', async () => {
+      const spy = jest
+        .spyOn(packages, 'getPackageModules')
+        .mockResolvedValueOnce(['default'])
+        .mockResolvedValueOnce(['methodA']);
+      const usage = new Usage(['dep2', 'dep3']);
+      await usage.init();
       const imports = [
         {
           moduleSpecifier: 'dep2',
@@ -275,10 +288,12 @@ describe('usage report', () => {
       expect(usage.isPackageUsed('dep3')).toBe(true);
       expect(usage.isModuleUsed('dep2', 'default')).toBe(true);
       expect(usage.isModuleUsed('dep3', 'methodA')).toBe(true);
+
+      spy.mockRestore();
     });
 
     it('with a non tracked package', () => {
-      const usage = new Usage(packagesExports);
+      const usage = new Usage([]);
       const imports = [
         {
           moduleSpecifier: 'dep4',
@@ -297,8 +312,10 @@ describe('usage report', () => {
       expect(usage.hasModule('dep4', 'default')).toBe(false);
     });
 
-    it('with a non tracked module', () => {
-      const usage = new Usage(packagesExports);
+    it('with a non tracked module', async () => {
+      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['default']);
+      const usage = new Usage(['dep1']);
+      await usage.init();
       const imports = [
         {
           moduleSpecifier: 'dep1',
@@ -315,10 +332,14 @@ describe('usage report', () => {
       usage.addImports(imports);
 
       expect(usage.hasModule('dep1', 'methodA')).toBe(false);
+
+      spy.mockRestore();
     });
 
-    it('with tracked and non tracked packages', () => {
-      const usage = new Usage(packagesExports);
+    it('with tracked and non tracked packages', async () => {
+      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['default']);
+      const usage = new Usage(['dep1']);
+      await usage.init();
       const imports = [
         {
           moduleSpecifier: 'dep1',
@@ -341,10 +362,14 @@ describe('usage report', () => {
 
       expect(usage.isPackageUsed('dep1')).toBe(true);
       expect(usage.isPackageUsed('dep4')).toBe(false);
+
+      spy.mockRestore();
     });
 
-    it('with tracked and non tracked modules', () => {
-      const usage = new Usage(packagesExports);
+    it('with tracked and non tracked modules', async () => {
+      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['default']);
+      const usage = new Usage(['dep1']);
+      await usage.init();
       const imports = [
         {
           moduleSpecifier: 'dep1',
@@ -364,27 +389,44 @@ describe('usage report', () => {
       expect(usage.isPackageUsed('dep1')).toBe(true);
       expect(usage.isModuleUsed('dep1', 'default')).toBe(true);
       expect(usage.isModuleUsed('dep1', 'methodA')).toBe(false);
+
+      spy.mockRestore();
+    });
+
+    it('with non loaded modules', async () => {
+      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(null);
+      const usage = new Usage(['dep1']);
+      await usage.init();
+      const imports = [
+        {
+          moduleSpecifier: 'dep1',
+          packageName: 'dep1',
+          defaultName: 'dep1',
+          moduleNames: ['default'],
+        },
+      ];
+
+      expect(usage.isPackageUsed('dep1')).toBe(false);
+      expect(usage.isModuleUsed('dep1', 'default')).toBe(false);
+
+      usage.addImports(imports);
+
+      expect(usage.isPackageUsed('dep1')).toBe(true);
+      expect(usage.isModuleUsed('dep1', 'default')).toBe(false);
+
+      spy.mockRestore();
     });
   });
 
-  it('avoids duplicated modules', () => {
-    const packagesExports2 = new Map([
-      ['dep1', [{ name: 'default', type: 'string' }]],
-      ['dep1', [{ name: 'default', type: 'function' }]],
-    ]);
+  it('prints the report', async () => {
+    const spy1 = jest
+      .spyOn(packages, 'getPackageModules')
+      .mockResolvedValueOnce(['default', 'methodA'])
+      .mockResolvedValueOnce(['default']);
+    const spy2 = jest.spyOn(log, 'info').mockImplementation();
+    const usage = new Usage(['dep1', 'dep2']);
+    await usage.init();
 
-    const usage = new Usage(packagesExports2);
-
-    expect(usage.hasModule('dep1', 'default')).toBe(true);
-    expect(usage.getModule('dep1', 'default')).toStrictEqual({
-      type: 'function',
-      isUsed: false,
-    });
-  });
-
-  it('prints the report', () => {
-    const spy = jest.spyOn(log, 'info').mockImplementation();
-    const usage = new Usage(packagesExports);
     const imports = [
       {
         moduleSpecifier: 'dep1',
@@ -398,8 +440,8 @@ describe('usage report', () => {
 
     usage.print();
 
-    expect(spy).toHaveBeenNthCalledWith(1, 'Usage Report\n');
+    expect(spy2).toHaveBeenNthCalledWith(1, 'Usage Report\n');
 
-    spy.mockRestore();
+    spy1.mockRestore();
   });
 });

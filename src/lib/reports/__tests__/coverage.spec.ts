@@ -8,7 +8,7 @@ jest.mock('nanocolors', () => ({
   blue: (t: string): string => t,
   bold: (t: string): string => t,
 }));
-
+jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
 jest.mock('../usage');
 
 describe('coverage report', () => {
@@ -18,7 +18,7 @@ describe('coverage report', () => {
 
   describe('add file', () => {
     it('with no imports', () => {
-      const usage = new Usage(new Map());
+      const usage = new Usage([]);
       const coverage = new Coverage(usage);
       const filePath = 'src/example.js';
       const imports: Import[] = [];
@@ -32,7 +32,7 @@ describe('coverage report', () => {
     });
 
     it('with tracked package import', () => {
-      const usage = new Usage(new Map());
+      const usage = new Usage([]);
       const spy = jest.spyOn(usage, 'hasModule').mockReturnValueOnce(true);
       const coverage = new Coverage(usage);
       const filePath = 'src/example.js';
@@ -61,7 +61,7 @@ describe('coverage report', () => {
     });
 
     it('with untracked package import', () => {
-      const usage = new Usage(new Map());
+      const usage = new Usage([]);
       const spy = jest.spyOn(usage, 'hasModule').mockReturnValueOnce(false);
       const coverage = new Coverage(usage);
       const filePath = 'src/example.js';
@@ -85,7 +85,7 @@ describe('coverage report', () => {
     });
 
     it('with tracked and untracked package imports', () => {
-      const usage = new Usage(new Map());
+      const usage = new Usage([]);
       const spy = jest
         .spyOn(usage, 'hasModule')
         .mockReturnValueOnce(false)
@@ -123,7 +123,7 @@ describe('coverage report', () => {
     });
 
     it('with null package import', () => {
-      const usage = new Usage(new Map());
+      const usage = new Usage([]);
       const spy = jest.spyOn(usage, 'hasModule').mockReturnValueOnce(true);
       const coverage = new Coverage(usage);
       const filePath = 'src/example.js';
@@ -148,7 +148,7 @@ describe('coverage report', () => {
   });
 
   it('prints the report', () => {
-    const usage = new Usage(new Map());
+    const usage = new Usage([]);
     const spy1 = jest.spyOn(log, 'info').mockImplementation();
     const spy2 = jest.spyOn(usage, 'hasModule').mockReturnValueOnce(true);
     const coverage = new Coverage(usage);

@@ -2,14 +2,14 @@ import log from 'loglevel';
 import { blue, bold } from 'nanocolors';
 import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../imports/index.js';
-import type { Export, PackagesExports } from '../packages/index.js';
+import { getPackageModules } from '../packages/index.js';
 
 interface Module {
   isUsed: boolean;
-  type: string;
 }
 
 interface Package {
+  dependencies: Map<string, string>;
   isUsed: boolean;
   modules: Map<string, Module>;
 }
@@ -17,19 +17,36 @@ interface Package {
 class Usage {
   private readonly storage: Map<string, Package>;
 
-  public constructor(packagesExports: Readonly<PackagesExports>) {
+  public constructor(packageNames: readonly string[]) {
     this.storage = new Map();
 
-    packagesExports.forEach((exports, packageName) => {
-      this.storage.set(packageName, { isUsed: false, modules: new Map<string, Module>() });
-
-      if (exports !== null) {
-        exports.forEach(({ name, type }: Readonly<Export>) => {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          this.storage.get(packageName)!.modules.set(name, { type, isUsed: false });
-        });
-      }
+    packageNames.forEach((packageName) => {
+      this.storage.set(packageName, {
+        dependencies: new Map(),
+        isUsed: false,
+        modules: new Map(),
+      });
     });
+  }
+
+  public async init(): Promise<void> {
+    const packageNames = Array.from(this.storage.keys());
+
+    await packageNames.reduce(
+      async (prev: Readonly<Promise<void>>, packageName) =>
+        prev.then(async () => {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          const pkg = this.storage.get(packageName)!;
+          const moduleNames = await getPackageModules(packageName);
+
+          if (moduleNames !== null) {
+            moduleNames.forEach((moduleName) => {
+              pkg.modules.set(moduleName, { isUsed: false });
+            });
+          }
+        }),
+      Promise.resolve(),
+    );
   }
 
   public getPackageNames(): string[] {
