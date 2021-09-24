@@ -10,6 +10,20 @@ Auditing tool for increasing adoption of libraries.
 
 <!-- BADGES - END -->
 
+## Install
+
+Install it globally
+
+```sh
+npm install -g adopter
+```
+
+Install it locally in the project
+
+```sh
+npm install adopter
+```
+
 ## Usage
 
 Can be run as a client
