@@ -15,7 +15,7 @@ describe('packages', () => {
     expect(packages.filterTrackedDependencies).toStrictEqual(filterTrackedDependencies);
   });
 
-  it('get package exports', () => {
+  it('get packages exports', () => {
     expect(packages.getPackagesExports).toStrictEqual(getPackagesExports);
   });
 
