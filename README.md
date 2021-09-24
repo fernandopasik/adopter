@@ -10,6 +10,31 @@ Auditing tool for increasing adoption of libraries.
 
 <!-- BADGES - END -->
 
+## Usage
+
+Can be run as a client
+
+```sh
+adopter [options] package1 [package2] [packageN]
+```
+
+or in a node script
+
+```js
+import adopter from 'adopter';
+
+adopter({ packages: ['package1', 'package2', 'package3'] });
+```
+
+### Options
+
+| option     | description                                           | type    | default               |
+| ---------- | ----------------------------------------------------- | ------- | --------------------- |
+| --help     | Show help                                             | boolean |                       |
+| --version  | Show version number                                   | boolean |                       |
+| --rootDir  | Root directory containing files for tracking packages | string  | "."                   |
+| --srcMatch | Glob patterns to match files for tracking packages    | array   | ["\*\*/\*.[jt]s?(x)"] |
+
 ## License
 
 MIT (c) 2021 [Fernando Pasik](https://fernandopasik.com)
