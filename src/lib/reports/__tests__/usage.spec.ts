@@ -1,5 +1,9 @@
 import log from 'loglevel';
-import { getPackageModules } from '../../packages/index.js';
+import {
+  filterTrackedDependencies,
+  getPackageJson,
+  getPackageModules,
+} from '../../packages/index.js';
 import Usage from '../usage.js';
 
 jest.mock('loglevel');
@@ -9,6 +13,8 @@ jest.mock('nanocolors', () => ({
 }));
 
 jest.mock('../../packages', () => ({
+  filterTrackedDependencies: jest.fn(() => new Map()),
+  getPackageJson: jest.fn(() => ({})),
   getPackageModules: jest.fn(() => []),
   resolvePackage: jest.fn((specifier: string) => specifier),
 }));
@@ -64,6 +70,7 @@ describe('usage report', () => {
       (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce(
         null,
       );
+      (getPackageJson as jest.MockedFunction<typeof getPackageJson>).mockResolvedValueOnce(null);
 
       await usage.init();
 
@@ -126,6 +133,49 @@ describe('usage report', () => {
       await usage.init();
 
       expect(usage.hasModule('dep1', 'default')).toBe(false);
+    });
+  });
+
+  describe('set package used', () => {
+    it('with existent', () => {
+      const usage = new Usage(['dep1']);
+
+      expect(usage.isPackageUsed('dep1')).toBe(false);
+
+      usage.setPackageUsed('dep1');
+
+      expect(usage.isPackageUsed('dep1')).toBe(true);
+    });
+
+    it('with non existent', () => {
+      const usage = new Usage(['dep1']);
+
+      expect(usage.isPackageUsed('dep2')).toBe(false);
+
+      usage.setPackageUsed('dep2');
+
+      expect(usage.isPackageUsed('dep2')).toBe(false);
+    });
+
+    it('with dependencies', async () => {
+      const dependencies = new Map([
+        ['dep2', '*'],
+        ['dep3', '*'],
+      ]);
+
+      (
+        filterTrackedDependencies as jest.MockedFunction<typeof filterTrackedDependencies>
+      ).mockReturnValueOnce(dependencies);
+
+      const usage = new Usage(['dep1', 'dep2', 'dep3', 'dep4']);
+      await usage.init();
+
+      usage.setPackageUsed('dep1');
+
+      expect(usage.isPackageUsed('dep1')).toBe(true);
+      expect(usage.isPackageUsed('dep2')).toBe(true);
+      expect(usage.isPackageUsed('dep3')).toBe(true);
+      expect(usage.isPackageUsed('dep4')).toBe(false);
     });
   });
 
@@ -414,6 +464,41 @@ describe('usage report', () => {
 
       expect(usage.isPackageUsed('dep1')).toBe(true);
       expect(usage.isModuleUsed('dep1', 'default')).toBe(false);
+    });
+
+    it('with dependencies', async () => {
+      const dependencies = new Map([
+        ['dep2', '*'],
+        ['dep3', '*'],
+      ]);
+
+      (
+        filterTrackedDependencies as jest.MockedFunction<typeof filterTrackedDependencies>
+      ).mockReturnValueOnce(dependencies);
+
+      const usage = new Usage(['dep1', 'dep2', 'dep3', 'dep4']);
+      await usage.init();
+
+      const imports = [
+        {
+          moduleSpecifier: 'dep1',
+          packageName: 'dep1',
+          defaultName: 'dep1',
+          moduleNames: ['default'],
+        },
+      ];
+
+      expect(usage.isPackageUsed('dep1')).toBe(false);
+      expect(usage.isPackageUsed('dep2')).toBe(false);
+      expect(usage.isPackageUsed('dep3')).toBe(false);
+      expect(usage.isPackageUsed('dep4')).toBe(false);
+
+      usage.addImports(imports);
+
+      expect(usage.isPackageUsed('dep1')).toBe(true);
+      expect(usage.isPackageUsed('dep2')).toBe(true);
+      expect(usage.isPackageUsed('dep3')).toBe(true);
+      expect(usage.isPackageUsed('dep4')).toBe(false);
     });
   });
 

@@ -2,7 +2,7 @@ import log from 'loglevel';
 import { blue, bold } from 'nanocolors';
 import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../imports/index.js';
-import { getPackageModules } from '../packages/index.js';
+import { filterTrackedDependencies, getPackageJson, getPackageModules } from '../packages/index.js';
 
 interface Module {
   isUsed: boolean;
@@ -31,18 +31,22 @@ class Usage {
 
   public async init(): Promise<void> {
     const packageNames = Array.from(this.storage.keys());
-
     await packageNames.reduce(
       async (prev: Readonly<Promise<void>>, packageName) =>
         prev.then(async () => {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const pkg = this.storage.get(packageName)!;
           const moduleNames = await getPackageModules(packageName);
+          const packageJson = await getPackageJson(packageName);
 
           if (moduleNames !== null) {
             moduleNames.forEach((moduleName) => {
               pkg.modules.set(moduleName, { isUsed: false });
             });
+          }
+
+          if (packageJson !== null) {
+            pkg.dependencies = filterTrackedDependencies(packageJson, packageNames);
           }
         }),
       Promise.resolve(),
@@ -77,13 +81,24 @@ class Usage {
     return Boolean(this.getModule(packageName, moduleName)?.isUsed);
   }
 
+  public setPackageUsed(packageName: string): void {
+    const pkg = this.getPackage(packageName);
+
+    if (typeof pkg !== 'undefined') {
+      pkg.isUsed = true;
+      pkg.dependencies.forEach((_version, dependency) => {
+        this.setPackageUsed(dependency);
+      });
+    }
+  }
+
   public addImports(imports: ReadonlyDeep<Import[]>): void {
     imports.forEach(({ packageName, moduleNames }) => {
       if (packageName !== null) {
         const pkg = this.storage.get(packageName);
 
         if (typeof pkg !== 'undefined') {
-          pkg.isUsed = true;
+          this.setPackageUsed(packageName);
 
           moduleNames.forEach((moduleName) => {
             const module = pkg.modules.get(moduleName);
