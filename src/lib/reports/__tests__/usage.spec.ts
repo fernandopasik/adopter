@@ -1,5 +1,5 @@
 import log from 'loglevel';
-import * as packages from '../../packages/index.js';
+import { getPackageModules } from '../../packages/index.js';
 import Usage from '../usage.js';
 
 jest.mock('loglevel');
@@ -42,12 +42,12 @@ describe('usage report', () => {
   describe('get module', () => {
     it('with existent', async () => {
       const usage = new Usage(['dep1']);
-      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['default']);
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce([
+        'default',
+      ]);
       await usage.init();
 
       expect(usage.getModule('dep1', 'default')).toBeDefined();
-
-      spy.mockRestore();
     });
 
     it('with non existent', async () => {
@@ -59,12 +59,13 @@ describe('usage report', () => {
 
     it('with non loaded', async () => {
       const usage = new Usage(['dep1']);
-      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(null);
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce(
+        null,
+      );
+
       await usage.init();
 
       expect(usage.getModule('dep1', 'default')).toBeUndefined();
-
-      spy.mockRestore();
     });
   });
 
@@ -84,23 +85,23 @@ describe('usage report', () => {
 
   describe('has module', () => {
     it('finds a default module', async () => {
-      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['default']);
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce([
+        'default',
+      ]);
       const usage = new Usage(['dep2']);
       await usage.init();
 
       expect(usage.hasModule('dep2', 'default')).toBe(true);
-
-      spy.mockRestore();
     });
 
     it('finds a named module', async () => {
-      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['methodA']);
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce([
+        'methodA',
+      ]);
       const usage = new Usage(['dep2']);
       await usage.init();
 
       expect(usage.hasModule('dep2', 'methodA')).toBe(true);
-
-      spy.mockRestore();
     });
 
     it('does not find a package', () => {
@@ -117,18 +118,20 @@ describe('usage report', () => {
 
     it('with non loaded', async () => {
       const usage = new Usage(['dep1']);
-      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(null);
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce(
+        null,
+      );
       await usage.init();
 
       expect(usage.hasModule('dep1', 'default')).toBe(false);
-
-      spy.mockRestore();
     });
   });
 
   describe('add imports', () => {
     it('with a default module', async () => {
-      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['default']);
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce([
+        'default',
+      ]);
       const usage = new Usage(['dep1']);
       await usage.init();
       const imports = [
@@ -147,12 +150,12 @@ describe('usage report', () => {
 
       expect(usage.isPackageUsed('dep1')).toBe(true);
       expect(usage.isModuleUsed('dep1', 'default')).toBe(true);
-
-      spy.mockRestore();
     });
 
     it('with a named module', async () => {
-      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['methodA']);
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce([
+        'methodA',
+      ]);
       const usage = new Usage(['dep3']);
       await usage.init();
       const imports = [
@@ -171,14 +174,13 @@ describe('usage report', () => {
 
       expect(usage.isPackageUsed('dep3')).toBe(true);
       expect(usage.isModuleUsed('dep3', 'methodA')).toBe(true);
-
-      spy.mockRestore();
     });
 
     it('with default and named modules', async () => {
-      const spy = jest
-        .spyOn(packages, 'getPackageModules')
-        .mockResolvedValueOnce(['default', 'methodA']);
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce([
+        'default',
+        'methodA',
+      ]);
       const usage = new Usage(['dep2']);
       await usage.init();
       const imports = [
@@ -200,8 +202,6 @@ describe('usage report', () => {
       expect(usage.isPackageUsed('dep2')).toBe(true);
       expect(usage.isModuleUsed('dep2', 'default')).toBe(true);
       expect(usage.isModuleUsed('dep2', 'methodA')).toBe(true);
-
-      spy.mockRestore();
     });
 
     it('with no modules', () => {
@@ -256,8 +256,7 @@ describe('usage report', () => {
     });
 
     it('with multiple imports', async () => {
-      const spy = jest
-        .spyOn(packages, 'getPackageModules')
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>)
         .mockResolvedValueOnce(['default'])
         .mockResolvedValueOnce(['methodA']);
       const usage = new Usage(['dep2', 'dep3']);
@@ -288,8 +287,6 @@ describe('usage report', () => {
       expect(usage.isPackageUsed('dep3')).toBe(true);
       expect(usage.isModuleUsed('dep2', 'default')).toBe(true);
       expect(usage.isModuleUsed('dep3', 'methodA')).toBe(true);
-
-      spy.mockRestore();
     });
 
     it('with a non tracked package', () => {
@@ -313,7 +310,9 @@ describe('usage report', () => {
     });
 
     it('with a non tracked module', async () => {
-      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['default']);
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce([
+        'default',
+      ]);
       const usage = new Usage(['dep1']);
       await usage.init();
       const imports = [
@@ -332,12 +331,12 @@ describe('usage report', () => {
       usage.addImports(imports);
 
       expect(usage.hasModule('dep1', 'methodA')).toBe(false);
-
-      spy.mockRestore();
     });
 
     it('with tracked and non tracked packages', async () => {
-      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['default']);
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce([
+        'default',
+      ]);
       const usage = new Usage(['dep1']);
       await usage.init();
       const imports = [
@@ -362,12 +361,12 @@ describe('usage report', () => {
 
       expect(usage.isPackageUsed('dep1')).toBe(true);
       expect(usage.isPackageUsed('dep4')).toBe(false);
-
-      spy.mockRestore();
     });
 
     it('with tracked and non tracked modules', async () => {
-      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(['default']);
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce([
+        'default',
+      ]);
       const usage = new Usage(['dep1']);
       await usage.init();
       const imports = [
@@ -389,12 +388,12 @@ describe('usage report', () => {
       expect(usage.isPackageUsed('dep1')).toBe(true);
       expect(usage.isModuleUsed('dep1', 'default')).toBe(true);
       expect(usage.isModuleUsed('dep1', 'methodA')).toBe(false);
-
-      spy.mockRestore();
     });
 
     it('with non loaded modules', async () => {
-      const spy = jest.spyOn(packages, 'getPackageModules').mockResolvedValueOnce(null);
+      (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce(
+        null,
+      );
       const usage = new Usage(['dep1']);
       await usage.init();
       const imports = [
@@ -413,17 +412,14 @@ describe('usage report', () => {
 
       expect(usage.isPackageUsed('dep1')).toBe(true);
       expect(usage.isModuleUsed('dep1', 'default')).toBe(false);
-
-      spy.mockRestore();
     });
   });
 
   it('prints the report', async () => {
-    const spy1 = jest
-      .spyOn(packages, 'getPackageModules')
+    (getPackageModules as jest.MockedFunction<typeof getPackageModules>)
       .mockResolvedValueOnce(['default', 'methodA'])
       .mockResolvedValueOnce(['default']);
-    const spy2 = jest.spyOn(log, 'info').mockImplementation();
+    const spy = jest.spyOn(log, 'info').mockImplementation();
     const usage = new Usage(['dep1', 'dep2']);
     await usage.init();
 
@@ -440,8 +436,8 @@ describe('usage report', () => {
 
     usage.print();
 
-    expect(spy2).toHaveBeenNthCalledWith(1, 'Usage Report\n');
+    expect(spy).toHaveBeenNthCalledWith(1, 'Usage Report\n');
 
-    spy1.mockRestore();
+    spy.mockRestore();
   });
 });
