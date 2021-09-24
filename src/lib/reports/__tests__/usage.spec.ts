@@ -8,8 +8,10 @@ jest.mock('nanocolors', () => ({
   bold: (t: string): string => t,
 }));
 
-jest.mock('../../packages', () => ({ getPackageModules: jest.fn(() => []) }));
-jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
+jest.mock('../../packages', () => ({
+  getPackageModules: jest.fn(() => []),
+  resolvePackage: jest.fn((specifier: string) => specifier),
+}));
 
 describe('usage report', () => {
   beforeEach(() => {
