@@ -1,5 +1,5 @@
 import extractPackageName from '../extract-package-name.js';
-import getPackageExports from '../get-package-exports.js';
+import getPackagesExports from '../get-packages-exports.js';
 import * as packages from '../index.js';
 import listPackageExports from '../list-package-exports.js';
 
@@ -11,7 +11,7 @@ describe('packages', () => {
   });
 
   it('get package exports', () => {
-    expect(packages.getPackageExports).toStrictEqual(getPackageExports);
+    expect(packages.getPackagesExports).toStrictEqual(getPackagesExports);
   });
 
   it('list package exports', () => {

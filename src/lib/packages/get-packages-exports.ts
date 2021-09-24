@@ -3,22 +3,22 @@ import type { Export } from './list-package-exports.js';
 import listPackageExports from './list-package-exports.js';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-export type PackageExports = Map<string, ReadonlyDeep<Export[]> | null>;
+export type PackagesExports = Map<string, ReadonlyDeep<Export[]> | null>;
 
-const getPackageExports = async (packageNames: readonly string[]): Promise<PackageExports> => {
-  const packageExports: PackageExports = new Map();
+const getPackagesExports = async (packageNames: readonly string[]): Promise<PackagesExports> => {
+  const packagesExports: PackagesExports = new Map();
 
   await packageNames.reduce(
     async (prev: Readonly<Promise<void>>, packageName) =>
       prev
         .then(async () => listPackageExports(packageName))
         .then((exports: ReadonlyDeep<Export[]> | null) => {
-          packageExports.set(packageName, exports);
+          packagesExports.set(packageName, exports);
         }),
     Promise.resolve(),
   );
 
-  return packageExports;
+  return packagesExports;
 };
 
-export default getPackageExports;
+export default getPackagesExports;

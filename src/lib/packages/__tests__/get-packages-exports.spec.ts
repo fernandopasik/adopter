@@ -1,4 +1,4 @@
-import getPackageExports from '../get-package-exports.js';
+import getPackagesExports from '../get-packages-exports.js';
 import type { Export } from '../list-package-exports.js';
 import listPackageExports from '../list-package-exports.js';
 
@@ -13,7 +13,7 @@ describe('get package exports', () => {
   it('lists exports from each package', async () => {
     const packages = ['dep1', 'dep2', 'dep3'];
 
-    await getPackageExports(packages);
+    await getPackagesExports(packages);
 
     expect(listPackageExports).toHaveBeenCalledTimes(3);
   });
@@ -37,10 +37,10 @@ describe('get package exports', () => {
       .mockResolvedValueOnce(dep3)
       .mockResolvedValueOnce(dep4);
 
-    const packageExports = await getPackageExports(packages);
+    const packagesExports = await getPackagesExports(packages);
 
-    expect(Array.from(packageExports.keys())).toStrictEqual(packages);
-    expect(Array.from(packageExports.values())).toStrictEqual([dep1, dep2, dep3, dep4]);
+    expect(Array.from(packagesExports.keys())).toStrictEqual(packages);
+    expect(Array.from(packagesExports.values())).toStrictEqual([dep1, dep2, dep3, dep4]);
   });
 
   it('with non installed or non existent packages', async () => {
@@ -57,9 +57,9 @@ describe('get package exports', () => {
       .mockResolvedValueOnce(dep2)
       .mockResolvedValueOnce(dep3);
 
-    const packageExports = await getPackageExports(packages);
+    const packagesExports = await getPackagesExports(packages);
 
-    expect(Array.from(packageExports.keys())).toStrictEqual(packages);
-    expect(Array.from(packageExports.values())).toStrictEqual([dep1, dep2, dep3]);
+    expect(Array.from(packagesExports.keys())).toStrictEqual(packages);
+    expect(Array.from(packagesExports.values())).toStrictEqual([dep1, dep2, dep3]);
   });
 });

@@ -8,7 +8,7 @@ jest.mock('nanocolors', () => ({
 }));
 
 describe('usage report', () => {
-  const packageExports = new Map([
+  const packagesExports = new Map([
     ['dep1', [{ name: 'default', type: 'function' }]],
     [
       'dep2',
@@ -31,27 +31,27 @@ describe('usage report', () => {
   });
 
   it('get package names', () => {
-    const usage = new Usage(packageExports);
+    const usage = new Usage(packagesExports);
 
     expect(usage.getPackageNames()).toStrictEqual(['dep1', 'dep2', 'dep3']);
   });
 
   describe('get package', () => {
     it('with existent', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
 
       expect(usage.getPackage('dep1')).toBeDefined();
     });
 
     it('with non existent', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
 
       expect(usage.getPackage('dep4')).toBeUndefined();
     });
 
     it('with non loaded', () => {
-      const packageExports2 = new Map([['dep4', null]]);
-      const usage = new Usage(packageExports2);
+      const packagesExports2 = new Map([['dep4', null]]);
+      const usage = new Usage(packagesExports2);
 
       expect(usage.getPackage('dep4')).toBeDefined();
     });
@@ -59,20 +59,20 @@ describe('usage report', () => {
 
   describe('get module', () => {
     it('with existent', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
 
       expect(usage.getModule('dep1', 'default')).toBeDefined();
     });
 
     it('with non existent', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
 
       expect(usage.getModule('dep4', 'default')).toBeUndefined();
     });
 
     it('with non loaded', () => {
-      const packageExports2 = new Map([['dep4', null]]);
-      const usage = new Usage(packageExports2);
+      const packagesExports2 = new Map([['dep4', null]]);
+      const usage = new Usage(packagesExports2);
 
       expect(usage.getModule('dep4', 'default')).toBeUndefined();
     });
@@ -80,20 +80,20 @@ describe('usage report', () => {
 
   describe('has package', () => {
     it('finds a package', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
 
       expect(usage.hasPackage('dep2')).toBe(true);
     });
 
     it('does not find a package', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
 
       expect(usage.hasPackage('dep4')).toBe(false);
     });
 
     it('does find a not loaded package', () => {
-      const packageExports2 = new Map([['dep4', null]]);
-      const usage = new Usage(packageExports2);
+      const packagesExports2 = new Map([['dep4', null]]);
+      const usage = new Usage(packagesExports2);
 
       expect(usage.hasPackage('dep4')).toBe(true);
     });
@@ -101,32 +101,32 @@ describe('usage report', () => {
 
   describe('has module', () => {
     it('finds a default module', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
 
       expect(usage.hasModule('dep2', 'default')).toBe(true);
     });
 
     it('finds a named module', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
 
       expect(usage.hasModule('dep2', 'methodA')).toBe(true);
     });
 
     it('does not find a package', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
 
       expect(usage.hasModule('dep4', 'methodA')).toBe(false);
     });
 
     it('does not find a module', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
 
       expect(usage.hasModule('dep2', 'methodB')).toBe(false);
     });
 
     it('does not find a not loaded module', () => {
-      const packageExports2 = new Map([['dep4', null]]);
-      const usage = new Usage(packageExports2);
+      const packagesExports2 = new Map([['dep4', null]]);
+      const usage = new Usage(packagesExports2);
 
       expect(usage.hasModule('dep4', 'methodA')).toBe(false);
     });
@@ -134,7 +134,7 @@ describe('usage report', () => {
 
   describe('add imports', () => {
     it('with a default module', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
       const filePath = 'src/example.js';
       const imports = [
         {
@@ -155,7 +155,7 @@ describe('usage report', () => {
     });
 
     it('with a named module', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
       const filePath = 'src/example.js';
       const imports = [
         {
@@ -176,7 +176,7 @@ describe('usage report', () => {
     });
 
     it('with default and named modules', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
       const filePath = 'src/example.js';
       const imports = [
         {
@@ -200,7 +200,7 @@ describe('usage report', () => {
     });
 
     it('with no modules', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
       const filePath = 'src/example.js';
       const imports = [
         {
@@ -218,7 +218,7 @@ describe('usage report', () => {
     });
 
     it('with non existent module', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
       const filePath = 'src/example.js';
 
       const imports = [
@@ -237,7 +237,7 @@ describe('usage report', () => {
     });
 
     it('with null imports module', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
       const filePath = 'src/example.js';
 
       const imports = [
@@ -256,7 +256,7 @@ describe('usage report', () => {
     });
 
     it('with multiple imports', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
       const filePath = 'src/example.js';
       const imports = [
         {
@@ -287,7 +287,7 @@ describe('usage report', () => {
     });
 
     it('with a non tracked package', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
       const filePath = 'src/example.js';
       const imports = [
         {
@@ -308,7 +308,7 @@ describe('usage report', () => {
     });
 
     it('with a non tracked module', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
       const filePath = 'src/example.js';
       const imports = [
         {
@@ -329,7 +329,7 @@ describe('usage report', () => {
     });
 
     it('with tracked and non tracked packages', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
       const filePath = 'src/example.js';
       const imports = [
         {
@@ -356,7 +356,7 @@ describe('usage report', () => {
     });
 
     it('with tracked and non tracked modules', () => {
-      const usage = new Usage(packageExports);
+      const usage = new Usage(packagesExports);
       const filePath = 'src/example.js';
       const imports = [
         {
@@ -381,12 +381,12 @@ describe('usage report', () => {
   });
 
   it('avoids duplicated modules', () => {
-    const packageExports2 = new Map([
+    const packagesExports2 = new Map([
       ['dep1', [{ name: 'default', type: 'string' }]],
       ['dep1', [{ name: 'default', type: 'function' }]],
     ]);
 
-    const usage = new Usage(packageExports2);
+    const usage = new Usage(packagesExports2);
 
     expect(usage.hasModule('dep1', 'default')).toBe(true);
     expect(usage.getModule('dep1', 'default')).toStrictEqual({
@@ -397,7 +397,7 @@ describe('usage report', () => {
 
   it('prints the report', () => {
     const spy = jest.spyOn(log, 'info').mockImplementation();
-    const usage = new Usage(packageExports);
+    const usage = new Usage(packagesExports);
 
     const imports = [
       {

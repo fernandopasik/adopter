@@ -1,5 +1,5 @@
 import { listFiles, processFiles } from '../files/index.js';
-import { getPackageExports } from '../packages/index.js';
+import { getPackagesExports } from '../packages/index.js';
 import { Coverage, Usage } from '../reports/index.js';
 import run from '../run.js';
 
@@ -32,22 +32,22 @@ describe('run', () => {
 
     await run({ packages });
 
-    expect(getPackageExports).toHaveBeenCalledTimes(1);
-    expect(getPackageExports).toHaveBeenCalledWith(packages);
+    expect(getPackagesExports).toHaveBeenCalledTimes(1);
+    expect(getPackagesExports).toHaveBeenCalledWith(packages);
   });
 
   it('initializes usage with package exports', async () => {
     const packages = ['dep1', 'dep2'];
-    const packageExports = new Map();
+    const packagesExports = new Map();
 
-    (getPackageExports as jest.MockedFunction<typeof getPackageExports>).mockResolvedValueOnce(
-      packageExports,
+    (getPackagesExports as jest.MockedFunction<typeof getPackagesExports>).mockResolvedValueOnce(
+      packagesExports,
     );
 
     await run({ packages });
 
     expect(Usage).toHaveBeenCalledTimes(1);
-    expect(Usage).toHaveBeenCalledWith(packageExports);
+    expect(Usage).toHaveBeenCalledWith(packagesExports);
   });
 
   it('lists all files from source match expression', async () => {

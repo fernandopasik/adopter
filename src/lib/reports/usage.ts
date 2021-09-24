@@ -2,7 +2,7 @@ import log from 'loglevel';
 import { blue, bold } from 'nanocolors';
 import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../imports/index.js';
-import type { Export, PackageExports } from '../packages/index.js';
+import type { Export, PackagesExports } from '../packages/index.js';
 
 interface Module {
   type: string;
@@ -17,10 +17,10 @@ interface Package {
 class Usage {
   private readonly storage: Map<string, Package>;
 
-  public constructor(packageExports: Readonly<PackageExports>) {
+  public constructor(packagesExports: Readonly<PackagesExports>) {
     this.storage = new Map();
 
-    packageExports.forEach((exports, packageName) => {
+    packagesExports.forEach((exports, packageName) => {
       this.storage.set(packageName, { isUsed: false, modules: new Map<string, Module>() });
 
       if (exports !== null) {
