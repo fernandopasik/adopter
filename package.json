@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsc",
     "check-types": "tsc --noEmit -p tsconfig.all.json",
-    "clean": "del coverage lib adopter.*",
+    "clean": "del coverage bin lib adopter.*",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . --ext js,ts",
