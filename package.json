@@ -18,7 +18,7 @@
     "/lib"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && chmod +x bin/adopter.js",
     "check-types": "tsc --noEmit -p tsconfig.all.json",
     "clean": "del coverage bin lib adopter.*",
     "format": "prettier --write .",
