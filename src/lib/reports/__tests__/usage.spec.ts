@@ -135,7 +135,6 @@ describe('usage report', () => {
   describe('add imports', () => {
     it('with a default module', () => {
       const usage = new Usage(packagesExports);
-      const filePath = 'src/example.js';
       const imports = [
         {
           moduleSpecifier: 'dep1',
@@ -148,7 +147,7 @@ describe('usage report', () => {
       expect(usage.isPackageUsed('dep1')).toBe(false);
       expect(usage.isModuleUsed('dep1', 'default')).toBe(false);
 
-      usage.addImports(filePath, imports);
+      usage.addImports(imports);
 
       expect(usage.isPackageUsed('dep1')).toBe(true);
       expect(usage.isModuleUsed('dep1', 'default')).toBe(true);
@@ -156,7 +155,6 @@ describe('usage report', () => {
 
     it('with a named module', () => {
       const usage = new Usage(packagesExports);
-      const filePath = 'src/example.js';
       const imports = [
         {
           moduleSpecifier: 'dep3',
@@ -169,7 +167,7 @@ describe('usage report', () => {
       expect(usage.isPackageUsed('dep3')).toBe(false);
       expect(usage.isModuleUsed('dep3', 'methodA')).toBe(false);
 
-      usage.addImports(filePath, imports);
+      usage.addImports(imports);
 
       expect(usage.isPackageUsed('dep3')).toBe(true);
       expect(usage.isModuleUsed('dep3', 'methodA')).toBe(true);
@@ -177,7 +175,6 @@ describe('usage report', () => {
 
     it('with default and named modules', () => {
       const usage = new Usage(packagesExports);
-      const filePath = 'src/example.js';
       const imports = [
         {
           moduleSpecifier: 'dep2',
@@ -192,7 +189,7 @@ describe('usage report', () => {
       expect(usage.isModuleUsed('dep2', 'default')).toBe(false);
       expect(usage.isModuleUsed('dep2', 'methodA')).toBe(false);
 
-      usage.addImports(filePath, imports);
+      usage.addImports(imports);
 
       expect(usage.isPackageUsed('dep2')).toBe(true);
       expect(usage.isModuleUsed('dep2', 'default')).toBe(true);
@@ -201,7 +198,6 @@ describe('usage report', () => {
 
     it('with no modules', () => {
       const usage = new Usage(packagesExports);
-      const filePath = 'src/example.js';
       const imports = [
         {
           moduleSpecifier: 'dep1',
@@ -212,15 +208,13 @@ describe('usage report', () => {
 
       expect(usage.isPackageUsed('dep1')).toBe(false);
 
-      usage.addImports(filePath, imports);
+      usage.addImports(imports);
 
       expect(usage.isPackageUsed('dep1')).toBe(true);
     });
 
     it('with non existent module', () => {
       const usage = new Usage(packagesExports);
-      const filePath = 'src/example.js';
-
       const imports = [
         {
           moduleSpecifier: 'dep4',
@@ -231,15 +225,13 @@ describe('usage report', () => {
 
       expect(usage.isPackageUsed('dep4')).toBe(false);
 
-      usage.addImports(filePath, imports);
+      usage.addImports(imports);
 
       expect(usage.isPackageUsed('dep4')).toBe(false);
     });
 
     it('with null imports module', () => {
       const usage = new Usage(packagesExports);
-      const filePath = 'src/example.js';
-
       const imports = [
         {
           moduleSpecifier: 'dep',
@@ -250,14 +242,13 @@ describe('usage report', () => {
 
       expect(usage.isPackageUsed('dep')).toBe(false);
 
-      usage.addImports(filePath, imports);
+      usage.addImports(imports);
 
       expect(usage.isPackageUsed('dep')).toBe(false);
     });
 
     it('with multiple imports', () => {
       const usage = new Usage(packagesExports);
-      const filePath = 'src/example.js';
       const imports = [
         {
           moduleSpecifier: 'dep2',
@@ -278,7 +269,7 @@ describe('usage report', () => {
       expect(usage.isModuleUsed('dep2', 'default')).toBe(false);
       expect(usage.isModuleUsed('dep3', 'methodA')).toBe(false);
 
-      usage.addImports(filePath, imports);
+      usage.addImports(imports);
 
       expect(usage.isPackageUsed('dep2')).toBe(true);
       expect(usage.isPackageUsed('dep3')).toBe(true);
@@ -288,7 +279,6 @@ describe('usage report', () => {
 
     it('with a non tracked package', () => {
       const usage = new Usage(packagesExports);
-      const filePath = 'src/example.js';
       const imports = [
         {
           moduleSpecifier: 'dep4',
@@ -301,7 +291,7 @@ describe('usage report', () => {
       expect(usage.hasPackage('dep4')).toBe(false);
       expect(usage.hasModule('dep4', 'default')).toBe(false);
 
-      usage.addImports(filePath, imports);
+      usage.addImports(imports);
 
       expect(usage.hasPackage('dep4')).toBe(false);
       expect(usage.hasModule('dep4', 'default')).toBe(false);
@@ -309,7 +299,6 @@ describe('usage report', () => {
 
     it('with a non tracked module', () => {
       const usage = new Usage(packagesExports);
-      const filePath = 'src/example.js';
       const imports = [
         {
           moduleSpecifier: 'dep1',
@@ -323,14 +312,13 @@ describe('usage report', () => {
       expect(usage.isPackageUsed('dep1')).toBe(false);
       expect(usage.hasModule('dep1', 'methodA')).toBe(false);
 
-      usage.addImports(filePath, imports);
+      usage.addImports(imports);
 
       expect(usage.hasModule('dep1', 'methodA')).toBe(false);
     });
 
     it('with tracked and non tracked packages', () => {
       const usage = new Usage(packagesExports);
-      const filePath = 'src/example.js';
       const imports = [
         {
           moduleSpecifier: 'dep1',
@@ -349,7 +337,7 @@ describe('usage report', () => {
       expect(usage.isPackageUsed('dep1')).toBe(false);
       expect(usage.isPackageUsed('dep4')).toBe(false);
 
-      usage.addImports(filePath, imports);
+      usage.addImports(imports);
 
       expect(usage.isPackageUsed('dep1')).toBe(true);
       expect(usage.isPackageUsed('dep4')).toBe(false);
@@ -357,7 +345,6 @@ describe('usage report', () => {
 
     it('with tracked and non tracked modules', () => {
       const usage = new Usage(packagesExports);
-      const filePath = 'src/example.js';
       const imports = [
         {
           moduleSpecifier: 'dep1',
@@ -372,7 +359,7 @@ describe('usage report', () => {
       expect(usage.isModuleUsed('dep1', 'default')).toBe(false);
       expect(usage.isModuleUsed('dep1', 'methodA')).toBe(false);
 
-      usage.addImports(filePath, imports);
+      usage.addImports(imports);
 
       expect(usage.isPackageUsed('dep1')).toBe(true);
       expect(usage.isModuleUsed('dep1', 'default')).toBe(true);
@@ -391,14 +378,13 @@ describe('usage report', () => {
     expect(usage.hasModule('dep1', 'default')).toBe(true);
     expect(usage.getModule('dep1', 'default')).toStrictEqual({
       type: 'function',
-      importedFrom: [],
+      isUsed: false,
     });
   });
 
   it('prints the report', () => {
     const spy = jest.spyOn(log, 'info').mockImplementation();
     const usage = new Usage(packagesExports);
-
     const imports = [
       {
         moduleSpecifier: 'dep1',
@@ -408,7 +394,7 @@ describe('usage report', () => {
       },
     ];
 
-    usage.addImports('example1.js', imports);
+    usage.addImports(imports);
 
     usage.print();
 

@@ -5,8 +5,8 @@ import type { Import } from '../imports/index.js';
 import type { Export, PackagesExports } from '../packages/index.js';
 
 interface Module {
+  isUsed: boolean;
   type: string;
-  importedFrom: string[];
 }
 
 interface Package {
@@ -26,7 +26,7 @@ class Usage {
       if (exports !== null) {
         exports.forEach(({ name, type }: Readonly<Export>) => {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          this.storage.get(packageName)!.modules.set(name, { type, importedFrom: [] });
+          this.storage.get(packageName)!.modules.set(name, { type, isUsed: false });
         });
       }
     });
@@ -57,10 +57,10 @@ class Usage {
   }
 
   public isModuleUsed(packageName: string, moduleName: string): boolean {
-    return Boolean(this.getModule(packageName, moduleName)?.importedFrom.length);
+    return Boolean(this.getModule(packageName, moduleName)?.isUsed);
   }
 
-  public addImports(filepath: string, imports: ReadonlyDeep<Import[]>): void {
+  public addImports(imports: ReadonlyDeep<Import[]>): void {
     imports.forEach(({ packageName, moduleNames }) => {
       if (packageName !== null) {
         const pkg = this.storage.get(packageName);
@@ -72,7 +72,7 @@ class Usage {
             const module = pkg.modules.get(moduleName);
 
             if (typeof module !== 'undefined') {
-              module.importedFrom.push(filepath);
+              module.isUsed = true;
             }
           });
         }
@@ -102,7 +102,7 @@ class Usage {
       log.info(`${pkg.isUsed ? '✅' : '❌'} ${packageName}\n`);
       // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
       pkg.modules.forEach((module, moduleName) => {
-        log.info(`  ${module.importedFrom.length > 0 ? '✅' : '  '} ${moduleName}`);
+        log.info(`  ${module.isUsed ? '✅' : '  '} ${moduleName}`);
       });
       log.info();
     });

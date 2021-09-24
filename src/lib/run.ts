@@ -24,7 +24,7 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
   const coverage = new Coverage(usage);
 
   processFiles(listFiles(filesMatch), (filePath, _filename, _content, _ast, imports = []) => {
-    usage.addImports(filePath, imports);
+    usage.addImports(imports);
     coverage.addFile(filePath, imports);
   });
 
