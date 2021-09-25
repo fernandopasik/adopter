@@ -523,6 +523,82 @@ describe('usage report', () => {
     });
   });
 
+  it('returns a json version of the report', async () => {
+    (getPackageModules as jest.MockedFunction<typeof getPackageModules>)
+      .mockResolvedValueOnce(['default'])
+      .mockResolvedValueOnce(['methodB'])
+      .mockResolvedValueOnce(['default']);
+
+    (filterTrackedDependencies as jest.MockedFunction<typeof filterTrackedDependencies>)
+      .mockReturnValueOnce(new Map([['dep2', '*']]))
+      .mockReturnValueOnce(new Map())
+      .mockReturnValueOnce(new Map());
+
+    const usage = new Usage(['dep1', 'dep2', 'dep3']);
+    await usage.init();
+
+    const imports = [
+      {
+        moduleSpecifier: 'dep1',
+        packageName: 'dep1',
+        defaultName: 'dep1',
+        moduleNames: ['default'],
+      },
+    ];
+
+    usage.addImports(imports);
+
+    expect(usage.json()).toMatchInlineSnapshot(`
+      Object {
+        "packages": Array [
+          Object {
+            "dependencies": Array [
+              Object {
+                "isUsed": true,
+                "name": "dep2",
+              },
+            ],
+            "isUsed": true,
+            "modules": Array [
+              Object {
+                "isUsed": true,
+                "name": "default",
+              },
+            ],
+            "name": "dep1",
+          },
+          Object {
+            "dependencies": Array [],
+            "isUsed": true,
+            "modules": Array [
+              Object {
+                "isUsed": false,
+                "name": "methodB",
+              },
+            ],
+            "name": "dep2",
+          },
+          Object {
+            "dependencies": Array [],
+            "isUsed": false,
+            "modules": Array [
+              Object {
+                "isUsed": false,
+                "name": "default",
+              },
+            ],
+            "name": "dep3",
+          },
+        ],
+        "summary": Object {
+          "packagesTracked": 3,
+          "packagesUsage": 0.6666666666666666,
+          "packagesUsed": 2,
+        },
+      }
+    `);
+  });
+
   it('prints the report', async () => {
     (getPackageModules as jest.MockedFunction<typeof getPackageModules>)
       .mockResolvedValueOnce(['default', 'methodA'])

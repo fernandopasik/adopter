@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import log from 'loglevel';
 import { blue, bold } from 'nanocolors';
 import type { ReadonlyDeep } from 'type-fest';
@@ -18,6 +19,24 @@ interface Summary {
   packagesTracked: number;
   packagesUsed: number;
   packagesUsage: number;
+}
+
+interface UsageJsonPackage {
+  name: string;
+  isUsed: boolean;
+  dependencies: {
+    name: string;
+    isUsed: boolean;
+  }[];
+  modules: {
+    name: string;
+    isUsed: boolean;
+  }[];
+}
+
+interface UsageJson {
+  summary: Summary;
+  packages: UsageJsonPackage[];
 }
 
 class Usage {
@@ -125,6 +144,30 @@ class Usage {
     const packagesUsage = packagesUsed / packagesTracked;
 
     return { packagesTracked, packagesUsed, packagesUsage };
+  }
+
+  public json(): UsageJson {
+    const usage: UsageJson = { summary: this.summary(), packages: [] };
+
+    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+    this.storage.forEach((pkg, packageName) => {
+      usage.packages.push({
+        name: packageName,
+        isUsed: pkg.isUsed,
+        dependencies: Array.from(pkg.dependencies.keys()).map((name) => ({
+          name,
+          isUsed: this.isPackageUsed(name),
+        })),
+        modules: Array.from(pkg.modules.entries()).map(
+          ([name, module]: ReadonlyDeep<[string, Module]>) => ({
+            name,
+            isUsed: module.isUsed,
+          }),
+        ),
+      });
+    });
+
+    return usage;
   }
 
   public print(): void {
