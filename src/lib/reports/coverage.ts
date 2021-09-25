@@ -79,7 +79,7 @@ class Coverage {
       log.info(file.librariesImports.length > 0 ? bold(green(filePath)) : dim(filePath));
 
       file.librariesImports.forEach((imprt) => {
-        log.info(dim(' └'), blue(imprt.packageName), ' ', cyan(imprt.moduleName));
+        log.info(dim(' └'), blue(imprt.packageName), '/', cyan(imprt.moduleName));
       });
     });
 
