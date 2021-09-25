@@ -14,6 +14,11 @@ export interface ImportAnalysis {
   librariesImports: ReadonlyDeep<ModuleImport[]>;
 }
 
+interface Summary {
+  filesTracked: number;
+  filesWithImports: number;
+}
+
 class Coverage {
   private readonly storage: Map<string, ImportAnalysis>;
 
@@ -47,15 +52,20 @@ class Coverage {
     return this.storage.get(filepath);
   }
 
+  public summary(): Summary {
+    const filesTracked = Array.from(this.storage.values()).length;
+    const filesWithImports = Array.from(this.storage.values()).filter(
+      (file: ReadonlyDeep<ImportAnalysis>) => file.librariesImports.length > 0,
+    ).length;
+
+    return { filesTracked, filesWithImports };
+  }
+
   public print(): void {
     const currentLogLevel = log.getLevel();
     log.setLevel('INFO');
 
-    const filesTracked = Array.from(this.storage.values()).length;
-    const filesWithImports = Array.from(this.storage.values()).filter(
-      // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-      (file) => file.librariesImports.length > 0,
-    ).length;
+    const { filesTracked, filesWithImports } = this.summary();
 
     log.info(blue(bold('Coverage Report\n')));
     log.info(blue('Files tracked:      '), filesTracked);

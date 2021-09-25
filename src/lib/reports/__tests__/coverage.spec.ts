@@ -147,6 +147,31 @@ describe('coverage report', () => {
     });
   });
 
+  it('creates a summary', () => {
+    const usage = new Usage([]);
+    const spy = jest.spyOn(usage, 'hasModule').mockReturnValueOnce(true);
+    const coverage = new Coverage(usage);
+    const filePath1 = 'src/example1.js';
+    const filePath2 = 'src/example2.js';
+    const filePath3 = 'src/example3.js';
+    const imports = [
+      {
+        moduleSpecifier: 'dep1',
+        packageName: 'dep1',
+        defaultName: 'dep1',
+        moduleNames: ['default'],
+      },
+    ];
+
+    coverage.addFile(filePath1, imports);
+    coverage.addFile(filePath2, []);
+    coverage.addFile(filePath3, []);
+
+    expect(coverage.summary()).toStrictEqual({ filesTracked: 3, filesWithImports: 1 });
+
+    spy.mockRestore();
+  });
+
   it('prints the report', () => {
     const usage = new Usage([]);
     const spy1 = jest.spyOn(log, 'info').mockImplementation();
