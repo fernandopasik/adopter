@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import log from 'loglevel';
-import { blue, bold } from 'nanocolors';
+import { bold, dim, green, red } from 'nanocolors';
 import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../imports/index.js';
 import { filterTrackedDependencies, getPackageJson, getPackageModules } from '../packages/index.js';
@@ -174,22 +174,24 @@ class Usage {
     const currentLogLevel = log.getLevel();
     log.setLevel('INFO');
 
-    const { packagesTracked, packagesUsed, packagesUsage } = this.summary();
+    const { summary, packages } = this.json();
 
-    log.info(blue(bold('Usage Report\n')));
-    log.info(blue('Packages tracked: '), packagesTracked);
-    log.info(blue('Packages used:    '), packagesUsed);
-    log.info(blue('Packages usage:   '), `${packagesUsage}%`);
     log.info('');
+    log.info('Package and Modules Usage');
+    log.info(dim('-----------------------------------'));
+    log.info(dim('Packages Tracked : '), bold(summary.packagesTracked));
+    log.info(dim('Packages Used    : '), bold(summary.packagesUsed));
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    log.info(dim('Packages Usage   : '), bold((summary.packagesUsage * 100).toFixed(2)));
 
-    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-    this.storage.forEach((pkg, packageName) => {
-      log.info(`${pkg.isUsed ? '✅' : '❌'} ${packageName}\n`);
-      // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-      pkg.modules.forEach((module, moduleName) => {
-        log.info(`  ${module.isUsed ? '✅' : '  '} ${moduleName}`);
-      });
-      log.info();
+    const listUsed = (items: ReadonlyDeep<{ name: string; isUsed: boolean }[]>): string =>
+      items.map((item) => (item.isUsed ? green(item.name) : red(item.name))).join(', ');
+
+    packages.forEach((pkg: ReadonlyDeep<UsageJsonPackage>) => {
+      log.info('');
+      log.info('Package: ', bold(pkg.isUsed ? green(pkg.name) : red(pkg.name)));
+      log.info(dim('Dependencies: '), listUsed(pkg.dependencies));
+      log.info(dim('Modules: '), listUsed(pkg.modules));
     });
 
     log.setLevel(currentLogLevel);

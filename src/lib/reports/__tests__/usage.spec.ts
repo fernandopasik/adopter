@@ -8,8 +8,10 @@ import Usage from '../usage.js';
 
 jest.mock('loglevel');
 jest.mock('nanocolors', () => ({
-  blue: (t: string): string => t,
   bold: (t: string): string => t,
+  dim: (t: string): string => t,
+  green: (t: string): string => t,
+  red: (t: string): string => t,
 }));
 
 jest.mock('../../packages', () => ({
@@ -620,7 +622,7 @@ describe('usage report', () => {
 
     usage.print();
 
-    expect(spy).toHaveBeenNthCalledWith(1, 'Usage Report\n');
+    expect(spy).toHaveBeenNthCalledWith(2, 'Package and Modules Usage');
 
     spy.mockRestore();
   });
