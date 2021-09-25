@@ -186,7 +186,9 @@ class Usage {
         log.info(dim('is Used: '), isUsed ? 'yes' : 'no');
         log.info(
           dim('Dependencies Tracked: '),
-          dependencies.map((d) => (d.isUsed ? green(d.name) : red(d.name))).join(', '),
+          dependencies.length > 0
+            ? dependencies.map((d) => (d.isUsed ? green(d.name) : red(d.name))).join(', ')
+            : '-',
         );
         log.info(dim('Modules Imported: '), mods.length > 0 ? mods.join(', ') : '-');
       },
