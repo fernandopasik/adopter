@@ -564,18 +564,25 @@ describe('usage report', () => {
             "modulesImported": Array [
               "default",
             ],
+            "modulesNotImported": Array [],
             "name": "dep1",
           },
           Object {
             "dependencies": Array [],
             "isUsed": true,
             "modulesImported": Array [],
+            "modulesNotImported": Array [
+              "methodB",
+            ],
             "name": "dep2",
           },
           Object {
             "dependencies": Array [],
             "isUsed": false,
             "modulesImported": Array [],
+            "modulesNotImported": Array [
+              "default",
+            ],
             "name": "dep3",
           },
         ],
@@ -593,14 +600,21 @@ describe('usage report', () => {
       .mockResolvedValueOnce(['default', 'methodA'])
       .mockResolvedValueOnce(['default'])
       .mockResolvedValueOnce(['default'])
+      .mockResolvedValueOnce(['default'])
       .mockResolvedValueOnce(['default']);
     (filterTrackedDependencies as jest.MockedFunction<typeof filterTrackedDependencies>)
       .mockReturnValueOnce(new Map([['dep2', '*']]))
       .mockReturnValueOnce(new Map())
-      .mockReturnValueOnce(new Map([['dep4', '*']]))
+      .mockReturnValueOnce(
+        new Map([
+          ['dep4', '*'],
+          ['dep5', '*'],
+        ]),
+      )
+      .mockReturnValueOnce(new Map())
       .mockReturnValueOnce(new Map());
     const spy = jest.spyOn(log, 'info').mockImplementation();
-    const usage = new Usage(['dep1', 'dep2', 'dep3', 'dep4']);
+    const usage = new Usage(['dep1', 'dep2', 'dep3', 'dep4', 'dep5']);
     await usage.init();
 
     const imports = [
@@ -608,6 +622,12 @@ describe('usage report', () => {
         moduleSpecifier: 'dep1',
         packageName: 'dep1',
         defaultName: 'dep1',
+        moduleNames: ['default'],
+      },
+      {
+        moduleSpecifier: 'dep4',
+        packageName: 'dep4',
+        defaultName: 'dep4',
         moduleNames: ['default'],
       },
     ];

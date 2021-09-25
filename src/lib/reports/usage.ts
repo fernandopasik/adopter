@@ -29,6 +29,7 @@ interface UsageJsonPackage {
     isUsed: boolean;
   }[];
   modulesImported: string[];
+  modulesNotImported: string[];
 }
 
 interface UsageJson {
@@ -158,6 +159,9 @@ class Usage {
         modulesImported: Array.from(pkg.modules.entries())
           .filter(([, module]: ReadonlyDeep<[string, Module]>) => module.isUsed)
           .map(([name]: ReadonlyDeep<[string, Module]>) => name),
+        modulesNotImported: Array.from(pkg.modules.entries())
+          .filter(([, module]: ReadonlyDeep<[string, Module]>) => !module.isUsed)
+          .map(([name]: ReadonlyDeep<[string, Module]>) => name),
       });
     });
 
@@ -179,20 +183,25 @@ class Usage {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     log.info(dim('Packages Usage   : '), bold((summary.packagesUsage * 100).toFixed(2)));
 
-    packages.forEach(
-      ({ dependencies, isUsed, modulesImported: mods, name }: ReadonlyDeep<UsageJsonPackage>) => {
-        log.info('');
-        log.info('Package              : ', bold(isUsed ? green(name) : red(name)));
-        log.info(dim('is Used              : '), isUsed ? 'yes' : 'no');
-        log.info(
-          dim('Dependencies Tracked : '),
-          dependencies.length > 0
-            ? dependencies.map((d) => (d.isUsed ? green(d.name) : red(d.name))).join(', ')
-            : '-',
-        );
-        log.info(dim('Modules Imported     : '), mods.length > 0 ? mods.join(', ') : '-');
-      },
-    );
+    packages.forEach((pkg: ReadonlyDeep<UsageJsonPackage>) => {
+      log.info('');
+      log.info('Package              : ', bold(pkg.isUsed ? green(pkg.name) : red(pkg.name)));
+      log.info(dim('is Used              : '), pkg.isUsed ? 'yes' : 'no');
+      log.info(
+        dim('Dependencies Tracked : '),
+        pkg.dependencies.length > 0
+          ? pkg.dependencies.map((d) => (d.isUsed ? green(d.name) : red(d.name))).join(', ')
+          : '-',
+      );
+      log.info(
+        dim('Modules Imported     : '),
+        pkg.modulesImported.length > 0 ? pkg.modulesImported.join(', ') : '-',
+      );
+      log.info(
+        dim('Modules not Imported : '),
+        pkg.modulesNotImported.length > 0 ? pkg.modulesNotImported.join(', ') : '-',
+      );
+    });
 
     log.setLevel(currentLogLevel);
   }
