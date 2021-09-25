@@ -1,6 +1,6 @@
 # adopter
 
-Auditing tool for increasing adoption of libraries.
+Auditing tool for tracking packages and modules usage, for increasing adoption of libraries.
 
 <!-- BADGES - START -->
 
