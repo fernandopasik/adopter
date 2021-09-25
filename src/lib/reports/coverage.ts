@@ -70,8 +70,8 @@ class Coverage {
     log.info('');
     log.info('Imported Packages and Modules Coverage');
     log.info(dim('--------------------------------------'));
-    log.info(dim('Packages Tracked : '), bold(summary.filesTracked));
-    log.info(dim('Packages Used    : '), bold(summary.filesWithImports));
+    log.info(dim('Files Tracked      : '), bold(summary.filesTracked));
+    log.info(dim('Files with Imports : '), bold(summary.filesWithImports));
 
     log.info();
 
