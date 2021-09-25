@@ -1263,7 +1263,7 @@ chalk@^2.0.0:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-chalk@^4.0.0:
+chalk@^4.0.0, chalk@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
   integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
@@ -3387,11 +3387,6 @@ mvdan-sh@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/mvdan-sh/-/mvdan-sh-0.5.0.tgz#fa76f611a103595ad0f04f5d18e582892c46e87c"
   integrity sha512-UWbdl4LHd2fUnaEcOUFVWRdWGLkNoV12cKVIPiirYd8qM5VkCoCTXErlDubevrkEG7kGohvjRxAlTQmOqG80tw==
-
-nanocolors@^0.2.12:
-  version "0.2.12"
-  resolved "https://registry.yarnpkg.com/nanocolors/-/nanocolors-0.2.12.tgz#4d05932e70116078673ea4cc6699a1c56cc77777"
-  integrity sha512-SFNdALvzW+rVlzqexid6epYdt8H9Zol7xDoQarioEFcFN0JHo4CYNztAxmtfgGTVRCmFlEOqqhBpoFGKqSAMug==
 
 natural-compare@^1.4.0:
   version "1.4.0"

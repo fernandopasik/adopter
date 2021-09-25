@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
+import chalk from 'chalk';
 import log from 'loglevel';
-import { bold, dim, green, red } from 'nanocolors';
 import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../imports/index.js';
 import { filterTrackedDependencies, getPackageJson, getPackageModules } from '../packages/index.js';
@@ -177,28 +177,37 @@ class Usage {
 
     log.info('');
     log.info('Package and Modules Usage');
-    log.info(dim('--------------------------------------'));
-    log.info(dim('Packages Tracked : '), bold(summary.packagesTracked));
-    log.info(dim('Packages Used    : '), bold(summary.packagesUsed));
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    log.info(dim('Packages Usage   : '), bold((summary.packagesUsage * 100).toFixed(2)));
+    log.info(chalk.dim('--------------------------------------'));
+    log.info(chalk.dim('Packages Tracked : '), chalk.bold(summary.packagesTracked));
+    log.info(chalk.dim('Packages Used    : '), chalk.bold(summary.packagesUsed));
+    log.info(
+      chalk.dim('Packages Usage   : '),
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+      chalk.bold((summary.packagesUsage * 100).toFixed(2)),
+    );
 
+    // eslint-disable-next-line max-lines-per-function
     packages.forEach((pkg: ReadonlyDeep<UsageJsonPackage>) => {
       log.info('');
-      log.info('Package              : ', bold(pkg.isUsed ? green(pkg.name) : red(pkg.name)));
-      log.info(dim('is Used              : '), pkg.isUsed ? 'yes' : 'no');
       log.info(
-        dim('Dependencies Tracked : '),
+        'Package              : ',
+        chalk.bold(pkg.isUsed ? chalk.green(pkg.name) : chalk.red(pkg.name)),
+      );
+      log.info(chalk.dim('is Used              : '), pkg.isUsed ? 'yes' : 'no');
+      log.info(
+        chalk.dim('Dependencies Tracked : '),
         pkg.dependencies.length > 0
-          ? pkg.dependencies.map((d) => (d.isUsed ? green(d.name) : red(d.name))).join(', ')
+          ? pkg.dependencies
+              .map((d) => (d.isUsed ? chalk.green(d.name) : chalk.red(d.name)))
+              .join(', ')
           : '-',
       );
       log.info(
-        dim('Modules Imported     : '),
+        chalk.dim('Modules Imported     : '),
         pkg.modulesImported.length > 0 ? pkg.modulesImported.join(', ') : '-',
       );
       log.info(
-        dim('Modules not Imported : '),
+        chalk.dim('Modules not Imported : '),
         pkg.modulesNotImported.length > 0 ? pkg.modulesNotImported.join(', ') : '-',
       );
     });

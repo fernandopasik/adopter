@@ -4,7 +4,7 @@ import Coverage from '../coverage.js';
 import Usage from '../usage.js';
 
 jest.mock('loglevel');
-jest.mock('nanocolors', () => ({
+jest.mock('chalk', () => ({
   blue: (t: string): string => t,
   bold: (t: string): string => t,
   cyan: (t: string): string => t,

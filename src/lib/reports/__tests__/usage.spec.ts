@@ -7,7 +7,7 @@ import {
 import Usage from '../usage.js';
 
 jest.mock('loglevel');
-jest.mock('nanocolors', () => ({
+jest.mock('chalk', () => ({
   bold: (t: string): string => t,
   dim: (t: string): string => t,
   green: (t: string): string => t,

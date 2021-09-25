@@ -1,5 +1,5 @@
+import chalk from 'chalk';
 import log from 'loglevel';
-import { blue, bold, cyan, dim, green } from 'nanocolors';
 import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../imports/index.js';
 import type Usage from './usage.js';
@@ -69,17 +69,19 @@ class Coverage {
 
     log.info('');
     log.info('Imported Packages and Modules Coverage');
-    log.info(dim('--------------------------------------'));
-    log.info(dim('Files Tracked      : '), bold(summary.filesTracked));
-    log.info(dim('Files with Imports : '), bold(summary.filesWithImports));
+    log.info(chalk.dim('--------------------------------------'));
+    log.info(chalk.dim('Files Tracked      : '), chalk.bold(summary.filesTracked));
+    log.info(chalk.dim('Files with Imports : '), chalk.bold(summary.filesWithImports));
 
     log.info();
 
     this.storage.forEach((file: ReadonlyDeep<ImportAnalysis>, filePath) => {
-      log.info(file.librariesImports.length > 0 ? bold(green(filePath)) : dim(filePath));
+      log.info(
+        file.librariesImports.length > 0 ? chalk.bold(chalk.green(filePath)) : chalk.dim(filePath),
+      );
 
       file.librariesImports.forEach((imprt) => {
-        log.info(dim(' └'), blue(imprt.packageName), '/', cyan(imprt.moduleName));
+        log.info(chalk.dim(' └'), chalk.blue(imprt.packageName), '/', chalk.cyan(imprt.moduleName));
       });
     });
 

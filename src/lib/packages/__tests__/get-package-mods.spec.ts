@@ -5,7 +5,7 @@ jest.mock('../resolve-package.js', () =>
   jest.fn(async (specifier: string) => Promise.resolve(specifier)),
 );
 jest.mock('loglevel');
-jest.mock('nanocolors', () => ({
+jest.mock('chalk', () => ({
   yellow: (t: string): string => t,
 }));
 

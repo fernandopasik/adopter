@@ -10,7 +10,7 @@ jest.mock('../resolve-package.js', () =>
 );
 jest.mock('fs');
 jest.mock('loglevel');
-jest.mock('nanocolors', () => ({
+jest.mock('chalk', () => ({
   yellow: (t: string): string => t,
 }));
 
