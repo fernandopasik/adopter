@@ -30,11 +30,30 @@ describe('adopter cli', () => {
   });
 
   it('can set root directory', async () => {
-    const args = ['--rootDir', 'src', 'dep1', 'dep2'];
+    const rootDir = 'src';
+    const args = ['--rootDir', rootDir, 'dep1', 'dep2'];
 
     await cli(args);
 
     expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith({ packages: ['dep1', 'dep2'], rootDir: 'src' });
+    expect(run).toHaveBeenCalledWith(expect.objectContaining({ rootDir }));
+  });
+
+  it('by default hides coverage', async () => {
+    const args = ['dep1', 'dep2'];
+
+    await cli(args);
+
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledWith(expect.objectContaining({ coverage: false }));
+  });
+
+  it('can display coverage', async () => {
+    const args = ['--coverage', 'dep1', 'dep2'];
+
+    await cli(args);
+
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledWith(expect.objectContaining({ coverage: true }));
   });
 });
