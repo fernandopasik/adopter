@@ -126,11 +126,11 @@ describe('run', () => {
     spy.mockRestore();
   });
 
-  it('prints coverage', async () => {
+  it('can print coverage', async () => {
     const packages = ['dep1', 'dep2'];
     const spy = jest.spyOn(Coverage.prototype, 'print');
 
-    await run({ packages });
+    await run({ packages, coverage: true });
 
     expect(spy).toHaveBeenCalledTimes(1);
 

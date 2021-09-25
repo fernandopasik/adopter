@@ -7,6 +7,7 @@ import type { Import } from './imports/index.js';
 import { Coverage, Usage } from './reports/index.js';
 
 export interface Options {
+  coverage?: boolean;
   onFile?: (
     filePath: string,
     filename: string,
@@ -21,8 +22,15 @@ export interface Options {
 
 log.setDefaultLevel('ERROR');
 
+// eslint-disable-next-line max-lines-per-function
 const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
-  const { onFile, packages, rootDir = '.', srcMatch = ['**/*.[jt]s?(x)'] } = options;
+  const {
+    coverage: displayCoverage = false,
+    onFile,
+    packages,
+    rootDir = '.',
+    srcMatch = ['**/*.[jt]s?(x)'],
+  } = options;
 
   const filesMatch = srcMatch.map((srcM) => path.join(rootDir, srcM));
 
@@ -41,7 +49,9 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
   });
 
   usage.print();
-  coverage.print();
+  if (displayCoverage) {
+    coverage.print();
+  }
 };
 
 export default run;
