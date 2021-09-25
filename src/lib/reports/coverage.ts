@@ -51,14 +51,14 @@ class Coverage {
     const currentLogLevel = log.getLevel();
     log.setLevel('INFO');
 
-    const filesAmount = Array.from(this.storage.values()).length;
+    const filesTracked = Array.from(this.storage.values()).length;
     const filesWithImports = Array.from(this.storage.values()).filter(
       // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
       (file) => file.librariesImports.length > 0,
     ).length;
 
     log.info(blue(bold('Coverage Report\n')));
-    log.info(blue('Files tracked:      '), filesAmount);
+    log.info(blue('Files tracked:      '), filesTracked);
     log.info(blue('Files with imports: '), filesWithImports);
     log.info();
 
