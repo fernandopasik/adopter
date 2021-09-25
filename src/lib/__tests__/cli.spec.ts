@@ -39,6 +39,15 @@ describe('adopter cli', () => {
     expect(run).toHaveBeenCalledWith(expect.objectContaining({ rootDir }));
   });
 
+  it('by default tracks all js and ts files', async () => {
+    const args = ['dep1', 'dep2'];
+
+    await cli(args);
+
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledWith(expect.objectContaining({ srcMatch: ['**/*.[jt]s?(x)'] }));
+  });
+
   it('by default hides coverage', async () => {
     const args = ['dep1', 'dep2'];
 

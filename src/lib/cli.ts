@@ -9,6 +9,7 @@ const cli = async (processArgs: readonly string[]): Promise<void> => {
     _: argList,
     coverage,
     rootDir,
+    srcMatch,
   } = yargs(processArgs)
     .usage('$0 [options] package1 [package2] [packageN]')
     .demandCommand(1, 'You need to provide at least one package to track')
@@ -32,7 +33,7 @@ const cli = async (processArgs: readonly string[]): Promise<void> => {
 
   const packages = argList.map((arg) => String(arg));
 
-  await run({ coverage, packages, rootDir });
+  await run({ coverage, packages, rootDir, srcMatch });
 };
 
 export default cli;
