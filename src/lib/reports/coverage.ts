@@ -1,5 +1,5 @@
 import log from 'loglevel';
-import { blue, bold } from 'nanocolors';
+import { bold, dim } from 'nanocolors';
 import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../imports/index.js';
 import type Usage from './usage.js';
@@ -65,11 +65,14 @@ class Coverage {
     const currentLogLevel = log.getLevel();
     log.setLevel('INFO');
 
-    const { filesTracked, filesWithImports } = this.summary();
+    const summary = this.summary();
 
-    log.info(blue(bold('Coverage Report\n')));
-    log.info(blue('Files tracked:      '), filesTracked);
-    log.info(blue('Files with imports: '), filesWithImports);
+    log.info('');
+    log.info('File Coverage');
+    log.info(dim('-----------------------------------'));
+    log.info(dim('Packages Tracked : '), bold(summary.filesTracked));
+    log.info(dim('Packages Used    : '), bold(summary.filesWithImports));
+
     log.info();
 
     // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
