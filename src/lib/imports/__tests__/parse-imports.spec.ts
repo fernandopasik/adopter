@@ -4,239 +4,117 @@ import parseImports from '../parse-imports.js';
 jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
 
 describe('parse imports', () => {
-  it('default imports', () => {
+  it('with default imports', () => {
     const source = ts.createSourceFile(
       'example.ts',
       'import dep1 from "dep1"; import dep2 from "dep2";',
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImports(source)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "defaultName": "dep1",
-    "moduleNames": Array [
-      "default",
-    ],
-    "moduleSpecifier": "dep1",
-    "named": undefined,
-    "packageName": "dep1",
-  },
-  Object {
-    "defaultName": "dep2",
-    "moduleNames": Array [
-      "default",
-    ],
-    "moduleSpecifier": "dep2",
-    "named": undefined,
-    "packageName": "dep2",
-  },
-]
-`);
+    const imports = parseImports(source);
+
+    expect(imports).toHaveLength(2);
+    expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
+    expect(imports[1]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
   });
 
-  it('default and named imports', () => {
+  it('with default and named imports', () => {
     const source = ts.createSourceFile(
       'example.ts',
-      'import dep1 from "dep1"; import { dep2, dep3 } from "dep2";',
+      'import dep1 from "dep1"; import { moduleA, moduleB } from "dep2";',
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImports(source)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "defaultName": "dep1",
-    "moduleNames": Array [
-      "default",
-    ],
-    "moduleSpecifier": "dep1",
-    "named": undefined,
-    "packageName": "dep1",
-  },
-  Object {
-    "defaultName": undefined,
-    "moduleNames": Array [
-      "dep2",
-      "dep3",
-    ],
-    "moduleSpecifier": "dep2",
-    "named": Object {
-      "dep2": "dep2",
-      "dep3": "dep3",
-    },
-    "packageName": "dep2",
-  },
-]
-`);
+    const imports = parseImports(source);
+
+    expect(imports).toHaveLength(2);
+    expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
+    expect(imports[1]).toStrictEqual(
+      expect.objectContaining({ moduleNames: ['moduleA', 'moduleB'] }),
+    );
   });
 
-  it('unnamed, default and named imports with alias', () => {
+  it('with unnamed, default and named imports with alias', () => {
     const source = ts.createSourceFile(
       'example.ts',
-      'import dep1 from "dep1"; import { dep2, dep3 as dep4 } from "dep2"; import "dep5"',
+      'import dep1 from "dep1"; import { moduleA, moduleB as aliasB } from "dep2"; import "dep5"',
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImports(source)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "defaultName": "dep1",
-    "moduleNames": Array [
-      "default",
-    ],
-    "moduleSpecifier": "dep1",
-    "named": undefined,
-    "packageName": "dep1",
-  },
-  Object {
-    "defaultName": undefined,
-    "moduleNames": Array [
-      "dep2",
-      "dep3",
-    ],
-    "moduleSpecifier": "dep2",
-    "named": Object {
-      "dep2": "dep2",
-      "dep3": "dep4",
-    },
-    "packageName": "dep2",
-  },
-  Object {
-    "defaultName": undefined,
-    "moduleNames": Array [],
-    "moduleSpecifier": "dep5",
-    "named": undefined,
-    "packageName": "dep5",
-  },
-]
-`);
+    const imports = parseImports(source);
+
+    expect(imports).toHaveLength(3);
+    expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
+    expect(imports[1]).toStrictEqual(
+      expect.objectContaining({ moduleNames: ['moduleA', 'moduleB'] }),
+    );
+    expect(imports[1]).toStrictEqual(
+      expect.objectContaining({ named: { moduleA: 'moduleA', moduleB: 'aliasB' } }),
+    );
+    expect(imports[2]).toStrictEqual(expect.objectContaining({ moduleNames: [] }));
   });
 
-  it('imports and non imports', () => {
+  it('with imports and non imports', () => {
     const source = ts.createSourceFile(
       'example.ts',
-      'import dep1 from "dep1"; import { dep2 } from "dep2"; console.log(true)',
+      'import dep1 from "dep1"; import { moduleA } from "dep2"; console.log(true)',
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImports(source)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "defaultName": "dep1",
-    "moduleNames": Array [
-      "default",
-    ],
-    "moduleSpecifier": "dep1",
-    "named": undefined,
-    "packageName": "dep1",
-  },
-  Object {
-    "defaultName": undefined,
-    "moduleNames": Array [
-      "dep2",
-    ],
-    "moduleSpecifier": "dep2",
-    "named": Object {
-      "dep2": "dep2",
-    },
-    "packageName": "dep2",
-  },
-]
-`);
+    const imports = parseImports(source);
+
+    expect(imports).toHaveLength(2);
+    expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
+    expect(imports[1]).toStrictEqual(expect.objectContaining({ moduleNames: ['moduleA'] }));
   });
 
-  it('module imports and type imports', () => {
+  it('with module imports and type imports', () => {
     const source = ts.createSourceFile(
       'example.ts',
       'import dep1 from "dep1"; import type { Dep2 } from "dep2"; console.log(true)',
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImports(source)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "defaultName": "dep1",
-    "moduleNames": Array [
-      "default",
-    ],
-    "moduleSpecifier": "dep1",
-    "named": undefined,
-    "packageName": "dep1",
-  },
-  Object {
-    "defaultName": undefined,
-    "moduleNames": Array [
-      "Dep2",
-    ],
-    "moduleSpecifier": "dep2",
-    "named": Object {
-      "Dep2": "Dep2",
-    },
-    "packageName": "dep2",
-  },
-]
-`);
+    const imports = parseImports(source);
+
+    expect(imports).toHaveLength(2);
+    expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
+    expect(imports[1]).toStrictEqual(expect.objectContaining({ moduleNames: ['Dep2'] }));
   });
 
-  it('relative imports', () => {
+  it('with relative imports', () => {
     const source = ts.createSourceFile(
       'example.ts',
       'import dep1 from "dep1"; import dep2 from "./dep2/example.ts"',
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImports(source)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "defaultName": "dep1",
-    "moduleNames": Array [
-      "default",
-    ],
-    "moduleSpecifier": "dep1",
-    "named": undefined,
-    "packageName": "dep1",
-  },
-  Object {
-    "defaultName": "dep2",
-    "moduleNames": Array [
-      "default",
-    ],
-    "moduleSpecifier": "./dep2/example.ts",
-    "named": undefined,
-    "packageName": null,
-  },
-]
-`);
+    const imports = parseImports(source);
+
+    expect(imports).toHaveLength(2);
+    expect(imports[0]).toStrictEqual(
+      expect.objectContaining({ moduleNames: ['default'], packageName: 'dep1' }),
+    );
+    expect(imports[1]).toStrictEqual(
+      expect.objectContaining({ moduleNames: ['default'], packageName: null }),
+    );
   });
 
-  it('internal files in package imports', () => {
+  it('with internal files in package imports', () => {
     const source = ts.createSourceFile(
       'example.ts',
       'import dep1 from "dep1"; import dep2 from "dep2/example.ts"',
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImports(source)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "defaultName": "dep1",
-    "moduleNames": Array [
-      "default",
-    ],
-    "moduleSpecifier": "dep1",
-    "named": undefined,
-    "packageName": "dep1",
-  },
-  Object {
-    "defaultName": "dep2",
-    "moduleNames": Array [
-      "default",
-    ],
-    "moduleSpecifier": "dep2/example.ts",
-    "named": undefined,
-    "packageName": "dep2",
-  },
-]
-`);
+    const imports = parseImports(source);
+
+    expect(imports).toHaveLength(2);
+    expect(imports[0]).toStrictEqual(
+      expect.objectContaining({ moduleNames: ['default'], packageName: 'dep1' }),
+    );
+    expect(imports[1]).toStrictEqual(
+      expect.objectContaining({ moduleNames: ['default'], packageName: 'dep2' }),
+    );
   });
 });
