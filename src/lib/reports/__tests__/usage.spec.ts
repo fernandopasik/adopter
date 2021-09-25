@@ -502,6 +502,27 @@ describe('usage report', () => {
     });
   });
 
+  it('creates a summary', async () => {
+    const usage = new Usage(['dep1', 'dep2']);
+    await usage.init();
+
+    const imports = [
+      {
+        moduleSpecifier: 'dep1',
+        packageName: 'dep1',
+        moduleNames: [],
+      },
+    ];
+
+    usage.addImports(imports);
+
+    expect(usage.summary()).toStrictEqual({
+      packagesTracked: 2,
+      packagesUsage: 0.5,
+      packagesUsed: 1,
+    });
+  });
+
   it('prints the report', async () => {
     (getPackageModules as jest.MockedFunction<typeof getPackageModules>)
       .mockResolvedValueOnce(['default', 'methodA'])

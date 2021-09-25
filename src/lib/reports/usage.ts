@@ -14,6 +14,12 @@ interface Package {
   modules: Map<string, Module>;
 }
 
+interface Summary {
+  packagesTracked: number;
+  packagesUsed: number;
+  packagesUsage: number;
+}
+
 class Usage {
   private readonly storage: Map<string, Package>;
 
@@ -112,16 +118,20 @@ class Usage {
     });
   }
 
+  public summary(): Summary {
+    const packagesTracked = this.getPackageNames().length;
+    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+    const packagesUsed = Array.from(this.storage.values()).filter((pkg) => pkg.isUsed).length;
+    const packagesUsage = packagesUsed / packagesTracked;
+
+    return { packagesTracked, packagesUsed, packagesUsage };
+  }
+
   public print(): void {
     const currentLogLevel = log.getLevel();
     log.setLevel('INFO');
 
-    const packagesTracked = this.getPackageNames().length;
-
-    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-    const packagesUsed = Array.from(this.storage.values()).filter((pkg) => pkg.isUsed).length;
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    const packagesUsage = ((packagesUsed / packagesTracked) * 100).toFixed(2);
+    const { packagesTracked, packagesUsed, packagesUsage } = this.summary();
 
     log.info(blue(bold('Usage Report\n')));
     log.info(blue('Packages tracked: '), packagesTracked);
