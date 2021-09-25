@@ -20,8 +20,6 @@ export interface Options {
   srcMatch?: string[];
 }
 
-log.setDefaultLevel('ERROR');
-
 // eslint-disable-next-line max-lines-per-function
 const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
   const {
@@ -31,6 +29,8 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
     rootDir = '.',
     srcMatch = ['**/*.[jt]s?(x)'],
   } = options;
+
+  log.setDefaultLevel('ERROR');
 
   const filesMatch = srcMatch.map((srcM) => path.join(rootDir, srcM));
 

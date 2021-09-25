@@ -1,3 +1,4 @@
+import log from 'loglevel';
 import { listFiles, processFiles } from '../files/index.js';
 import { Coverage, Usage } from '../reports/index.js';
 import run from '../run.js';
@@ -29,6 +30,18 @@ jest.mock('../reports/index.js');
 describe('run', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('sets loglevel', async () => {
+    const spy = jest.spyOn(log, 'setDefaultLevel');
+    const packages = ['dep1', 'dep2'];
+
+    await run({ packages });
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith('ERROR');
+
+    spy.mockRestore();
   });
 
   it('creates usage with package exports', async () => {
