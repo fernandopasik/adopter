@@ -1,5 +1,5 @@
 import log from 'loglevel';
-import { bold, dim } from 'nanocolors';
+import { blue, bold, cyan, dim, green } from 'nanocolors';
 import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../imports/index.js';
 import type Usage from './usage.js';
@@ -68,16 +68,19 @@ class Coverage {
     const summary = this.summary();
 
     log.info('');
-    log.info('File Coverage');
-    log.info(dim('-----------------------------------'));
+    log.info('Imported Packages and Modules Coverage');
+    log.info(dim('--------------------------------------'));
     log.info(dim('Packages Tracked : '), bold(summary.filesTracked));
     log.info(dim('Packages Used    : '), bold(summary.filesWithImports));
 
     log.info();
 
-    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-    this.storage.forEach((file, filePath) => {
-      log.info(`${file.librariesImports.length > 0 ? '✅' : '  '} ${filePath}`);
+    this.storage.forEach((file: ReadonlyDeep<ImportAnalysis>, filePath) => {
+      log.info(file.librariesImports.length > 0 ? bold(green(filePath)) : dim(filePath));
+
+      file.librariesImports.forEach((imprt) => {
+        log.info(dim(' └'), blue(imprt.packageName), ' ', cyan(imprt.moduleName));
+      });
     });
 
     log.setLevel(currentLogLevel);

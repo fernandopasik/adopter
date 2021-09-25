@@ -5,8 +5,11 @@ import Usage from '../usage.js';
 
 jest.mock('loglevel');
 jest.mock('nanocolors', () => ({
+  blue: (t: string): string => t,
   bold: (t: string): string => t,
+  cyan: (t: string): string => t,
   dim: (t: string): string => t,
+  green: (t: string): string => t,
 }));
 jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
 jest.mock('../usage');
@@ -193,7 +196,7 @@ describe('coverage report', () => {
 
     coverage.print();
 
-    expect(spy1).toHaveBeenNthCalledWith(2, 'File Coverage');
+    expect(spy1).toHaveBeenNthCalledWith(2, 'Imported Packages and Modules Coverage');
 
     spy1.mockRestore();
     spy2.mockRestore();
