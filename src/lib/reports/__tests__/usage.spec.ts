@@ -591,9 +591,16 @@ describe('usage report', () => {
   it('prints the report', async () => {
     (getPackageModules as jest.MockedFunction<typeof getPackageModules>)
       .mockResolvedValueOnce(['default', 'methodA'])
+      .mockResolvedValueOnce(['default'])
+      .mockResolvedValueOnce(['default'])
       .mockResolvedValueOnce(['default']);
+    (filterTrackedDependencies as jest.MockedFunction<typeof filterTrackedDependencies>)
+      .mockReturnValueOnce(new Map([['dep2', '*']]))
+      .mockReturnValueOnce(new Map())
+      .mockReturnValueOnce(new Map([['dep4', '*']]))
+      .mockReturnValueOnce(new Map());
     const spy = jest.spyOn(log, 'info').mockImplementation();
-    const usage = new Usage(['dep1', 'dep2']);
+    const usage = new Usage(['dep1', 'dep2', 'dep3', 'dep4']);
     await usage.init();
 
     const imports = [
