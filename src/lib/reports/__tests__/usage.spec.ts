@@ -561,34 +561,21 @@ describe('usage report', () => {
               },
             ],
             "isUsed": true,
-            "modules": Array [
-              Object {
-                "isUsed": true,
-                "name": "default",
-              },
+            "modulesImported": Array [
+              "default",
             ],
             "name": "dep1",
           },
           Object {
             "dependencies": Array [],
             "isUsed": true,
-            "modules": Array [
-              Object {
-                "isUsed": false,
-                "name": "methodB",
-              },
-            ],
+            "modulesImported": Array [],
             "name": "dep2",
           },
           Object {
             "dependencies": Array [],
             "isUsed": false,
-            "modules": Array [
-              Object {
-                "isUsed": false,
-                "name": "default",
-              },
-            ],
+            "modulesImported": Array [],
             "name": "dep3",
           },
         ],

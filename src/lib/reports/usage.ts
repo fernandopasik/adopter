@@ -28,10 +28,7 @@ interface UsageJsonPackage {
     name: string;
     isUsed: boolean;
   }[];
-  modules: {
-    name: string;
-    isUsed: boolean;
-  }[];
+  modulesImported: string[];
 }
 
 interface UsageJson {
@@ -158,18 +155,16 @@ class Usage {
           name,
           isUsed: this.isPackageUsed(name),
         })),
-        modules: Array.from(pkg.modules.entries()).map(
-          ([name, module]: ReadonlyDeep<[string, Module]>) => ({
-            name,
-            isUsed: module.isUsed,
-          }),
-        ),
+        modulesImported: Array.from(pkg.modules.entries())
+          .filter(([, module]: ReadonlyDeep<[string, Module]>) => module.isUsed)
+          .map(([name]: ReadonlyDeep<[string, Module]>) => name),
       });
     });
 
     return usage;
   }
 
+  // eslint-disable-next-line max-lines-per-function
   public print(): void {
     const currentLogLevel = log.getLevel();
     log.setLevel('INFO');
@@ -178,21 +173,24 @@ class Usage {
 
     log.info('');
     log.info('Package and Modules Usage');
-    log.info(dim('-----------------------------------'));
+    log.info(dim('--------------------------------------'));
     log.info(dim('Packages Tracked : '), bold(summary.packagesTracked));
     log.info(dim('Packages Used    : '), bold(summary.packagesUsed));
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     log.info(dim('Packages Usage   : '), bold((summary.packagesUsage * 100).toFixed(2)));
 
-    const listUsed = (items: ReadonlyDeep<{ name: string; isUsed: boolean }[]>): string =>
-      items.map((item) => (item.isUsed ? green(item.name) : red(item.name))).join(', ');
-
-    packages.forEach((pkg: ReadonlyDeep<UsageJsonPackage>) => {
-      log.info('');
-      log.info('Package: ', bold(pkg.isUsed ? green(pkg.name) : red(pkg.name)));
-      log.info(dim('Dependencies: '), listUsed(pkg.dependencies));
-      log.info(dim('Modules: '), listUsed(pkg.modules));
-    });
+    packages.forEach(
+      ({ dependencies, isUsed, modulesImported: mods, name }: ReadonlyDeep<UsageJsonPackage>) => {
+        log.info('');
+        log.info('Package: ', bold(isUsed ? green(name) : red(name)));
+        log.info(dim('is Used: '), isUsed ? 'yes' : 'no');
+        log.info(
+          dim('Dependencies: '),
+          dependencies.map((d) => (d.isUsed ? green(d.name) : red(d.name))).join(', '),
+        );
+        log.info(dim('Modules Imported: '), mods.length > 0 ? mods.join(', ') : '-');
+      },
+    );
 
     log.setLevel(currentLogLevel);
   }
