@@ -116,15 +116,15 @@ class Usage {
     const currentLogLevel = log.getLevel();
     log.setLevel('INFO');
 
-    const packageAmount = this.getPackageNames().length;
+    const packagesTracked = this.getPackageNames().length;
 
     // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
     const packagesUsed = Array.from(this.storage.values()).filter((pkg) => pkg.isUsed).length;
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    const packagesUsage = ((packagesUsed / packageAmount) * 100).toFixed(2);
+    const packagesUsage = ((packagesUsed / packagesTracked) * 100).toFixed(2);
 
     log.info(blue(bold('Usage Report\n')));
-    log.info(blue('Packages tracked: '), packageAmount);
+    log.info(blue('Packages tracked: '), packagesTracked);
     log.info(blue('Packages used:    '), packagesUsed);
     log.info(blue('Packages usage:   '), `${packagesUsage}%`);
     log.info('');
