@@ -2,7 +2,7 @@
 
 import cli from '../lib/cli.js';
 
-// eslint-disable-next-line @typescript-eslint/no-magic-numbers
-const processArgs = process.argv.slice(2);
+const COMMANDS_START = 2;
+const processArgs = process.argv.slice(COMMANDS_START);
 
 await cli(processArgs);
