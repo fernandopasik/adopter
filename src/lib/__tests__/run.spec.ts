@@ -1,4 +1,5 @@
 import log from 'loglevel';
+import ProgressBar from 'progress';
 import { listFiles, processFiles } from '../files/index.js';
 import { Coverage, Usage } from '../reports/index.js';
 import run from '../run.js';
@@ -8,9 +9,10 @@ jest.mock('../packages/resolve-package.js', () => jest.fn((specifier: string) =>
 jest.mock('globby', () => ({
   globbySync: jest.fn(),
 }));
+jest.mock('progress');
 
 jest.mock('../files/index.js', () => ({
-  listFiles: jest.fn(),
+  listFiles: jest.fn(() => []),
   processFiles: jest.fn(
     (
       files: readonly string[] = [],
@@ -51,6 +53,27 @@ describe('run', () => {
 
     expect(Usage).toHaveBeenCalledTimes(1);
     expect(Usage).toHaveBeenCalledWith(packages);
+  });
+
+  it('creates a progress bar', async () => {
+    const packages = ['dep1', 'dep2'];
+
+    await run({ packages });
+
+    expect(ProgressBar).toHaveBeenCalledTimes(1);
+  });
+
+  it('updates progress bar after processing each file', async () => {
+    const spy = jest.spyOn(ProgressBar.prototype, 'tick');
+    const packages = ['dep1', 'dep2'];
+    const files = ['example1.js', 'example2.js'];
+
+    (listFiles as jest.MockedFunction<typeof listFiles>).mockReturnValueOnce(files);
+
+    await run({ packages });
+
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledWith(1);
   });
 
   it('lists all files from source match expression', async () => {

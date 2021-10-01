@@ -1,5 +1,7 @@
+import chalk from 'chalk';
 import log from 'loglevel';
 import path from 'path';
+import ProgressBar from 'progress';
 import type { ReadonlyDeep } from 'type-fest';
 import type ts from 'typescript';
 import { listFiles, processFiles } from './files/index.js';
@@ -39,13 +41,25 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
 
   await usage.init();
 
-  processFiles(listFiles(filesMatch), (filePath, filename, content, ast, imports = []) => {
+  const files = listFiles(filesMatch);
+  const total = files.length;
+
+  const progressBar = new ProgressBar(`[${chalk.blue(':bar')}] :percent`, {
+    complete: '=',
+    incomplete: ' ',
+    width: 30,
+    total,
+  });
+
+  processFiles(files, (filePath, filename, content, ast, imports = []) => {
     usage.addImports(imports);
     coverage.addFile(filePath, imports);
 
     if (typeof onFile === 'function') {
       onFile(filePath, filename, content, ast, imports);
     }
+
+    progressBar.tick(1);
   });
 
   usage.print();
