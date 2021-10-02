@@ -10,6 +10,7 @@ interface Module {
 }
 
 interface Package {
+  name: string;
   dependencies: Map<string, string>;
   isUsed: boolean;
   modules: Map<string, Module>;
@@ -45,6 +46,7 @@ class Usage {
 
     packageNames.forEach((packageName) => {
       this.storage.set(packageName, {
+        name: packageName,
         dependencies: new Map(),
         isUsed: false,
         modules: new Map(),
