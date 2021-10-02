@@ -11,7 +11,7 @@ interface Module {
 
 interface Package {
   name: string;
-  dependencies: Map<string, string>;
+  dependencies: Set<Package>;
   isUsed: boolean;
   modules: Map<string, Module>;
 }
@@ -47,7 +47,7 @@ class Usage {
     packageNames.forEach((packageName) => {
       this.storage.set(packageName, {
         name: packageName,
-        dependencies: new Map(),
+        dependencies: new Set(),
         isUsed: false,
         modules: new Map(),
       });
@@ -72,13 +72,13 @@ class Usage {
           }
 
           if (packageJson !== null) {
-            const filteredDependencies = filterTrackedDependencies(packageJson, packageNames).map(
-              ({
-                name,
-                version,
-              }: Readonly<{ name: string; version: string }>): [string, string] => [name, version],
-            );
-            pkg.dependencies = new Map(filteredDependencies);
+            // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+            filterTrackedDependencies(packageJson, packageNames).forEach(({ name }) => {
+              const dependencyPkg = this.getPackage(name);
+              if (typeof dependencyPkg !== 'undefined') {
+                pkg.dependencies.add(dependencyPkg);
+              }
+            });
           }
         }),
       Promise.resolve(),
@@ -118,8 +118,9 @@ class Usage {
 
     if (typeof pkg !== 'undefined') {
       pkg.isUsed = true;
-      pkg.dependencies.forEach((_version, dependency) => {
-        this.setPackageUsed(dependency);
+      // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+      pkg.dependencies.forEach((dependency) => {
+        this.setPackageUsed(dependency.name);
       });
     }
   }
@@ -161,10 +162,8 @@ class Usage {
       usage.packages.push({
         name: packageName,
         isUsed: pkg.isUsed,
-        dependencies: Array.from(pkg.dependencies.keys()).map((name) => ({
-          name,
-          isUsed: this.isPackageUsed(name),
-        })),
+        // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+        dependencies: Array.from(pkg.dependencies).map(({ name, isUsed }) => ({ name, isUsed })),
         modulesImported: Array.from(pkg.modules.entries())
           .filter(([, module]: ReadonlyDeep<[string, Module]>) => module.isUsed)
           .map(([name]: ReadonlyDeep<[string, Module]>) => name),
