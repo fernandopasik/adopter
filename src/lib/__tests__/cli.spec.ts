@@ -48,6 +48,16 @@ describe('adopter cli', () => {
     expect(run).toHaveBeenCalledWith(expect.objectContaining({ srcMatch: ['**/*.[jt]s?(x)'] }));
   });
 
+  it('can track other files', async () => {
+    const track = '**/*.css';
+    const args = ['--srcMatch', track, 'dep1', 'dep2'];
+
+    await cli(args);
+
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledWith(expect.objectContaining({ srcMatch: [track] }));
+  });
+
   it('by default hides coverage', async () => {
     const args = ['dep1', 'dep2'];
 

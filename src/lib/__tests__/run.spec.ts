@@ -78,7 +78,7 @@ describe('run', () => {
 
   it('lists all files from source match expression', async () => {
     const packages = ['dep1', 'dep2'];
-    const srcMatch = ['*'];
+    const srcMatch = ['*', '*.js'];
 
     await run({ packages, srcMatch });
 
