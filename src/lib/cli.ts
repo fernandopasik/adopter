@@ -16,6 +16,7 @@ const cli = async (processArgs: readonly string[]): Promise<void> => {
     rootDir,
     srcMatch,
   } = yargs(processArgs)
+    .parserConfiguration({ 'greedy-arrays': false })
     .usage('$0 [options] package1 [package2] [packageN]')
     .demandCommand(1, 'You need to provide at least one package to track')
     .option('coverage', { describe: DESC.coverage, default: false, type: 'boolean' })
