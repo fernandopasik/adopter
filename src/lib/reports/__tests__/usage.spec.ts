@@ -15,7 +15,7 @@ jest.mock('chalk', () => ({
 }));
 
 jest.mock('../../packages', () => ({
-  filterTrackedDependencies: jest.fn(() => new Map()),
+  filterTrackedDependencies: jest.fn(() => []),
   getPackageJson: jest.fn(() => ({})),
   getPackageModules: jest.fn(() => []),
   resolvePackage: jest.fn((specifier: string) => specifier),
@@ -160,10 +160,10 @@ describe('usage report', () => {
     });
 
     it('with dependencies', async () => {
-      const dependencies = new Map([
-        ['dep2', '*'],
-        ['dep3', '*'],
-      ]);
+      const dependencies = [
+        { name: 'dep2', version: '*' },
+        { name: 'dep3', version: '*' },
+      ];
 
       (
         filterTrackedDependencies as jest.MockedFunction<typeof filterTrackedDependencies>
@@ -469,10 +469,10 @@ describe('usage report', () => {
     });
 
     it('with dependencies', async () => {
-      const dependencies = new Map([
-        ['dep2', '*'],
-        ['dep3', '*'],
-      ]);
+      const dependencies = [
+        { name: 'dep2', version: '*' },
+        { name: 'dep3', version: '*' },
+      ];
 
       (
         filterTrackedDependencies as jest.MockedFunction<typeof filterTrackedDependencies>
@@ -532,9 +532,9 @@ describe('usage report', () => {
       .mockResolvedValueOnce(['default']);
 
     (filterTrackedDependencies as jest.MockedFunction<typeof filterTrackedDependencies>)
-      .mockReturnValueOnce(new Map([['dep2', '*']]))
-      .mockReturnValueOnce(new Map())
-      .mockReturnValueOnce(new Map());
+      .mockReturnValueOnce([{ name: 'dep2', version: '*' }])
+      .mockReturnValueOnce([])
+      .mockReturnValueOnce([]);
 
     const usage = new Usage(['dep1', 'dep2', 'dep3']);
     await usage.init();
@@ -603,16 +603,14 @@ describe('usage report', () => {
       .mockResolvedValueOnce(['default'])
       .mockResolvedValueOnce(['default']);
     (filterTrackedDependencies as jest.MockedFunction<typeof filterTrackedDependencies>)
-      .mockReturnValueOnce(new Map([['dep2', '*']]))
-      .mockReturnValueOnce(new Map())
-      .mockReturnValueOnce(
-        new Map([
-          ['dep4', '*'],
-          ['dep5', '*'],
-        ]),
-      )
-      .mockReturnValueOnce(new Map())
-      .mockReturnValueOnce(new Map());
+      .mockReturnValueOnce([{ name: 'dep2', version: '*' }])
+      .mockReturnValueOnce([])
+      .mockReturnValueOnce([
+        { name: 'dep4', version: '*' },
+        { name: 'dep5', version: '*' },
+      ])
+      .mockReturnValueOnce([])
+      .mockReturnValueOnce([]);
     const spy = jest.spyOn(log, 'info').mockImplementation();
     const usage = new Usage(['dep1', 'dep2', 'dep3', 'dep4', 'dep5']);
     await usage.init();

@@ -54,6 +54,7 @@ class Usage {
     });
   }
 
+  // eslint-disable-next-line max-lines-per-function
   public async init(): Promise<void> {
     const packageNames = Array.from(this.storage.keys());
     await packageNames.reduce(
@@ -71,7 +72,13 @@ class Usage {
           }
 
           if (packageJson !== null) {
-            pkg.dependencies = filterTrackedDependencies(packageJson, packageNames);
+            const filteredDependencies = filterTrackedDependencies(packageJson, packageNames).map(
+              ({
+                name,
+                version,
+              }: Readonly<{ name: string; version: string }>): [string, string] => [name, version],
+            );
+            pkg.dependencies = new Map(filteredDependencies);
           }
         }),
       Promise.resolve(),

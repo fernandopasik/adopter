@@ -1,21 +1,25 @@
 import type { PackageJson, ReadonlyDeep } from 'type-fest';
 
+export interface Dependency {
+  name: string;
+  version: string;
+}
+
 const filterTrackedDependencies = (
   packageJson: ReadonlyDeep<PackageJson>,
   trackedPackageNames: readonly string[] = [],
-): Map<string, string> => {
-  const deps = new Map<string, string>();
-
+): Dependency[] => {
   const { dependencies = {}, peerDependencies = {} } = packageJson;
   const allDependencies = { ...dependencies, ...peerDependencies };
 
-  Object.entries(allDependencies).forEach(([packageName, version]: Readonly<[string, string]>) => {
-    if (trackedPackageNames.includes(packageName)) {
-      deps.set(packageName, version);
-    }
-  });
+  const list = Object.entries(allDependencies)
+    .map(([packageName, version]: Readonly<[string, string]>) => ({
+      name: packageName,
+      version,
+    }))
+    .filter(({ name }: Readonly<Dependency>) => trackedPackageNames.includes(name));
 
-  return deps;
+  return list;
 };
 
 export default filterTrackedDependencies;
