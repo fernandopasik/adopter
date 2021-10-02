@@ -6,6 +6,7 @@ const MAX_FORMAT_WIDTH = 120;
 const DESC: Record<string, string> = {
   coverage: 'Report file coverage',
   rootDir: 'Root directory containing files for tracking packages',
+  srcIgnoreMatch: 'Glob patterns to ignore files for tracking packages',
   srcMatch: 'Glob patterns to match files for tracking packages',
 };
 
@@ -14,6 +15,7 @@ const cli = async (processArgs: readonly string[]): Promise<void> => {
     _: argList,
     coverage,
     rootDir,
+    srcIgnoreMatch,
     srcMatch,
   } = yargs(processArgs)
     .parserConfiguration({ 'greedy-arrays': false })
@@ -21,13 +23,14 @@ const cli = async (processArgs: readonly string[]): Promise<void> => {
     .demandCommand(1, 'You need to provide at least one package to track')
     .option('coverage', { describe: DESC.coverage, default: false, type: 'boolean' })
     .option('rootDir', { describe: DESC.rootDir, default: '.', type: 'string' })
+    .option('srcIgnoreMatch', { describe: DESC.srcMatch, default: [], type: 'array' })
     .option('srcMatch', { describe: DESC.srcMatch, default: ['**/*.[jt]s?(x)'], type: 'array' })
     .wrap(MAX_FORMAT_WIDTH)
     .parseSync();
 
   const packages = argList.map((arg) => String(arg));
 
-  await run({ coverage, packages, rootDir, srcMatch });
+  await run({ coverage, packages, rootDir, srcIgnoreMatch, srcMatch });
 };
 
 export default cli;

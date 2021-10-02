@@ -97,6 +97,17 @@ describe('run', () => {
     expect(listFiles).toHaveBeenCalledWith(['src/*', 'src/*.js']);
   });
 
+  it('ignores files from expression', async () => {
+    const packages = ['dep1', 'dep2'];
+    const srcMatch = ['*'];
+    const ignore = '*.js';
+
+    await run({ packages, srcMatch, srcIgnoreMatch: [ignore] });
+
+    expect(listFiles).toHaveBeenCalledTimes(1);
+    expect(listFiles).toHaveBeenCalledWith([...srcMatch, `!${ignore}`]);
+  });
+
   it('processes all files', async () => {
     const packages = ['dep1', 'dep2'];
     const files = ['*'];

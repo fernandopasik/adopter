@@ -19,6 +19,7 @@ export interface Options {
   ) => void;
   packages: string[];
   rootDir?: string;
+  srcIgnoreMatch?: string[];
   srcMatch?: string[];
 }
 
@@ -29,19 +30,21 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
     onFile,
     packages,
     rootDir = '.',
+    srcIgnoreMatch = [],
     srcMatch = ['**/*.[jt]s?(x)'],
   } = options;
 
   log.setDefaultLevel('ERROR');
 
   const filesMatch = srcMatch.map((srcM) => path.join(rootDir, srcM));
+  const filesIgnoreMatch = srcIgnoreMatch.map((srcM) => `!${path.join(rootDir, srcM)}`);
 
   const usage = new Usage(packages);
   const coverage = new Coverage(usage);
 
   await usage.init();
 
-  const files = listFiles(filesMatch);
+  const files = listFiles(filesMatch.concat(filesIgnoreMatch));
   const total = files.length;
 
   const progressBar = new ProgressBar(`[${chalk.blue(':bar')}] :percent`, {

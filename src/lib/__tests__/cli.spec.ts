@@ -58,6 +58,38 @@ describe('adopter cli', () => {
     expect(run).toHaveBeenCalledWith(expect.objectContaining({ srcMatch: [track] }));
   });
 
+  it('by default does not ignore any files', async () => {
+    const args = ['dep1', 'dep2'];
+
+    await cli(args);
+
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledWith(expect.objectContaining({ srcIgnoreMatch: [] }));
+  });
+
+  it('can ignore files to track', async () => {
+    const ignores = '**/*.(spec).js';
+    const args = ['--srcIgnoreMatch', ignores, 'dep1', 'dep2'];
+
+    await cli(args);
+
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledWith(expect.objectContaining({ srcIgnoreMatch: [ignores] }));
+  });
+
+  it('can track and ignore files', async () => {
+    const track = '**/*.css';
+    const ignores = '**/*.(spec).js';
+    const args = ['--srcMatch', track, '--srcIgnoreMatch', ignores, 'dep1', 'dep2'];
+
+    await cli(args);
+
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledWith(
+      expect.objectContaining({ srcIgnoreMatch: [ignores], srcMatch: [track] }),
+    );
+  });
+
   it('by default hides coverage', async () => {
     const args = ['dep1', 'dep2'];
 
