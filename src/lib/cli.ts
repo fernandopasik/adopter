@@ -25,6 +25,11 @@ const OPTIONS: Record<string, Options> = {
     default: ['**/*.[jt]s?(x)'],
     type: 'array',
   },
+  debug: {
+    describe: 'Display debugging information',
+    default: false,
+    type: 'boolean',
+  },
 };
 
 const cli = async (processArgs: readonly string[]): Promise<void> => {

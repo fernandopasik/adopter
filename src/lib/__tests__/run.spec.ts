@@ -6,9 +6,8 @@ import run from '../run.js';
 
 jest.mock('../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
 
-jest.mock('globby', () => ({
-  globbySync: jest.fn(),
-}));
+jest.mock('globby', () => ({ globbySync: jest.fn() }));
+jest.mock('loglevel');
 jest.mock('progress');
 
 jest.mock('../files/index.js', () => ({
@@ -34,7 +33,7 @@ describe('run', () => {
     jest.clearAllMocks();
   });
 
-  it('sets loglevel', async () => {
+  it('sets default loglevel', async () => {
     const spy = jest.spyOn(log, 'setDefaultLevel');
     const packages = ['dep1', 'dep2'];
 
@@ -42,6 +41,18 @@ describe('run', () => {
 
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith('ERROR');
+
+    spy.mockRestore();
+  });
+
+  it('can set debug loglevel', async () => {
+    const spy = jest.spyOn(log, 'setDefaultLevel');
+    const packages = ['dep1', 'dep2'];
+
+    await run({ debug: true, packages });
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith('DEBUG');
 
     spy.mockRestore();
   });
@@ -64,7 +75,8 @@ describe('run', () => {
   });
 
   it('updates progress bar after processing each file', async () => {
-    const spy = jest.spyOn(ProgressBar.prototype, 'tick');
+    const spy1 = jest.spyOn(ProgressBar.prototype, 'tick');
+    const spy2 = jest.spyOn(log, 'getLevel').mockReturnValue(4);
     const packages = ['dep1', 'dep2'];
     const files = ['example1.js', 'example2.js'];
 
@@ -72,8 +84,11 @@ describe('run', () => {
 
     await run({ packages });
 
-    expect(spy).toHaveBeenCalledTimes(2);
-    expect(spy).toHaveBeenCalledWith(1);
+    expect(spy1).toHaveBeenCalledTimes(2);
+    expect(spy1).toHaveBeenCalledWith(1);
+
+    spy1.mockRestore();
+    spy2.mockRestore();
   });
 
   it('lists all files from source match expression', async () => {

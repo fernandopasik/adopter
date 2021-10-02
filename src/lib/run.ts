@@ -21,12 +21,14 @@ export interface Options {
   rootDir?: string;
   srcIgnoreMatch?: string[];
   srcMatch?: string[];
+  debug?: boolean;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
   const {
     coverage: displayCoverage = false,
+    debug = false,
     onFile,
     packages,
     rootDir = '.',
@@ -34,7 +36,9 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
     srcMatch = ['**/*.[jt]s?(x)'],
   } = options;
 
-  log.setDefaultLevel('ERROR');
+  log.setDefaultLevel(debug ? 'DEBUG' : 'ERROR');
+
+  log.debug('Start run');
 
   const filesMatch = srcMatch.map((srcM) => path.join(rootDir, srcM));
   const filesIgnoreMatch = srcIgnoreMatch.map((srcM) => `!${path.join(rootDir, srcM)}`);
@@ -42,7 +46,9 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
   const usage = new Usage(packages);
   const coverage = new Coverage(usage);
 
+  log.debug('Loading packages and modules');
   await usage.init();
+  log.debug('Loaded packages and modules');
 
   const files = listFiles(filesMatch.concat(filesIgnoreMatch));
   const total = files.length;
@@ -54,7 +60,9 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
     total,
   });
 
+  log.debug('Processing files');
   processFiles(files, (filePath, filename, content, ast, imports = []) => {
+    log.debug('Processing file', filePath);
     usage.addImports(imports);
     coverage.addFile(filePath, imports);
 
@@ -62,13 +70,19 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
       onFile(filePath, filename, content, ast, imports);
     }
 
-    progressBar.tick(1);
+    if (log.getLevel() > 1) {
+      progressBar.tick(1);
+    }
+    log.debug('Processed file', filePath);
   });
 
+  log.debug('Printing reports');
   usage.print();
   if (displayCoverage) {
     coverage.print();
   }
+  log.debug('Printed reports');
+  log.debug('End of run');
 };
 
 export default run;

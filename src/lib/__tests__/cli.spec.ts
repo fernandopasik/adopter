@@ -107,4 +107,22 @@ describe('adopter cli', () => {
     expect(run).toHaveBeenCalledTimes(1);
     expect(run).toHaveBeenCalledWith(expect.objectContaining({ coverage: true }));
   });
+
+  it('by default hides debug information', async () => {
+    const args = ['dep1', 'dep2'];
+
+    await cli(args);
+
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledWith(expect.objectContaining({ debug: false }));
+  });
+
+  it('can display debug information', async () => {
+    const args = ['--debug', 'dep1', 'dep2'];
+
+    await cli(args);
+
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledWith(expect.objectContaining({ debug: true }));
+  });
 });
