@@ -554,6 +554,7 @@ describe('usage report', () => {
       Object {
         "packages": Array [
           Object {
+            "dependants": Array [],
             "dependencies": Array [
               Object {
                 "isUsed": true,
@@ -568,6 +569,12 @@ describe('usage report', () => {
             "name": "dep1",
           },
           Object {
+            "dependants": Array [
+              Object {
+                "isUsed": true,
+                "name": "dep1",
+              },
+            ],
             "dependencies": Array [],
             "isUsed": true,
             "modulesImported": Array [],
@@ -577,6 +584,7 @@ describe('usage report', () => {
             "name": "dep2",
           },
           Object {
+            "dependants": Array [],
             "dependencies": Array [],
             "isUsed": false,
             "modulesImported": Array [],

@@ -11,6 +11,7 @@ interface Module {
 
 interface Package {
   name: string;
+  dependants: Set<Package>;
   dependencies: Set<Package>;
   isUsed: boolean;
   modules: Map<string, Module>;
@@ -25,6 +26,10 @@ interface Summary {
 interface UsageJsonPackage {
   name: string;
   isUsed: boolean;
+  dependants: {
+    name: string;
+    isUsed: boolean;
+  }[];
   dependencies: {
     name: string;
     isUsed: boolean;
@@ -47,6 +52,7 @@ class Usage {
     packageNames.forEach((packageName) => {
       this.storage.set(packageName, {
         name: packageName,
+        dependants: new Set(),
         dependencies: new Set(),
         isUsed: false,
         modules: new Map(),
@@ -74,10 +80,10 @@ class Usage {
           if (packageJson !== null) {
             // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
             filterTrackedDependencies(packageJson, packageNames).forEach(({ name }) => {
-              const dependencyPkg = this.getPackage(name);
-              if (typeof dependencyPkg !== 'undefined') {
-                pkg.dependencies.add(dependencyPkg);
-              }
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              const dependencyPkg = this.getPackage(name)!;
+              pkg.dependencies.add(dependencyPkg);
+              dependencyPkg.dependants.add(pkg);
             });
           }
         }),
@@ -163,6 +169,8 @@ class Usage {
         name: packageName,
         isUsed: pkg.isUsed,
         // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+        dependants: Array.from(pkg.dependants).map(({ name, isUsed }) => ({ name, isUsed })),
+        // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
         dependencies: Array.from(pkg.dependencies).map(({ name, isUsed }) => ({ name, isUsed })),
         modulesImported: Array.from(pkg.modules.entries())
           .filter(([, module]: ReadonlyDeep<[string, Module]>) => module.isUsed)
@@ -206,6 +214,14 @@ class Usage {
         chalk.dim('Dependencies Tracked : '),
         pkg.dependencies.length > 0
           ? pkg.dependencies
+              .map((d) => (d.isUsed ? chalk.green(d.name) : chalk.red(d.name)))
+              .join(', ')
+          : '-',
+      );
+      log.info(
+        chalk.dim('Dependants Tracked   : '),
+        pkg.dependants.length > 0
+          ? pkg.dependants
               .map((d) => (d.isUsed ? chalk.green(d.name) : chalk.red(d.name)))
               .join(', ')
           : '-',
