@@ -23,7 +23,7 @@ describe('get package modules', () => {
 
     const exports = await getPackageModules('typescript');
 
-    expect(exports).toStrictEqual(['__esModule']);
+    expect(exports).toStrictEqual([]);
   });
 
   it('with a non installed module', async () => {
@@ -60,7 +60,7 @@ describe('get package modules', () => {
 
     const exports = await getPackageModules('typescript');
 
-    expect(exports).toStrictEqual(['__esModule', 'default', 'example1', 'example2']);
+    expect(exports).toStrictEqual(['default', 'example1', 'example2']);
   });
 
   it('with named exports', async () => {
@@ -74,6 +74,6 @@ describe('get package modules', () => {
 
     const exports = await getPackageModules('typescript');
 
-    expect(exports).toStrictEqual(['__esModule', 'example1', 'example2', 'example3']);
+    expect(exports).toStrictEqual(['example1', 'example2', 'example3']);
   });
 });
