@@ -1,9 +1,11 @@
 import { globbySync } from 'globby';
 import listFiles from '../list-files.js';
+import sortPaths from '../sort-paths.js';
 
 jest.mock('globby', () => ({
-  globbySync: jest.fn(),
+  globbySync: jest.fn(() => []),
 }));
+jest.mock('../sort-paths', () => jest.fn((paths: readonly string[]): readonly string[] => paths));
 
 describe('list files from globs', () => {
   beforeEach(() => {
@@ -30,5 +32,11 @@ describe('list files from globs', () => {
 
     expect(globbySync).toHaveBeenCalledTimes(1);
     expect(globbySync).toHaveBeenCalledWith(globs, expect.anything());
+  });
+
+  it('sorts paths', () => {
+    listFiles();
+
+    expect(sortPaths).toHaveBeenCalledTimes(1);
   });
 });
