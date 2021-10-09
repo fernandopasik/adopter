@@ -1,6 +1,6 @@
 {
   "name": "adopter",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "type": "module",
   "description": "Auditing tool for tracking packages and modules usage, for increasing adoption of libraries",
   "repository": "fernandopasik/adopter",
