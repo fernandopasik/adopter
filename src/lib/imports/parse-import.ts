@@ -23,7 +23,7 @@ const parseImport = (statement: ReadonlyDeep<ts.ImportDeclaration>, filePath: st
 
   const moduleNames = getImportModuleNames(defaultName, named);
 
-  return { filePath, moduleSpecifier, packageName, defaultName, named, moduleNames };
+  return { defaultName, filePath, moduleNames, moduleSpecifier, named, packageName };
 };
 
 export default parseImport;
