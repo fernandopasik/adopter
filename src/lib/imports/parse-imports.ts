@@ -1,6 +1,6 @@
 import type { ReadonlyDeep } from 'type-fest';
 import ts from 'typescript';
-import type { Import } from './parse-import.js';
+import type { Import } from './imports.js';
 import parseImport from './parse-import.js';
 
 // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types

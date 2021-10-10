@@ -1,2 +1,2 @@
-export type { Import } from './parse-import.js';
+export type { Import } from './imports.js';
 export { default as parseImports } from './parse-imports.js';

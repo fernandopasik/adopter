@@ -3,14 +3,7 @@ import type ts from 'typescript';
 import areNamedImports from './are-named-imports.js';
 import extractPackageName from './extract-package-name.js';
 import getImportModuleNames from './get-import-module-names.js';
-
-export interface Import {
-  moduleSpecifier: string;
-  packageName: string | null;
-  defaultName?: string;
-  named?: Record<string, string>;
-  moduleNames: string[];
-}
+import type { Import } from './imports.js';
 
 const parseImport = (statement: ReadonlyDeep<ts.ImportDeclaration>): Import => {
   const { text: moduleSpecifier } = statement.moduleSpecifier as ts.LiteralExpression;

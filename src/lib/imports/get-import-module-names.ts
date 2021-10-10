@@ -1,4 +1,4 @@
-import type { Import } from './parse-import.js';
+import type { Import } from './imports.js';
 
 const getImportModuleNames = (
   defaultName?: Import['defaultName'],
