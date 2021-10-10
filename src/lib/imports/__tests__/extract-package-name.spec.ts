@@ -1,7 +1,5 @@
 import extractPackageName from '../extract-package-name.js';
 
-jest.mock('../resolve-package.js', () => jest.fn((specifier: string) => specifier));
-
 describe('get package name', () => {
   it('with empty', () => {
     expect(extractPackageName()).toBeNull();

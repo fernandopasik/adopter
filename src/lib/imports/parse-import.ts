@@ -1,7 +1,7 @@
 import type { ReadonlyDeep } from 'type-fest';
 import type ts from 'typescript';
-import { extractPackageName } from '../packages/index.js';
 import areNamedImports from './are-named-imports.js';
+import extractPackageName from './extract-package-name.js';
 import getImportModuleNames from './get-import-module-names.js';
 
 export interface Import {

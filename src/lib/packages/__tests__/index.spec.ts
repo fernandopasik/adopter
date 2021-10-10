@@ -1,4 +1,3 @@
-import extractPackageName from '../extract-package-name.js';
 import extractPackagePath from '../extract-package-path.js';
 import filterTrackedDependencies from '../filter-tracked-dependencies.js';
 import getPackageJson from '../get-package-json.js';
@@ -8,10 +7,6 @@ import * as packages from '../index.js';
 jest.mock('../resolve-package.js', () => jest.fn((specifier: string) => specifier));
 
 describe('packages', () => {
-  it('extract package name', () => {
-    expect(packages.extractPackageName).toStrictEqual(extractPackageName);
-  });
-
   it('extract package path', () => {
     expect(packages.extractPackagePath).toStrictEqual(extractPackagePath);
   });
