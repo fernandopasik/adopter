@@ -1,9 +1,15 @@
 import ts from 'typescript';
+import { addImport } from '../imports.js';
 import parseImports from '../parse-imports.js';
 
+jest.mock('../imports.js');
 jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
 
 describe('parse imports', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('with default imports', () => {
     const source = ts.createSourceFile(
       'example.ts',
@@ -116,5 +122,17 @@ describe('parse imports', () => {
     expect(imports[1]).toStrictEqual(
       expect.objectContaining({ moduleNames: ['default'], packageName: 'dep2' }),
     );
+  });
+
+  it('stores each import', () => {
+    const source = ts.createSourceFile(
+      'example.ts',
+      'import dep1 from "dep1"; import dep2 from "dep2";',
+      ts.ScriptTarget.Latest,
+    );
+
+    parseImports(source);
+
+    expect(addImport).toHaveBeenCalledTimes(2);
   });
 });
