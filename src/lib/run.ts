@@ -6,6 +6,7 @@ import type { ReadonlyDeep } from 'type-fest';
 import type ts from 'typescript';
 import { listFiles, processFiles } from './files/index.js';
 import type { Import } from './imports/index.js';
+import { analyzePackages } from './packages/index.js';
 import { Coverage, Usage } from './reports/index.js';
 
 export interface Options {
@@ -42,6 +43,8 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
 
   const filesMatch = srcMatch.map((srcM) => path.join(rootDir, srcM));
   const filesIgnoreMatch = srcIgnoreMatch.map((srcM) => `!${path.join(rootDir, srcM)}`);
+
+  await analyzePackages(packages);
 
   const usage = new Usage(packages);
   const coverage = new Coverage(usage);

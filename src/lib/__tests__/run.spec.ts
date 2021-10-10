@@ -1,6 +1,7 @@
 import log from 'loglevel';
 import ProgressBar from 'progress';
 import { listFiles, processFiles } from '../files/index.js';
+import { analyzePackages } from '../packages/index.js';
 import { Coverage, Usage } from '../reports/index.js';
 import run from '../run.js';
 
@@ -25,7 +26,10 @@ jest.mock('../files/index.js', () => ({
     },
   ),
 }));
-jest.mock('../packages/index.js');
+jest.mock('../packages/index.js', () => ({
+  analyzePackages: jest.fn(),
+  getPackageNames: jest.fn(() => []),
+}));
 jest.mock('../reports/index.js');
 
 describe('run', () => {
@@ -55,6 +59,15 @@ describe('run', () => {
     expect(spy).toHaveBeenCalledWith('DEBUG');
 
     spy.mockRestore();
+  });
+
+  it('analyze packages', async () => {
+    const packages = ['dep1', 'dep2'];
+
+    await run({ packages });
+
+    expect(analyzePackages).toHaveBeenCalledTimes(1);
+    expect(analyzePackages).toHaveBeenCalledWith(packages);
   });
 
   it('creates usage with package exports', async () => {
