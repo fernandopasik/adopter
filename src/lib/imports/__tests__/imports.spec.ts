@@ -8,6 +8,7 @@ describe('imports', () => {
   describe('key', () => {
     it('with default module in package', () => {
       const imprt = {
+        filePath: 'example.js',
         moduleNames: ['default'],
         moduleSpecifier: 'dep1',
         packageName: 'dep1',
@@ -18,6 +19,7 @@ describe('imports', () => {
 
     it('with named modules in package', () => {
       const imprt = {
+        filePath: 'example.js',
         moduleNames: ['methodA', 'methodB'],
         moduleSpecifier: 'dep1',
         packageName: 'dep1',
@@ -28,6 +30,7 @@ describe('imports', () => {
 
     it('with default and  modules in package', () => {
       const imprt = {
+        filePath: 'example.js',
         moduleNames: ['default', 'methodA', 'methodB'],
         moduleSpecifier: 'dep1',
         packageName: 'dep1',
@@ -38,6 +41,7 @@ describe('imports', () => {
 
     it('with a relative import', () => {
       const imprt = {
+        filePath: 'example.js',
         moduleNames: ['default'],
         moduleSpecifier: './src/example.ts',
         packageName: null,
@@ -49,6 +53,7 @@ describe('imports', () => {
 
   it('can add an import', () => {
     const imprt = {
+      filePath: 'example.js',
       moduleNames: ['default'],
       moduleSpecifier: 'dep1',
       packageName: 'dep1',
@@ -61,6 +66,7 @@ describe('imports', () => {
 
   it('can get an existing import', () => {
     const imprt = {
+      filePath: 'example.js',
       moduleNames: ['default'],
       moduleSpecifier: 'dep1',
       packageName: 'dep1',

@@ -21,7 +21,7 @@ const processFiles = (
     const filename = path.basename(filePath);
     const ast = parseAst(filename, content);
 
-    const imports = typeof ast === 'undefined' ? undefined : parseImports(ast);
+    const imports = typeof ast === 'undefined' ? undefined : parseImports(ast, filePath);
 
     if (typeof callback === 'function') {
       callback(filePath, filename, content, ast, imports);

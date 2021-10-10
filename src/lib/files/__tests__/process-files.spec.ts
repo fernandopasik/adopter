@@ -136,6 +136,7 @@ describe('process files', () => {
       const asts = [{ fileName: files[0] }, { fileName: files[1] }];
       const imports: Import[] = [
         {
+          filePath: 'example1.js',
           moduleSpecifier: 'dep1',
           packageName: 'dep1',
           defaultName: 'dep1',

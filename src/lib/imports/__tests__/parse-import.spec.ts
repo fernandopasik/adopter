@@ -6,11 +6,13 @@ jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string)
 
 describe('parse import', () => {
   it('without default nor named imports', () => {
+    const filePath = 'example.ts';
     const {
       statements: [statement],
-    } = ts.createSourceFile('example.ts', 'import "./dep.ts"', ts.ScriptTarget.Latest);
+    } = ts.createSourceFile(filePath, 'import "./dep.ts"', ts.ScriptTarget.Latest);
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
+    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+      filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
       defaultName: undefined,
@@ -20,11 +22,13 @@ describe('parse import', () => {
   });
 
   it('with only default import', () => {
+    const filePath = 'example.ts';
     const {
       statements: [statement],
-    } = ts.createSourceFile('example.ts', 'import dep from "./dep.ts"', ts.ScriptTarget.Latest);
+    } = ts.createSourceFile(filePath, 'import dep from "./dep.ts"', ts.ScriptTarget.Latest);
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
+    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+      filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
       defaultName: 'dep',
@@ -34,11 +38,13 @@ describe('parse import', () => {
   });
 
   it('with only named import', () => {
+    const filePath = 'example.ts';
     const {
       statements: [statement],
-    } = ts.createSourceFile('example.ts', 'import { dep } from "./dep.ts"', ts.ScriptTarget.Latest);
+    } = ts.createSourceFile(filePath, 'import { dep } from "./dep.ts"', ts.ScriptTarget.Latest);
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
+    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+      filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
       defaultName: undefined,
@@ -48,15 +54,17 @@ describe('parse import', () => {
   });
 
   it('with multiple named imports', () => {
+    const filePath = 'example.ts';
     const {
       statements: [statement],
     } = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import { dep1, dep2 } from "./dep.ts"',
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
+    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+      filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
       defaultName: undefined,
@@ -66,15 +74,17 @@ describe('parse import', () => {
   });
 
   it('with named imports with alias', () => {
+    const filePath = 'example.js';
     const {
       statements: [statement],
     } = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import { dep1 as dep3, dep2 } from "./dep.ts"',
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
+    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+      filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
       defaultName: undefined,
@@ -84,15 +94,17 @@ describe('parse import', () => {
   });
 
   it('with default and named imports', () => {
+    const filePath = 'example.js';
     const {
       statements: [statement],
     } = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import dep, { dep1, dep2 } from "./dep.ts"',
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
+    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+      filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
       defaultName: 'dep',
@@ -102,15 +114,17 @@ describe('parse import', () => {
   });
 
   it('with default and named imports with alias', () => {
+    const filePath = 'example.js';
     const {
       statements: [statement],
     } = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import dep, { dep1, dep2 as dep3 } from "./dep.ts"',
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
+    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+      filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
       defaultName: 'dep',
@@ -120,15 +134,17 @@ describe('parse import', () => {
   });
 
   it('with a type import', () => {
+    const filePath = 'example.js';
     const {
       statements: [statement],
     } = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import type { Dep } from "./dep.ts"',
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>)).toStrictEqual({
+    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+      filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
       defaultName: undefined,

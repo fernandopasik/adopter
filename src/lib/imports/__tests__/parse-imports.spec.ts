@@ -11,13 +11,14 @@ describe('parse imports', () => {
   });
 
   it('with default imports', () => {
+    const filePath = 'example.ts';
     const source = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import dep1 from "dep1"; import dep2 from "dep2";',
       ts.ScriptTarget.Latest,
     );
 
-    const imports = parseImports(source);
+    const imports = parseImports(source, filePath);
 
     expect(imports).toHaveLength(2);
     expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
@@ -25,13 +26,14 @@ describe('parse imports', () => {
   });
 
   it('with default and named imports', () => {
+    const filePath = 'example.ts';
     const source = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import dep1 from "dep1"; import { moduleA, moduleB } from "dep2";',
       ts.ScriptTarget.Latest,
     );
 
-    const imports = parseImports(source);
+    const imports = parseImports(source, filePath);
 
     expect(imports).toHaveLength(2);
     expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
@@ -41,13 +43,14 @@ describe('parse imports', () => {
   });
 
   it('with unnamed, default and named imports with alias', () => {
+    const filePath = 'example.ts';
     const source = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import dep1 from "dep1"; import { moduleA, moduleB as aliasB } from "dep2"; import "dep5"',
       ts.ScriptTarget.Latest,
     );
 
-    const imports = parseImports(source);
+    const imports = parseImports(source, filePath);
 
     expect(imports).toHaveLength(3);
     expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
@@ -61,13 +64,14 @@ describe('parse imports', () => {
   });
 
   it('with imports and non imports', () => {
+    const filePath = 'example.ts';
     const source = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import dep1 from "dep1"; import { moduleA } from "dep2"; console.log(true)',
       ts.ScriptTarget.Latest,
     );
 
-    const imports = parseImports(source);
+    const imports = parseImports(source, filePath);
 
     expect(imports).toHaveLength(2);
     expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
@@ -75,13 +79,14 @@ describe('parse imports', () => {
   });
 
   it('with module imports and type imports', () => {
+    const filePath = 'example.ts';
     const source = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import dep1 from "dep1"; import type { Dep2 } from "dep2"; console.log(true)',
       ts.ScriptTarget.Latest,
     );
 
-    const imports = parseImports(source);
+    const imports = parseImports(source, filePath);
 
     expect(imports).toHaveLength(2);
     expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
@@ -89,13 +94,14 @@ describe('parse imports', () => {
   });
 
   it('with relative imports', () => {
+    const filePath = 'example.ts';
     const source = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import dep1 from "dep1"; import dep2 from "./dep2/example.ts"',
       ts.ScriptTarget.Latest,
     );
 
-    const imports = parseImports(source);
+    const imports = parseImports(source, filePath);
 
     expect(imports).toHaveLength(2);
     expect(imports[0]).toStrictEqual(
@@ -107,13 +113,14 @@ describe('parse imports', () => {
   });
 
   it('with internal files in package imports', () => {
+    const filePath = 'example.ts';
     const source = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import dep1 from "dep1"; import dep2 from "dep2/example.ts"',
       ts.ScriptTarget.Latest,
     );
 
-    const imports = parseImports(source);
+    const imports = parseImports(source, filePath);
 
     expect(imports).toHaveLength(2);
     expect(imports[0]).toStrictEqual(
@@ -125,13 +132,14 @@ describe('parse imports', () => {
   });
 
   it('stores each import', () => {
+    const filePath = 'example.ts';
     const source = ts.createSourceFile(
-      'example.ts',
+      filePath,
       'import dep1 from "dep1"; import dep2 from "dep2";',
       ts.ScriptTarget.Latest,
     );
 
-    parseImports(source);
+    parseImports(source, filePath);
 
     expect(addImport).toHaveBeenCalledTimes(2);
   });

@@ -2,6 +2,7 @@ import type { Mutable, ReadonlyDeep } from 'type-fest';
 
 export interface Import {
   defaultName?: string;
+  filePath: string;
   moduleNames: string[];
   moduleSpecifier: string;
   named?: Record<string, string>;

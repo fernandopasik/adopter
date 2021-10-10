@@ -41,6 +41,7 @@ describe('coverage report', () => {
       const filePath = 'src/example.js';
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep1',
           packageName: 'dep1',
           defaultName: 'dep1',
@@ -70,6 +71,7 @@ describe('coverage report', () => {
       const filePath = 'src/example.js';
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep1',
           packageName: 'dep1',
           defaultName: 'dep1',
@@ -97,12 +99,14 @@ describe('coverage report', () => {
       const filePath = 'src/example.js';
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep1',
           packageName: 'dep1',
           defaultName: 'dep1',
           moduleNames: ['default'],
         },
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep2',
           packageName: 'dep2',
           defaultName: 'dep2',
@@ -132,6 +136,7 @@ describe('coverage report', () => {
       const filePath = 'src/example.js';
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep',
           packageName: null,
           defaultName: 'dep',
@@ -159,6 +164,7 @@ describe('coverage report', () => {
     const filePath3 = 'src/example3.js';
     const imports = [
       {
+        filePath: 'example.ts',
         moduleSpecifier: 'dep1',
         packageName: 'dep1',
         defaultName: 'dep1',
@@ -184,6 +190,7 @@ describe('coverage report', () => {
     const filePath2 = 'src/example2.js';
     const imports = [
       {
+        filePath: 'example.ts',
         moduleSpecifier: 'dep1',
         packageName: 'dep1',
         defaultName: 'dep1',
