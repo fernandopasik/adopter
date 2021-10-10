@@ -14,13 +14,10 @@ const parseImport = (statement: ReadonlyDeep<ts.ImportDeclaration>): Import => {
   const named: Record<string, string> | undefined = !areNamedImports(namedBindings)
     ? undefined
     : (Array.from(namedBindings.elements) as ReadonlyDeep<ts.ImportSpecifier>[]).reduce(
-        (acc, namedImport: ReadonlyDeep<ts.ImportSpecifier>) => {
-          const name = namedImport.propertyName?.text ?? namedImport.name.text;
-          return {
-            ...acc,
-            [name]: namedImport.name.text,
-          };
-        },
+        (acc, namedImport: ReadonlyDeep<ts.ImportSpecifier>) => ({
+          ...acc,
+          [namedImport.propertyName?.text ?? namedImport.name.text]: namedImport.name.text,
+        }),
         {},
       );
 
