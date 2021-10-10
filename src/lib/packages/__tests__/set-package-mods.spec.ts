@@ -22,6 +22,8 @@ describe('set package modules', () => {
 
     (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
 
+    expect(pkg.modules.size).toBe(0);
+
     await setPackageMods('example');
 
     expect(pkg.modules.size).toBe(0);
@@ -40,6 +42,9 @@ describe('set package modules', () => {
       'default',
     ]);
     (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
+
+    expect(pkg.modules.size).toBe(0);
+    expect(pkg.modules.has('default')).toBe(false);
 
     await setPackageMods('example');
 
@@ -63,8 +68,55 @@ describe('set package modules', () => {
     ]);
     (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
 
+    expect(pkg.modules.size).toBe(0);
+
     await setPackageMods('example');
 
     expect(pkg.modules.size).toBe(3);
+  });
+
+  it('sets installed true', async () => {
+    const pkg = {
+      name: 'example',
+      isInstalled: false,
+      dependants: new Set<Package>(),
+      dependencies: new Set<Package>(),
+      modules: new Set<string>(),
+    };
+
+    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
+
+    expect(pkg.isInstalled).toBe(false);
+
+    await setPackageMods('example');
+
+    expect(pkg.isInstalled).toBe(true);
+  });
+
+  it('handles an uninstalled package', async () => {
+    const pkg = {
+      name: 'example',
+      isInstalled: false,
+      dependants: new Set<Package>(),
+      dependencies: new Set<Package>(),
+      modules: new Set<string>(),
+    };
+
+    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
+    (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce(
+      null,
+    );
+
+    expect(pkg.isInstalled).toBe(false);
+
+    await setPackageMods('example');
+
+    expect(pkg.isInstalled).toBe(false);
+  });
+
+  it('with non existent package', () => {
+    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(undefined);
+
+    expect(getPackageModules).not.toHaveBeenCalled();
   });
 });
