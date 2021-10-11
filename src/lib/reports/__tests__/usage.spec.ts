@@ -190,6 +190,7 @@ describe('usage report', () => {
       await usage.init();
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep1',
           packageName: 'dep1',
           defaultName: 'dep1',
@@ -214,6 +215,7 @@ describe('usage report', () => {
       await usage.init();
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep3',
           packageName: 'dep3',
           named: { methodA: 'methodA' },
@@ -239,6 +241,7 @@ describe('usage report', () => {
       await usage.init();
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep2',
           packageName: 'dep2',
           defaultName: 'dep2',
@@ -262,6 +265,7 @@ describe('usage report', () => {
       const usage = new Usage(['dep1']);
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep1',
           packageName: 'dep1',
           moduleNames: [],
@@ -279,6 +283,7 @@ describe('usage report', () => {
       const usage = new Usage([]);
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep4',
           packageName: 'dep4',
           moduleNames: [],
@@ -296,6 +301,7 @@ describe('usage report', () => {
       const usage = new Usage([]);
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep',
           packageName: null,
           moduleNames: [],
@@ -317,12 +323,14 @@ describe('usage report', () => {
       await usage.init();
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep2',
           packageName: 'dep2',
           defaultName: 'dep2',
           moduleNames: ['default'],
         },
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep3',
           packageName: 'dep3',
           named: { methodA: 'methodA' },
@@ -347,6 +355,7 @@ describe('usage report', () => {
       const usage = new Usage([]);
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep4',
           packageName: 'dep4',
           defaultName: 'dep4',
@@ -371,6 +380,7 @@ describe('usage report', () => {
       await usage.init();
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep1',
           packageName: 'dep1',
           named: { methodA: 'methodA' },
@@ -395,12 +405,14 @@ describe('usage report', () => {
       await usage.init();
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep1',
           packageName: 'dep1',
           defaultName: 'dep1',
           moduleNames: ['default'],
         },
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep4',
           packageName: 'dep4',
           defaultName: 'dep4',
@@ -425,6 +437,7 @@ describe('usage report', () => {
       await usage.init();
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep1',
           packageName: 'dep1',
           defaultName: 'dep1',
@@ -452,6 +465,7 @@ describe('usage report', () => {
       await usage.init();
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep1',
           packageName: 'dep1',
           defaultName: 'dep1',
@@ -483,6 +497,7 @@ describe('usage report', () => {
 
       const imports = [
         {
+          filePath: 'example.ts',
           moduleSpecifier: 'dep1',
           packageName: 'dep1',
           defaultName: 'dep1',
@@ -510,6 +525,7 @@ describe('usage report', () => {
 
     const imports = [
       {
+        filePath: 'example.ts',
         moduleSpecifier: 'dep1',
         packageName: 'dep1',
         moduleNames: [],
@@ -541,6 +557,7 @@ describe('usage report', () => {
 
     const imports = [
       {
+        filePath: 'example.ts',
         moduleSpecifier: 'dep1',
         packageName: 'dep1',
         defaultName: 'dep1',
@@ -625,12 +642,14 @@ describe('usage report', () => {
 
     const imports = [
       {
+        filePath: 'example.ts',
         moduleSpecifier: 'dep1',
         packageName: 'dep1',
         defaultName: 'dep1',
         moduleNames: ['default'],
       },
       {
+        filePath: 'example.ts',
         moduleSpecifier: 'dep4',
         packageName: 'dep4',
         defaultName: 'dep4',
