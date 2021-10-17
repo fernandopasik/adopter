@@ -14,7 +14,7 @@ describe('imports', () => {
         packageName: 'dep1',
       };
 
-      expect(importKey(imprt)).toBe('dep1**default');
+      expect(importKey(imprt)).toBe('example.js**dep1**default');
     });
 
     it('with named modules in package', () => {
@@ -25,7 +25,7 @@ describe('imports', () => {
         packageName: 'dep1',
       };
 
-      expect(importKey(imprt)).toBe('dep1**methodA**methodB');
+      expect(importKey(imprt)).toBe('example.js**dep1**methodA**methodB');
     });
 
     it('with default and  modules in package', () => {
@@ -36,7 +36,7 @@ describe('imports', () => {
         packageName: 'dep1',
       };
 
-      expect(importKey(imprt)).toBe('dep1**default**methodA**methodB');
+      expect(importKey(imprt)).toBe('example.js**dep1**default**methodA**methodB');
     });
 
     it('with a relative import', () => {
@@ -47,7 +47,7 @@ describe('imports', () => {
         packageName: null,
       };
 
-      expect(importKey(imprt)).toBe('./src/example.ts**default');
+      expect(importKey(imprt)).toBe('example.js**./src/example.ts**default');
     });
   });
 
@@ -61,7 +61,7 @@ describe('imports', () => {
 
     addImport(imprt);
 
-    expect(imports.get('dep1**default')).toStrictEqual(imprt);
+    expect(imports.get('example.js**dep1**default')).toStrictEqual(imprt);
   });
 
   it('can get an existing import', () => {
@@ -74,7 +74,7 @@ describe('imports', () => {
 
     addImport(imprt);
 
-    expect(getImport('dep1**default')).toStrictEqual(imprt);
+    expect(getImport('example.js**dep1**default')).toStrictEqual(imprt);
   });
 
   it('can not get a non xisting import', () => {

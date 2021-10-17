@@ -12,7 +12,7 @@ export interface Import {
 export const imports: Map<string, Import> = new Map();
 
 export const importKey = (imprt: ReadonlyDeep<Import>): string =>
-  `${imprt.moduleSpecifier}**${imprt.moduleNames.join('**')}`;
+  `${imprt.filePath}**${imprt.moduleSpecifier}**${imprt.moduleNames.join('**')}`;
 
 export const addImport = (imprt: ReadonlyDeep<Import>): void => {
   imports.set(importKey(imprt), imprt as Mutable<Import>);
