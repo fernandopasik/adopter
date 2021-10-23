@@ -80,4 +80,20 @@ describe('packages', () => {
 
     expect(getPackage('example1')?.imports.has(imprt)).toBe(true);
   });
+
+  it('add non existing package import', () => {
+    const imprt = {
+      filePath: 'example.ts',
+      moduleNames: ['default'],
+      moduleSpecifier: 'example2',
+      packageName: 'example2',
+    };
+
+    addPackage('example1');
+    expect(getPackage('example1')?.imports.has(imprt)).toBe(false);
+
+    addPackageImport(imprt);
+
+    expect(getPackage('example1')?.imports.has(imprt)).toBe(false);
+  });
 });
