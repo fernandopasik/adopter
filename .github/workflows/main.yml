@@ -48,7 +48,8 @@ jobs:
       - run: yarn install --frozen-lockfile
       - name: Lint
         run: yarn lint --format junit -o reports/lint-results.xml
-      - uses: actions/upload-artifact@v2
+      - name: Upload Report
+        uses: actions/upload-artifact@v2
         if: always()
         with:
           name: lint-results
@@ -88,7 +89,8 @@ jobs:
       - name: Upload Report to Codecov
         uses: codecov/codecov-action@v2
         if: always()
-      - uses: actions/upload-artifact@v2
+      - name: Upload Report
+        uses: actions/upload-artifact@v2
         if: always()
         with:
           name: unit-test-results
