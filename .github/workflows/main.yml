@@ -11,7 +11,8 @@ jobs:
     name: Install Dependencies
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
@@ -23,27 +24,31 @@ jobs:
     runs-on: ubuntu-latest
     needs: install
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
           check-latest: true
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
-      - run: yarn format:check
+      - name: Check Format
+        run: yarn format:check
   lint:
     name: Lint
     runs-on: ubuntu-latest
     needs: install
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
           check-latest: true
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
-      - run: yarn lint --format junit -o reports/lint-results.xml
+      - name: Lint
+        run: yarn lint --format junit -o reports/lint-results.xml
       - uses: actions/upload-artifact@v2
         if: always()
         with:
@@ -54,27 +59,31 @@ jobs:
     runs-on: ubuntu-latest
     needs: install
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
           check-latest: true
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
-      - run: yarn check-types
+      - name: Check Typescript Types
+        run: yarn check-types
   unit-test:
     name: Unit Tests
     runs-on: ubuntu-latest
     needs: install
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
           check-latest: true
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
-      - run: yarn test:coverage --ci --reporters=default --reporters=jest-junit
+      - name: Unit Tests
+        run: yarn test:coverage --ci --reporters=default --reporters=jest-junit
         env:
           JEST_JUNIT_OUTPUT_FILE: 'reports/unit-test-results.xml'
       - run: yarn codecov
@@ -89,11 +98,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: [check-format, lint, check-types, unit-test]
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
           check-latest: true
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
-      - run: yarn build
+      - name: Build
+        run: yarn build
