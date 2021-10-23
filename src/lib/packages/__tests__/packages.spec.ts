@@ -1,5 +1,6 @@
 import {
   addPackage,
+  addPackageImport,
   getPackage,
   getPackageNames,
   hasModule,
@@ -52,6 +53,7 @@ describe('packages', () => {
       isInstalled: false,
       dependants: new Set(),
       dependencies: new Set(),
+      imports: new Set(),
       modules: new Set(),
     });
   });
@@ -61,5 +63,21 @@ describe('packages', () => {
     addPackage('example2');
 
     expect(getPackageNames()).toStrictEqual(['example1', 'example2']);
+  });
+
+  it('add package import', () => {
+    const imprt = {
+      filePath: 'example.ts',
+      moduleNames: ['default'],
+      moduleSpecifier: 'example1',
+      packageName: 'example1',
+    };
+
+    addPackage('example1');
+    expect(getPackage('example1')?.imports.has(imprt)).toBe(false);
+
+    addPackageImport(imprt);
+
+    expect(getPackage('example1')?.imports.has(imprt)).toBe(true);
   });
 });

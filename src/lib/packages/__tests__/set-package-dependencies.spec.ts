@@ -1,3 +1,4 @@
+import type { Import } from '../../imports/index.js';
 import filterTrackedDependencies from '../filter-tracked-dependencies.js';
 import getPackageJson from '../get-package-json.js';
 import type { Package } from '../packages.js';
@@ -19,6 +20,7 @@ describe('set package dependencies', () => {
       isInstalled: false,
       dependants: new Set<Package>(),
       dependencies: new Set<Package>(),
+      imports: new Set<Import>(),
       modules: new Set<string>(),
     };
 
@@ -37,6 +39,7 @@ describe('set package dependencies', () => {
       isInstalled: false,
       dependants: new Set<Package>(),
       dependencies: new Set<Package>(),
+      imports: new Set<Import>(),
       modules: new Set<string>(),
     };
 
@@ -45,6 +48,7 @@ describe('set package dependencies', () => {
       isInstalled: false,
       dependants: new Set<Package>(),
       dependencies: new Set<Package>(),
+      imports: new Set<Import>(),
       modules: new Set<string>(),
     };
 
@@ -53,6 +57,7 @@ describe('set package dependencies', () => {
       isInstalled: false,
       dependants: new Set<Package>(),
       dependencies: new Set<Package>(),
+      imports: new Set<Import>(),
       modules: new Set<string>(),
     };
 
@@ -83,6 +88,7 @@ describe('set package dependencies', () => {
       isInstalled: false,
       dependants: new Set<Package>(),
       dependencies: new Set<Package>(),
+      imports: new Set<Import>(),
       modules: new Set<string>(),
     };
 
@@ -101,6 +107,7 @@ describe('set package dependencies', () => {
       isInstalled: false,
       dependants: new Set<Package>(),
       dependencies: new Set<Package>(),
+      imports: new Set<Import>(),
       modules: new Set<string>(),
     };
 

@@ -1,3 +1,4 @@
+import type { Import } from '../../imports/index.js';
 import getPackageModules from '../get-package-mods.js';
 import type { Package } from '../packages.js';
 import { getPackage } from '../packages.js';
@@ -17,6 +18,7 @@ describe('set package modules', () => {
       isInstalled: false,
       dependants: new Set<Package>(),
       dependencies: new Set<Package>(),
+      imports: new Set<Import>(),
       modules: new Set<string>(),
     };
 
@@ -35,6 +37,7 @@ describe('set package modules', () => {
       isInstalled: false,
       dependants: new Set<Package>(),
       dependencies: new Set<Package>(),
+      imports: new Set<Import>(),
       modules: new Set<string>(),
     };
 
@@ -58,6 +61,7 @@ describe('set package modules', () => {
       isInstalled: false,
       dependants: new Set<Package>(),
       dependencies: new Set<Package>(),
+      imports: new Set<Import>(),
       modules: new Set<string>(),
     };
 
@@ -81,6 +85,7 @@ describe('set package modules', () => {
       isInstalled: false,
       dependants: new Set<Package>(),
       dependencies: new Set<Package>(),
+      imports: new Set<Import>(),
       modules: new Set<string>(),
     };
 
@@ -99,6 +104,7 @@ describe('set package modules', () => {
       isInstalled: false,
       dependants: new Set<Package>(),
       dependencies: new Set<Package>(),
+      imports: new Set<Import>(),
       modules: new Set<string>(),
     };
 
