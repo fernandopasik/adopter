@@ -95,7 +95,7 @@ describe('imports', () => {
     expect(getImport('example.js**dep1**default')).toStrictEqual(imprt);
   });
 
-  it('can not get a non xisting import', () => {
+  it('can not get a non existing import', () => {
     expect(getImport('dep1**default')).toBeUndefined();
   });
 });
