@@ -1,1 +1,3 @@
-export { default } from './lib/run.js';
+import run from './lib/run.js';
+
+export default run;
