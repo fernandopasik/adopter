@@ -67,7 +67,7 @@ describe('packages', () => {
     expect(getPackageNames()).toStrictEqual(['example1', 'example2']);
   });
 
-  it('add package import', () => {
+  describe('package imports', () => {
     const imprt = {
       filePath: 'example.ts',
       moduleNames: ['default'],
@@ -75,89 +75,69 @@ describe('packages', () => {
       packageName: 'example1',
     };
 
-    addPackage('example1');
-    expect(getPackage('example1')?.imports.has(imprt)).toBe(false);
+    it('add package import', () => {
+      addPackage('example1');
+      expect(getPackage('example1')?.imports.has(imprt)).toBe(false);
 
-    addPackageImport(imprt);
+      addPackageImport(imprt);
+      expect(getPackage('example1')?.imports.has(imprt)).toBe(true);
+    });
 
-    expect(getPackage('example1')?.imports.has(imprt)).toBe(true);
-  });
-
-  it('add non existing package import', () => {
-    const imprt = {
-      filePath: 'example.ts',
-      moduleNames: ['default'],
-      moduleSpecifier: 'example2',
-      packageName: 'example2',
-    };
-
-    addPackage('example1');
-    expect(getPackage('example1')?.imports.has(imprt)).toBe(false);
-
-    addPackageImport(imprt);
-
-    expect(getPackage('example1')?.imports.has(imprt)).toBe(false);
-  });
-
-  describe('is package imported', () => {
-    it('with existent and imported package', () => {
-      const imprt = {
+    it('add non existing package import', () => {
+      const imprt2 = {
         filePath: 'example.ts',
         moduleNames: ['default'],
-        moduleSpecifier: 'example1',
-        packageName: 'example1',
+        moduleSpecifier: 'example2',
+        packageName: 'example2',
       };
 
       addPackage('example1');
-      expect(isPackageImported('example1')).toBe(false);
+      expect(getPackage('example1')?.imports.has(imprt2)).toBe(false);
 
-      addPackageImport(imprt);
-      expect(isPackageImported('example1')).toBe(true);
+      addPackageImport(imprt2);
+
+      expect(getPackage('example1')?.imports.has(imprt2)).toBe(false);
     });
 
-    it('with existent and non imported package', () => {
-      addPackage('example1');
-      expect(isPackageImported('example1')).toBe(false);
+    describe('is package imported', () => {
+      it('with existent and imported package', () => {
+        addPackage('example1');
+        expect(isPackageImported('example1')).toBe(false);
+
+        addPackageImport(imprt);
+        expect(isPackageImported('example1')).toBe(true);
+      });
+
+      it('with existent and non imported package', () => {
+        addPackage('example1');
+        expect(isPackageImported('example1')).toBe(false);
+      });
+
+      it('with non existent package', () => {
+        expect(isPackageImported('example2')).toBe(false);
+      });
     });
 
-    it('with non existent package', () => {
-      expect(isPackageImported('example2')).toBe(false);
-    });
-  });
+    describe('is module imported', () => {
+      it('with imported package and module', () => {
+        addPackage('example1');
+        expect(isModuleImported('default', 'example1')).toBe(false);
 
-  describe('is module imported', () => {
-    it('with imported package and module', () => {
-      const imprt = {
-        filePath: 'example.ts',
-        moduleNames: ['default'],
-        moduleSpecifier: 'example1',
-        packageName: 'example1',
-      };
+        addPackageImport(imprt);
+        expect(isModuleImported('default', 'example1')).toBe(true);
+      });
 
-      addPackage('example1');
-      expect(isModuleImported('default', 'example1')).toBe(false);
+      it('with imported package and not module', () => {
+        addPackage('example1');
+        expect(isModuleImported('module1', 'example1')).toBe(false);
 
-      addPackageImport(imprt);
-      expect(isModuleImported('default', 'example1')).toBe(true);
-    });
+        addPackageImport(imprt);
+        expect(isModuleImported('module1', 'example1')).toBe(false);
+      });
 
-    it('with imported package and not module', () => {
-      const imprt = {
-        filePath: 'example.ts',
-        moduleNames: ['default'],
-        moduleSpecifier: 'example1',
-        packageName: 'example1',
-      };
-
-      addPackage('example1');
-      expect(isModuleImported('module1', 'example1')).toBe(false);
-
-      addPackageImport(imprt);
-      expect(isModuleImported('module1', 'example1')).toBe(false);
-    });
-
-    it('with non imported package', () => {
-      expect(isModuleImported('module1', 'example1')).toBe(false);
+      it('with non imported package', () => {
+        expect(isModuleImported('module1', 'example1')).toBe(false);
+      });
     });
   });
 });
