@@ -35,4 +35,14 @@ export const addPackageImport = (imprt: ReadonlyDeep<Import>): void => {
   }
 };
 
+export const isModuleImported = (moduleName: string, packageName: string): boolean =>
+  Boolean(
+    Array.from(getPackage(packageName)?.imports ?? []).find((pkg: ReadonlyDeep<Import>) =>
+      pkg.moduleNames.includes(moduleName),
+    ),
+  );
+
+export const isPackageImported = (packageName: string): boolean =>
+  Boolean(getPackage(packageName)?.imports.size);
+
 export default packages;

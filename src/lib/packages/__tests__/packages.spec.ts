@@ -5,6 +5,8 @@ import {
   getPackageNames,
   hasModule,
   hasPackage,
+  isModuleImported,
+  isPackageImported,
   packages,
 } from '../packages.js';
 
@@ -95,5 +97,67 @@ describe('packages', () => {
     addPackageImport(imprt);
 
     expect(getPackage('example1')?.imports.has(imprt)).toBe(false);
+  });
+
+  describe('is package imported', () => {
+    it('with existent and imported package', () => {
+      const imprt = {
+        filePath: 'example.ts',
+        moduleNames: ['default'],
+        moduleSpecifier: 'example1',
+        packageName: 'example1',
+      };
+
+      addPackage('example1');
+      expect(isPackageImported('example1')).toBe(false);
+
+      addPackageImport(imprt);
+      expect(isPackageImported('example1')).toBe(true);
+    });
+
+    it('with existent and non imported package', () => {
+      addPackage('example1');
+      expect(isPackageImported('example1')).toBe(false);
+    });
+
+    it('with non existent package', () => {
+      expect(isPackageImported('example2')).toBe(false);
+    });
+  });
+
+  describe('is module imported', () => {
+    it('with imported package and module', () => {
+      const imprt = {
+        filePath: 'example.ts',
+        moduleNames: ['default'],
+        moduleSpecifier: 'example1',
+        packageName: 'example1',
+      };
+
+      addPackage('example1');
+      expect(isModuleImported('default', 'example1')).toBe(false);
+
+      addPackageImport(imprt);
+      expect(isModuleImported('default', 'example1')).toBe(true);
+    });
+
+    it('with imported package and not module', () => {
+      const imprt = {
+        filePath: 'example.ts',
+        moduleNames: ['default'],
+        moduleSpecifier: 'example1',
+        packageName: 'example1',
+      };
+
+      addPackage('example1');
+      expect(isModuleImported('module1', 'example1')).toBe(false);
+
+      addPackageImport(imprt);
+      expect(isModuleImported('module1', 'example1')).toBe(false);
+    });
+
+    it('with non imported package', () => {
+      expect(isModuleImported('module1', 'example1')).toBe(false);
+    });
   });
 });
