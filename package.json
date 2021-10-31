@@ -47,7 +47,7 @@
     "verify": "yarn format:check && yarn lint && yarn check-types && yarn test:coverage && yarn build"
   },
   "dependencies": {
-    "chalk": "^5.0.0",
+    "chalk": "^4.1.2",
     "execa": "^6.0.0",
     "globby": "^12.0.2",
     "loglevel": "^1.8.0",
