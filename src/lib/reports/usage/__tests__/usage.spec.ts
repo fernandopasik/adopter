@@ -1,0 +1,59 @@
+import { getPackageNames } from '../../../packages/index.js';
+import packageUsage from '../package-usage.js';
+import summary from '../summary.js';
+import usage from '../usage.js';
+
+jest.mock('../summary');
+jest.mock('../../../packages/index.js', () => ({
+  getPackageNames: jest.fn(() => []),
+}));
+jest.mock('../package-usage.js');
+jest.mock('../../../packages/resolve-package.js', () =>
+  jest.fn(async (specifier: string) => Promise.resolve(specifier)),
+);
+
+const summaryMock = summary as jest.MockedFunction<typeof summary>;
+const getPackageNamesMock = getPackageNames as jest.MockedFunction<typeof getPackageNames>;
+const packageUsageMock = packageUsage as jest.MockedFunction<typeof packageUsage>;
+
+describe('usage', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('has a summary', () => {
+    const sum = {
+      packagesTracked: 5,
+      packagesUsed: 2,
+      packagesUsage: 0.4,
+    };
+
+    summaryMock.mockReturnValueOnce(sum);
+
+    expect(usage()).toStrictEqual(expect.objectContaining({ summary: sum }));
+    expect(summary).toHaveBeenCalledTimes(1);
+  });
+
+  it('has packages', () => {
+    const pkgUsage = {
+      name: 'example',
+      isImported: false,
+      isUsed: false,
+      dependants: [],
+      dependencies: [],
+      modulesImported: [],
+      modulesNotImported: [],
+    };
+
+    getPackageNamesMock.mockReturnValueOnce(['example1', 'example2', 'example3']);
+    packageUsageMock
+      .mockReturnValueOnce({ ...pkgUsage, name: 'example1' })
+      .mockReturnValueOnce({ ...pkgUsage, name: 'example2' })
+      .mockReturnValueOnce({ ...pkgUsage, name: 'example3' });
+
+    usage();
+
+    expect(getPackageNames).toHaveBeenCalledTimes(1);
+    expect(packageUsage).toHaveBeenCalledTimes(3);
+  });
+});
