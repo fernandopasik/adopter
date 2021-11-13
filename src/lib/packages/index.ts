@@ -9,5 +9,7 @@ export {
   getPackageNames,
   hasModule,
   hasPackage,
+  isModuleImported,
+  isPackageImported,
 } from './packages.js';
 export type { Package } from './packages.js';

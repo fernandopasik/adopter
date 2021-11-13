@@ -10,6 +10,8 @@ import {
   getPackageNames,
   hasModule,
   hasPackage,
+  isModuleImported,
+  isPackageImported,
 } from '../packages.js';
 
 jest.mock('../resolve-package.js', () => jest.fn((specifier: string) => specifier));
@@ -53,5 +55,13 @@ describe('packages', () => {
 
   it('has package', () => {
     expect(packages.hasPackage).toStrictEqual(hasPackage);
+  });
+
+  it('is module imported', () => {
+    expect(packages.isModuleImported).toStrictEqual(isModuleImported);
+  });
+
+  it('is package imported', () => {
+    expect(packages.isPackageImported).toStrictEqual(isPackageImported);
   });
 });
