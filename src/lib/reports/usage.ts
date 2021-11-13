@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+/* eslint-disable max-lines, max-lines-per-function */
 import chalk from 'chalk';
 import log from 'loglevel';
 import type { ReadonlyDeep } from 'type-fest';
@@ -60,7 +60,6 @@ class Usage {
     });
   }
 
-  // eslint-disable-next-line max-lines-per-function
   public async init(): Promise<void> {
     const packageNames = Array.from(this.storage.keys());
     await packageNames.reduce(
@@ -184,7 +183,6 @@ class Usage {
     return usage;
   }
 
-  // eslint-disable-next-line max-lines-per-function
   public print(): void {
     const currentLogLevel = log.getLevel();
     log.setLevel('INFO');
@@ -202,7 +200,6 @@ class Usage {
       chalk.bold((summary.packagesUsage * 100).toFixed(2)),
     );
 
-    // eslint-disable-next-line max-lines-per-function
     packages.forEach((pkg: ReadonlyDeep<UsageJsonPackage>) => {
       log.info('');
       log.info(

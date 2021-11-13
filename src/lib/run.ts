@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import chalk from 'chalk';
 import log from 'loglevel';
 import path from 'path';
@@ -25,7 +26,6 @@ export interface Options {
   debug?: boolean;
 }
 
-// eslint-disable-next-line max-lines-per-function
 const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
   const {
     coverage: displayCoverage = false,
