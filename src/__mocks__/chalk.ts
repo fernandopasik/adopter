@@ -1,7 +1,7 @@
-const mockMethod = (): jest.Mock => jest.fn((text: string): string => text);
+export const blue = (text: string): string => text;
+export const dim = (text: string): string => text;
+export const green = (text: string): string => text;
+export const red = (text: string): string => text;
+export const yellow = (text: string): string => text;
 
-export const blue = mockMethod();
-export const dim = mockMethod();
-export const green = mockMethod();
-export const red = mockMethod();
-export const yellow = mockMethod();
+export default { blue, dim, green, red, yellow };
