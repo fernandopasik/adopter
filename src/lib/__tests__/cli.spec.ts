@@ -2,9 +2,6 @@ import cli from '../cli.js';
 import run from '../run.js';
 
 jest.mock('../run.js', () => jest.fn());
-jest.mock('globby', () => ({
-  globbySync: jest.fn(),
-}));
 
 describe('adopter cli', () => {
   beforeEach(() => {

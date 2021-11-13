@@ -5,10 +5,6 @@ import processFiles from '../process-files.js';
 
 jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
 
-jest.mock('globby', () => ({
-  globbySync: jest.fn(),
-}));
-
 describe('files', () => {
   it('get files', () => {
     expect(imports.getFile).toStrictEqual(getFile);
