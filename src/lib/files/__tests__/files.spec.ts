@@ -1,4 +1,4 @@
-import { addFile, addFileImports, files, getFile, getFilePaths } from '../files.js';
+import { addFile, addFileImports, files, getFile, getFilePaths, getFiles } from '../files.js';
 
 describe('files', () => {
   beforeEach(() => {
@@ -42,6 +42,24 @@ describe('files', () => {
     addFile(filePath3);
 
     expect(getFilePaths()).toStrictEqual([filePath1, filePath2, filePath3]);
+  });
+
+  it('can get all files', () => {
+    const filePath1 = 'src/example1.js';
+    const filePath2 = 'src/example2.js';
+    const filePath3 = 'src/example3.js';
+
+    expect(getFilePaths()).toStrictEqual([]);
+
+    addFile(filePath1);
+    addFile(filePath2);
+    addFile(filePath3);
+
+    expect(getFiles()).toStrictEqual([
+      { filePath: filePath1, imports: new Set() },
+      { filePath: filePath2, imports: new Set() },
+      { filePath: filePath3, imports: new Set() },
+    ]);
   });
 
   it('can add file imports', () => {

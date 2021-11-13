@@ -26,3 +26,4 @@ export const addFileImports = (filePath: string, imprts: ReadonlyDeep<Import[]> 
 
 export const getFile = (filePath: string): File | undefined => files.get(filePath);
 export const getFilePaths = (): string[] => Array.from(files.keys());
+export const getFiles = (): File[] => Array.from(files.values());

@@ -1,4 +1,4 @@
-import { getFile, getFilePaths } from '../files.js';
+import { getFile, getFilePaths, getFiles } from '../files.js';
 import * as imports from '../index.js';
 import listFiles from '../list-files.js';
 import processFiles from '../process-files.js';
@@ -12,6 +12,10 @@ describe('files', () => {
 
   it('get all filepaths', () => {
     expect(imports.getFilePaths).toStrictEqual(getFilePaths);
+  });
+
+  it('get all files', () => {
+    expect(imports.getFiles).toStrictEqual(getFiles);
   });
 
   it('list files from glob', () => {
