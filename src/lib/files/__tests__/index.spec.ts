@@ -1,3 +1,4 @@
+import { getFile, getFilePaths } from '../files.js';
 import * as imports from '../index.js';
 import listFiles from '../list-files.js';
 import processFiles from '../process-files.js';
@@ -9,6 +10,14 @@ jest.mock('globby', () => ({
 }));
 
 describe('files', () => {
+  it('get files', () => {
+    expect(imports.getFile).toStrictEqual(getFile);
+  });
+
+  it('get all filepaths', () => {
+    expect(imports.getFilePaths).toStrictEqual(getFilePaths);
+  });
+
   it('list files from glob', () => {
     expect(imports.listFiles).toStrictEqual(listFiles);
   });
