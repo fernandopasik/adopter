@@ -1,7 +1,6 @@
 import text from '../text.js';
 import usage from '../usage.js';
 
-// jest.mock('chalk');
 jest.mock('../usage.js');
 jest.mock('../../../packages/resolve-package.js', () =>
   jest.fn(async (specifier: string) => Promise.resolve(specifier)),
