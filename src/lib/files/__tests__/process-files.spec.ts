@@ -2,16 +2,16 @@ import fs from 'fs';
 import type ts from 'typescript';
 import type { Import } from '../../imports/index.js';
 import { parseImports } from '../../imports/index.js';
+import { addFile, addFileImports } from '../files.js';
 import parseAst from '../parse-ast.js';
 import processFiles from '../process-files.js';
 
 jest.mock('fs');
-
 jest.mock('../parse-ast.js', () => jest.fn());
-
 jest.mock('../../imports/index.js', () => ({
   parseImports: jest.fn(),
 }));
+jest.mock('../files.js');
 
 describe('process files', () => {
   beforeEach(() => {
@@ -155,6 +155,35 @@ describe('process files', () => {
 
       expect(callback).toHaveBeenCalledWith(files[0], files[0], undefined, asts[0], imports);
       expect(callback).toHaveBeenCalledWith(files[1], files[1], undefined, asts[1], undefined);
+    });
+
+    it('add file and file imports', () => {
+      const files = ['example1.js', 'example2.js'];
+      const asts = [{ fileName: files[0] }, { fileName: files[1] }];
+      const imports: Import[] = [
+        {
+          filePath: 'example1.js',
+          moduleSpecifier: 'dep1',
+          packageName: 'dep1',
+          defaultName: 'dep1',
+          moduleNames: ['default'],
+        },
+      ];
+
+      (parseAst as jest.MockedFunction<typeof parseAst>)
+        .mockReturnValueOnce(asts[0] as ts.SourceFile)
+        .mockReturnValueOnce(asts[1] as ts.SourceFile);
+
+      (parseImports as jest.MockedFunction<typeof parseImports>).mockReturnValueOnce(imports);
+
+      processFiles(files);
+
+      expect(addFile).toHaveBeenCalledTimes(2);
+      expect(addFile).toHaveBeenCalledWith(files[0]);
+      expect(addFile).toHaveBeenCalledWith(files[1]);
+      expect(addFileImports).toHaveBeenCalledTimes(2);
+      expect(addFileImports).toHaveBeenCalledWith(files[0], imports);
+      expect(addFileImports).toHaveBeenCalledWith(files[1], undefined);
     });
   });
 });
