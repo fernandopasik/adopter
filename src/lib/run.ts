@@ -8,7 +8,9 @@ import type ts from 'typescript';
 import { listFiles, processFiles } from './files/index.js';
 import type { Import } from './imports/index.js';
 import { analyzePackages } from './packages/index.js';
-import { Coverage, Usage } from './reports/index.js';
+import * as coverage2 from './reports/coverage/index.js';
+import { Coverage, print, Usage } from './reports/index.js';
+import * as usage2 from './reports/usage/index.js';
 
 export interface Options {
   coverage?: boolean;
@@ -80,9 +82,11 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
   });
 
   log.debug('Printing reports');
-  usage.print();
+
+  print(usage2.text());
+
   if (displayCoverage) {
-    coverage.print();
+    print(coverage2.text());
   }
   log.debug('Printed reports');
   log.debug('End of run');

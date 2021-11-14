@@ -30,6 +30,7 @@ jest.mock('../packages/index.js', () => ({
   getPackageNames: jest.fn(() => []),
 }));
 jest.mock('../reports/index.js');
+jest.mock('../reports/usage/index.js');
 
 describe('run', () => {
   beforeEach(() => {
@@ -187,27 +188,5 @@ describe('run', () => {
     expect(onFile).toHaveBeenCalledTimes(2);
     expect(onFile).toHaveBeenCalledWith(files[0], files[0], '', undefined, []);
     expect(onFile).toHaveBeenCalledWith(files[1], files[1], '', undefined, []);
-  });
-
-  it('prints usage', async () => {
-    const packages = ['dep1', 'dep2'];
-    const spy = jest.spyOn(Usage.prototype, 'print');
-
-    await run({ packages });
-
-    expect(spy).toHaveBeenCalledTimes(1);
-
-    spy.mockRestore();
-  });
-
-  it('can print coverage', async () => {
-    const packages = ['dep1', 'dep2'];
-    const spy = jest.spyOn(Coverage.prototype, 'print');
-
-    await run({ packages, coverage: true });
-
-    expect(spy).toHaveBeenCalledTimes(1);
-
-    spy.mockRestore();
   });
 });
