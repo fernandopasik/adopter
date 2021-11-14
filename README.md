@@ -52,6 +52,30 @@ adopter({ packages: ['package1', 'package2', 'package3'] });
 | --srcIgnoreMatch | Glob patterns to ignore files for tracking packages   | array   | []                    |
 | --srcMatch       | Glob patterns to match files for tracking packages    | array   | ["\*\*/\*.[jt]s?(x)"] |
 
+## Audit Information
+
+The tool runs on your codebase and displays two types of reports
+
+- Package and module usage
+- File imports coverage
+
+### Package and module usage
+
+This section displays a summary with amount of packages tracked, used and it's usage percentage.
+Also displays information on each package:
+
+- If package **is imported** in the codebase
+- If the package **is indirectly used** by other packages
+- What packages in the list are dependencies of the analyzed package
+- What packages in the list are dependents of the analyzed package
+- Which **modules are imported** in your codebase
+- Which **modules are not imported** in your codebase
+
+### File imports coverage
+
+This section displays a summary with the amount of files tracked and amount of files that import tracked packages.
+Also displays the list of files in your codebase and if and which packages and modules are imported on each file.
+
 ## License
 
 MIT (c) 2021 [Fernando Pasik](https://fernandopasik.com)
