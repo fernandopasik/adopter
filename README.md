@@ -42,14 +42,15 @@ adopter({ packages: ['package1', 'package2', 'package3'] });
 
 ### Options
 
-| option     | description                                           | type    | default               |
-| ---------- | ----------------------------------------------------- | ------- | --------------------- |
-| --help     | Show help                                             | boolean |                       |
-| --version  | Show version number                                   | boolean |                       |
-| --coverage | Report file coverage                                  | boolean | false                 |
-| --debug    | Display debugging information                         | boolean | false                 |
-| --rootDir  | Root directory containing files for tracking packages | string  | "."                   |
-| --srcMatch | Glob patterns to match files for tracking packages    | array   | ["\*\*/\*.[jt]s?(x)"] |
+| option           | description                                           | type    | default               |
+| ---------------- | ----------------------------------------------------- | ------- | --------------------- |
+| --help           | Show help                                             | boolean |                       |
+| --version        | Show version number                                   | boolean |                       |
+| --coverage       | Report file coverage                                  | boolean | false                 |
+| --debug          | Display debugging information                         | boolean | false                 |
+| --rootDir        | Root directory containing files for tracking packages | string  | "."                   |
+| --srcIgnoreMatch | Glob patterns to ignore files for tracking packages   | array   | []                    |
+| --srcMatch       | Glob patterns to match files for tracking packages    | array   | ["\*\*/\*.[jt]s?(x)"] |
 
 ## License
 
