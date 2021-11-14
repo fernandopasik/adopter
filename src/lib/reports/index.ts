@@ -1,2 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
+export * as coverage from './coverage/index.js';
 export { default as print } from './print.js';
+export * as usage from './usage/index.js';
