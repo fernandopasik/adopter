@@ -10,6 +10,11 @@ const OPTIONS: Record<string, Options> = {
     default: false,
     type: 'boolean',
   },
+  debug: {
+    describe: 'Display debugging information',
+    default: false,
+    type: 'boolean',
+  },
   rootDir: {
     describe: 'Root directory containing files for tracking packages',
     default: '.',
@@ -24,11 +29,6 @@ const OPTIONS: Record<string, Options> = {
     describe: 'Glob patterns to match files for tracking packages',
     default: ['**/*.[jt]s?(x)'],
     type: 'array',
-  },
-  debug: {
-    describe: 'Display debugging information',
-    default: false,
-    type: 'boolean',
   },
 };
 
