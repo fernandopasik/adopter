@@ -2,6 +2,7 @@ import log from 'loglevel';
 import ProgressBar from 'progress';
 import { listFiles, processFiles } from '../files/index.js';
 import { analyzePackages } from '../packages/index.js';
+import * as reports from '../reports/index.js';
 import run from '../run.js';
 
 jest.mock('../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
@@ -28,8 +29,11 @@ jest.mock('../packages/index.js', () => ({
   analyzePackages: jest.fn(),
   getPackageNames: jest.fn(() => []),
 }));
-jest.mock('../reports/index.js');
-jest.mock('../reports/usage/index.js');
+jest.mock('../reports/index.js', () => ({
+  coverage: { text: jest.fn() },
+  print: jest.fn(),
+  usage: { text: jest.fn() },
+}));
 
 describe('run', () => {
   beforeEach(() => {
@@ -150,5 +154,29 @@ describe('run', () => {
     expect(onFile).toHaveBeenCalledTimes(2);
     expect(onFile).toHaveBeenCalledWith(files[0], files[0], '', undefined, []);
     expect(onFile).toHaveBeenCalledWith(files[1], files[1], '', undefined, []);
+  });
+
+  it('prints report', async () => {
+    const spy = jest.spyOn(reports, 'print');
+    await run({ packages: [] });
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    spy.mockRestore();
+  });
+
+  it('prints usage report', async () => {
+    const spy = jest.spyOn(reports.usage, 'text');
+    await run({ packages: [] });
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    spy.mockRestore();
+  });
+
+  it('can print coverage report', async () => {
+    const spy = jest.spyOn(reports.coverage, 'text');
+    await run({ packages: [], coverage: true });
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    spy.mockRestore();
   });
 });
