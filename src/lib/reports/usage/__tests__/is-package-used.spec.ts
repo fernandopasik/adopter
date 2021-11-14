@@ -16,7 +16,7 @@ describe('is package used', () => {
   const pkg = {
     name: 'example',
     isInstalled: true,
-    dependants: new Set<Package>(),
+    dependents: new Set<Package>(),
     dependencies: new Set<Package>(),
     imports: new Set<Import>(),
     modules: new Set<string>(),
@@ -44,10 +44,10 @@ describe('is package used', () => {
     expect(getPackage).not.toHaveBeenCalled();
   });
 
-  it('with an imported dependant package', () => {
+  it('with an imported dependent package', () => {
     (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce({
       ...pkg,
-      dependants: new Set([pkg2]),
+      dependents: new Set([pkg2]),
     });
     (isPackageImported as jest.MockedFunction<typeof isPackageUsed>).mockReturnValueOnce(false);
     (isPackageImported as jest.MockedFunction<typeof isPackageUsed>).mockReturnValueOnce(true);
@@ -56,10 +56,10 @@ describe('is package used', () => {
     expect(isPackageImported).toHaveBeenCalledTimes(2);
   });
 
-  it('with not imported dependant packages', () => {
+  it('with not imported dependent packages', () => {
     (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce({
       ...pkg,
-      dependants: new Set([pkg2]),
+      dependents: new Set([pkg2]),
     });
     (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg2);
     (isPackageImported as jest.MockedFunction<typeof isPackageUsed>).mockReturnValueOnce(false);
@@ -70,10 +70,10 @@ describe('is package used', () => {
     expect(getPackage).toHaveBeenCalledTimes(2);
   });
 
-  it('with a non tracked dependant packages', () => {
+  it('with a non tracked dependent packages', () => {
     (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce({
       ...pkg,
-      dependants: new Set([pkg2]),
+      dependents: new Set([pkg2]),
     });
     (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(undefined);
     (isPackageImported as jest.MockedFunction<typeof isPackageUsed>).mockReturnValueOnce(false);

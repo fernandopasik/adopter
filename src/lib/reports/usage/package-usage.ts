@@ -9,7 +9,7 @@ export interface PackageUsed {
 }
 
 export interface PackageUsage extends PackageUsed {
-  dependants: PackageUsed[];
+  dependents: PackageUsed[];
   dependencies: PackageUsed[];
   modulesImported: string[];
   modulesNotImported: string[];
@@ -29,7 +29,7 @@ const filterUsedModules = (modules: Set<string>, packageName: string, isUsed = t
 
 const packageUsage = (name: string): PackageUsage => {
   const {
-    dependants = new Set<Package>(),
+    dependents = new Set<Package>(),
     dependencies = new Set<Package>(),
     modules = new Set<string>(),
   } = getPackage(name) ?? {};
@@ -38,7 +38,7 @@ const packageUsage = (name: string): PackageUsage => {
     name,
     isImported: isPackageImported(name),
     isUsed: isPackageUsed(name),
-    dependants: listPackages(dependants),
+    dependents: listPackages(dependents),
     dependencies: listPackages(dependencies),
     modulesImported: filterUsedModules(modules, name),
     modulesNotImported: filterUsedModules(modules, name, false),

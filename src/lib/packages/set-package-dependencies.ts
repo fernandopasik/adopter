@@ -16,7 +16,7 @@ const setPackageDependencies = async (name: string): Promise<void> => {
       dependencies.forEach(({ name: dependencyName }: Readonly<{ name: string }>) => {
         const dependency = getPackage(dependencyName);
         if (typeof dependency !== 'undefined') {
-          dependency.dependants.add(pkg);
+          dependency.dependents.add(pkg);
           pkg.dependencies.add(dependency);
         }
       });

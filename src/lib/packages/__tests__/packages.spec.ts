@@ -53,7 +53,7 @@ describe('packages', () => {
     expect(getPackage('example')).toStrictEqual({
       name: 'example',
       isInstalled: false,
-      dependants: new Set(),
+      dependents: new Set(),
       dependencies: new Set(),
       imports: new Set(),
       modules: new Set(),

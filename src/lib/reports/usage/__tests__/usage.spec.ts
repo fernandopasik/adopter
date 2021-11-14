@@ -39,7 +39,7 @@ describe('usage', () => {
       name: 'example',
       isImported: false,
       isUsed: false,
-      dependants: [],
+      dependents: [],
       dependencies: [],
       modulesImported: [],
       modulesNotImported: [],

@@ -16,7 +16,7 @@ describe('set package modules', () => {
     const pkg = {
       name: 'example',
       isInstalled: false,
-      dependants: new Set<Package>(),
+      dependents: new Set<Package>(),
       dependencies: new Set<Package>(),
       imports: new Set<Import>(),
       modules: new Set<string>(),
@@ -35,7 +35,7 @@ describe('set package modules', () => {
     const pkg = {
       name: 'example',
       isInstalled: false,
-      dependants: new Set<Package>(),
+      dependents: new Set<Package>(),
       dependencies: new Set<Package>(),
       imports: new Set<Import>(),
       modules: new Set<string>(),
@@ -59,7 +59,7 @@ describe('set package modules', () => {
     const pkg = {
       name: 'example',
       isInstalled: false,
-      dependants: new Set<Package>(),
+      dependents: new Set<Package>(),
       dependencies: new Set<Package>(),
       imports: new Set<Import>(),
       modules: new Set<string>(),
@@ -83,7 +83,7 @@ describe('set package modules', () => {
     const pkg = {
       name: 'example',
       isInstalled: false,
-      dependants: new Set<Package>(),
+      dependents: new Set<Package>(),
       dependencies: new Set<Package>(),
       imports: new Set<Import>(),
       modules: new Set<string>(),
@@ -102,7 +102,7 @@ describe('set package modules', () => {
     const pkg = {
       name: 'example',
       isInstalled: false,
-      dependants: new Set<Package>(),
+      dependents: new Set<Package>(),
       dependencies: new Set<Package>(),
       imports: new Set<Import>(),
       modules: new Set<string>(),

@@ -24,7 +24,7 @@ describe('package usage', () => {
   const pkg = {
     name: 'example',
     isInstalled: true,
-    dependants: new Set<Package>(),
+    dependents: new Set<Package>(),
     dependencies: new Set<Package>(),
     imports: new Set<Import>(),
     modules: new Set<string>(),
@@ -86,16 +86,16 @@ describe('package usage', () => {
     );
   });
 
-  it('tracks its dependencies and dependants', () => {
-    const dependants = new Set([{ ...pkg, name: 'example1' }]);
+  it('tracks its dependencies and dependents', () => {
+    const dependents = new Set([{ ...pkg, name: 'example1' }]);
     const dependencies = new Set([{ ...pkg, name: 'example2' }]);
-    getPackageMock.mockReturnValueOnce({ ...pkg, dependants, dependencies });
+    getPackageMock.mockReturnValueOnce({ ...pkg, dependents, dependencies });
 
     const usage = packageUsage('example');
 
     expect(usage).toStrictEqual(
       expect.objectContaining({
-        dependants: [{ name: 'example1', isImported: false, isUsed: false }],
+        dependents: [{ name: 'example1', isImported: false, isUsed: false }],
         dependencies: [{ name: 'example2', isImported: false, isUsed: false }],
       }),
     );

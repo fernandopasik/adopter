@@ -4,7 +4,7 @@ import type { Import } from '../imports/index.js';
 export interface Package {
   name: string;
   isInstalled: boolean;
-  dependants: Set<Package>;
+  dependents: Set<Package>;
   dependencies: Set<Package>;
   imports: Set<Import>;
   modules: Set<string>;
@@ -16,7 +16,7 @@ export const addPackage = (name: string): void => {
   packages.set(name, {
     name,
     isInstalled: false,
-    dependants: new Set(),
+    dependents: new Set(),
     dependencies: new Set(),
     imports: new Set(),
     modules: new Set(),

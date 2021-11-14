@@ -23,7 +23,7 @@ describe('usage text report', () => {
     name: 'example',
     isImported: false,
     isUsed: false,
-    dependants: [],
+    dependents: [],
     dependencies: [],
     modulesImported: [],
     modulesNotImported: [],
@@ -104,7 +104,7 @@ describe('usage text report', () => {
     expect(usageText).toStrictEqual(expect.stringMatching('Modules not Imported.*example4'));
   });
 
-  it('displays dependants and dependencies', () => {
+  it('displays dependents and dependencies', () => {
     usageMock.mockReturnValueOnce({
       summary,
       packages: [
@@ -115,7 +115,7 @@ describe('usage text report', () => {
             { ...pkg, name: 'example2' },
             { ...pkg, name: 'example3' },
           ],
-          dependants: [{ ...pkg, name: 'example4' }],
+          dependents: [{ ...pkg, name: 'example4' }],
         },
       ],
     });
@@ -125,6 +125,6 @@ describe('usage text report', () => {
     expect(usageText).toStrictEqual(
       expect.stringMatching('Dependencies Tracked.*example2, example3'),
     );
-    expect(usageText).toStrictEqual(expect.stringMatching('Dependants Tracked.*example4'));
+    expect(usageText).toStrictEqual(expect.stringMatching('Dependents Tracked.*example4'));
   });
 });

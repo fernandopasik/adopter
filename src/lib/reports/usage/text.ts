@@ -36,7 +36,7 @@ Package              : {bold ${highlightPackage(pkg)}}
 {dim is Imported          :} ${pkg.isImported ? 'yes' : 'no'}
 {dim is Used              :} ${pkg.isUsed ? 'yes' : 'no'}
 {dim Dependencies Tracked :} ${list(pkg.dependencies.map((p) => highlightPackage(p)))}
-{dim Dependants Tracked   :} ${list(pkg.dependants.map((p) => highlightPackage(p)))}
+{dim Dependents Tracked   :} ${list(pkg.dependents.map((p) => highlightPackage(p)))}
 {dim Modules Imported     :} ${list(pkg.modulesImported)}
 {dim Modules not Imported :} ${list(pkg.modulesNotImported)}
 `;

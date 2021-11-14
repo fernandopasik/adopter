@@ -12,7 +12,7 @@ const isPackageUsed = (packageName: string): boolean => {
   }
 
   return Boolean(
-    Array.from(pkg.dependants).find(({ name }: Readonly<{ name: string }>) => isPackageUsed(name)),
+    Array.from(pkg.dependents).find(({ name }: Readonly<{ name: string }>) => isPackageUsed(name)),
   );
 };
 
