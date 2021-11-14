@@ -2,7 +2,6 @@ import log from 'loglevel';
 import ProgressBar from 'progress';
 import { listFiles, processFiles } from '../files/index.js';
 import { analyzePackages } from '../packages/index.js';
-import { Coverage, Usage } from '../reports/index.js';
 import run from '../run.js';
 
 jest.mock('../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
@@ -68,15 +67,6 @@ describe('run', () => {
 
     expect(analyzePackages).toHaveBeenCalledTimes(1);
     expect(analyzePackages).toHaveBeenCalledWith(packages);
-  });
-
-  it('creates usage with package exports', async () => {
-    const packages = ['dep1', 'dep2'];
-
-    await run({ packages });
-
-    expect(Usage).toHaveBeenCalledTimes(1);
-    expect(Usage).toHaveBeenCalledWith(packages);
   });
 
   it('creates a progress bar', async () => {
@@ -146,34 +136,6 @@ describe('run', () => {
 
     expect(processFiles).toHaveBeenCalledTimes(1);
     expect(processFiles).toHaveBeenCalledWith(files, expect.any(Function));
-  });
-
-  it('add each file import to usage', async () => {
-    const packages = ['dep1', 'dep2'];
-    const files = ['example1.js', 'example2.js'];
-    const spy = jest.spyOn(Usage.prototype, 'addImports');
-
-    (listFiles as jest.MockedFunction<typeof listFiles>).mockReturnValueOnce(files);
-
-    await run({ packages });
-
-    expect(spy).toHaveBeenCalledTimes(2);
-
-    spy.mockRestore();
-  });
-
-  it('add each file to coverage', async () => {
-    const packages = ['dep1', 'dep2'];
-    const files = ['example1.js', 'example2.js'];
-    const spy = jest.spyOn(Coverage.prototype, 'addFile');
-
-    (listFiles as jest.MockedFunction<typeof listFiles>).mockReturnValueOnce(files);
-
-    await run({ packages });
-
-    expect(spy).toHaveBeenCalledTimes(2);
-
-    spy.mockRestore();
   });
 
   it('runs on file callback in options', async () => {

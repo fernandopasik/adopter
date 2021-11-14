@@ -9,7 +9,7 @@ import { listFiles, processFiles } from './files/index.js';
 import type { Import } from './imports/index.js';
 import { analyzePackages } from './packages/index.js';
 import * as coverage2 from './reports/coverage/index.js';
-import { Coverage, print, Usage } from './reports/index.js';
+import { print } from './reports/index.js';
 import * as usage2 from './reports/usage/index.js';
 
 export interface Options {
@@ -46,13 +46,8 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
   const filesMatch = srcMatch.map((srcM) => path.join(rootDir, srcM));
   const filesIgnoreMatch = srcIgnoreMatch.map((srcM) => `!${path.join(rootDir, srcM)}`);
 
-  await analyzePackages(packages);
-
-  const usage = new Usage(packages);
-  const coverage = new Coverage(usage);
-
   log.debug('Loading packages and modules');
-  await usage.init();
+  await analyzePackages(packages);
   log.debug('Loaded packages and modules');
 
   const files = listFiles(filesMatch.concat(filesIgnoreMatch));
@@ -68,8 +63,6 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
   log.debug('Processing files');
   processFiles(files, (filePath, filename, content, ast, imports = []) => {
     log.debug('Processing file', filePath);
-    usage.addImports(imports);
-    coverage.addFile(filePath, imports);
 
     if (typeof onFile === 'function') {
       onFile(filePath, filename, content, ast, imports);

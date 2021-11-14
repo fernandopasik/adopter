@@ -1,3 +1,2 @@
-export { default as Coverage } from './coverage.js';
+// eslint-disable-next-line import/prefer-default-export
 export { default as print } from './print.js';
-export { default as Usage } from './usage.js';
