@@ -51,7 +51,7 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
   const files = listFiles(filesMatch.concat(filesIgnoreMatch));
   const total = files.length;
 
-  const progressBar = new ProgressBar(`[${chalk.blue(':bar')}] :percent`, {
+  const progressBar = new ProgressBar(`Processing files   [${chalk.blue(':bar')}] :percent`, {
     complete: '=',
     incomplete: ' ',
     width: 30,
