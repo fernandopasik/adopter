@@ -18,7 +18,7 @@ describe('files', () => {
     const file = files.get(filePath);
 
     addFile(filePath);
-    expect(file === files.get(filePath)).toBe(true);
+    expect(file).toBe(files.get(filePath));
   });
 
   it('can get a file', () => {
