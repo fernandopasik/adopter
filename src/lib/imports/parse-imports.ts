@@ -9,17 +9,16 @@ const parseImports = (source: ts.SourceFile, filePath: string): Import[] => {
   const { statements } = source;
   const imports: Import[] = [];
 
-  (Array.from(statements) as ReadonlyDeep<ts.Statement>[]).forEach(
-    (statement: ReadonlyDeep<ts.Statement>): void => {
-      if (ts.isImportDeclaration(statement)) {
-        const parsedImport = parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath);
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+  Array.from(statements).forEach((statement: ts.Statement): void => {
+    if (ts.isImportDeclaration(statement)) {
+      const parsedImport = parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath);
 
-        addImport(parsedImport);
+      addImport(parsedImport);
 
-        imports.push(parsedImport);
-      }
-    },
-  );
+      imports.push(parsedImport);
+    }
+  });
 
   return imports;
 };

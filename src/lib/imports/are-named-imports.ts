@@ -1,9 +1,9 @@
-import type { ReadonlyDeep } from 'type-fest';
 import ts from 'typescript';
 
 export const areNamedImports = (
-  namedBindings?: ReadonlyDeep<ts.NamedImportBindings>,
-): namedBindings is ReadonlyDeep<ts.NamedImports> =>
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+  namedBindings?: ts.NamedImportBindings,
+): namedBindings is ts.NamedImports =>
   typeof namedBindings !== 'undefined' && ts.isNamedImports(namedBindings);
 
 export default areNamedImports;

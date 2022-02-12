@@ -1,4 +1,4 @@
-import type { PackageJson, ReadonlyDeep } from 'type-fest';
+import type { PackageJson } from 'type-fest';
 
 export interface Dependency {
   name: string;
@@ -6,7 +6,8 @@ export interface Dependency {
 }
 
 const filterTrackedDependencies = (
-  packageJson: ReadonlyDeep<PackageJson>,
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+  packageJson: PackageJson,
   trackedPackageNames: readonly string[] = [],
 ): Dependency[] => {
   const { dependencies = {}, peerDependencies = {} } = packageJson;
