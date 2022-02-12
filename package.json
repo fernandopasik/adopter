@@ -40,11 +40,11 @@
     "postpublish": "pinst --enable",
     "prepare": "husky install",
     "prepublishOnly": "pinst --disable",
-    "preversion": "yarn verify",
+    "preversion": "npm run verify",
     "start": "tsc -p tsconfig.build.json -w",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "verify": "yarn format:check && yarn lint && yarn check-types && yarn test:coverage && yarn build"
+    "verify": "npm run format:check && npm run lint && npm run check-types && npm run test:coverage && npm run build"
   },
   "dependencies": {
     "chalk": "^5.0.0",
