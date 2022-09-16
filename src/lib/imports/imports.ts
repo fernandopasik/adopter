@@ -10,7 +10,7 @@ export interface Import {
   packageName: string | null;
 }
 
-export const imports: Map<string, Import> = new Map();
+export const imports = new Map<string, Import>();
 
 export const importKey = (imprt: ReadonlyDeep<Import>): string =>
   `${imprt.filePath}**${imprt.moduleSpecifier}**${imprt.moduleNames.join('**')}`;

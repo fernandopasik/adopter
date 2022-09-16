@@ -6,7 +6,7 @@ export interface File {
   imports: Set<Import>;
 }
 
-export const files: Map<string, File> = new Map();
+export const files = new Map<string, File>();
 
 export const addFile = (filePath: string): void => {
   if (!files.has(filePath)) {

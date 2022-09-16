@@ -10,7 +10,7 @@ export interface Package {
   modules: Set<string>;
 }
 
-export const packages: Map<string, Package> = new Map();
+export const packages = new Map<string, Package>();
 
 export const addPackage = (name: string): void => {
   packages.set(name, {
