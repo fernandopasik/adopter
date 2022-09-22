@@ -2,7 +2,7 @@ import type { PackageJson } from 'type-fest';
 
 export interface Dependency {
   name: string;
-  version: string;
+  version: string | undefined;
 }
 
 const filterTrackedDependencies = (
@@ -14,7 +14,7 @@ const filterTrackedDependencies = (
   const allDependencies = { ...dependencies, ...peerDependencies };
 
   const list = Object.entries(allDependencies)
-    .map(([packageName, version]: Readonly<[string, string]>) => ({
+    .map(([packageName, version]: Readonly<[string, string | undefined]>) => ({
       name: packageName,
       version,
     }))
