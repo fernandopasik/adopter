@@ -82,7 +82,7 @@
     "prettier-plugin-pkg": "^0.17.1",
     "prettier-plugin-sh": "^0.12.8",
     "ts-jest": "^29.0.3",
-    "type-fest": "^2.12.2"
+    "type-fest": "^2.19.0"
   },
   "sideEffects": false
 }

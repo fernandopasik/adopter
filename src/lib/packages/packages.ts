@@ -1,4 +1,4 @@
-import type { Mutable, ReadonlyDeep } from 'type-fest';
+import type { ReadonlyDeep, Writable } from 'type-fest';
 import type { Import } from '../imports/index.js';
 
 export interface Package {
@@ -31,7 +31,7 @@ export const hasPackage = (name: string): boolean => packages.has(name);
 
 export const addPackageImport = (imprt: ReadonlyDeep<Import>): void => {
   if (imprt.packageName !== null) {
-    packages.get(imprt.packageName)?.imports.add(imprt as Mutable<Import>);
+    packages.get(imprt.packageName)?.imports.add(imprt as Writable<Import>);
   }
 };
 
