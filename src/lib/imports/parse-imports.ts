@@ -1,4 +1,3 @@
-import type { ReadonlyDeep } from 'type-fest';
 import ts from 'typescript';
 import type { Import } from './imports.js';
 import { addImport } from './imports.js';
@@ -12,7 +11,7 @@ const parseImports = (source: ts.SourceFile, filePath: string): Import[] => {
   // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   Array.from(statements).forEach((statement: ts.Statement): void => {
     if (ts.isImportDeclaration(statement)) {
-      const parsedImport = parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath);
+      const parsedImport = parseImport(statement, filePath);
 
       addImport(parsedImport);
 

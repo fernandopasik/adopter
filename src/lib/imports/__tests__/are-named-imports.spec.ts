@@ -1,4 +1,3 @@
-import type { ReadonlyDeep } from 'type-fest';
 import ts from 'typescript';
 import areNamedImports from '../are-named-imports.js';
 
@@ -16,8 +15,7 @@ describe('are named imports', () => {
       ts.ScriptTarget.Latest,
     );
 
-    const namedImports = (statement as ReadonlyDeep<ts.ImportDeclaration>).importClause
-      ?.namedBindings;
+    const namedImports = (statement as ts.ImportDeclaration).importClause?.namedBindings;
 
     expect(areNamedImports(namedImports)).toBe(true);
   });
@@ -27,8 +25,7 @@ describe('are named imports', () => {
       statements: [statement],
     } = ts.createSourceFile('example.ts', 'import dep from "./dep.ts"', ts.ScriptTarget.Latest);
 
-    const namedImports = (statement as ReadonlyDeep<ts.ImportDeclaration>).importClause
-      ?.namedBindings;
+    const namedImports = (statement as ts.ImportDeclaration).importClause?.namedBindings;
 
     expect(areNamedImports(namedImports)).toBe(false);
   });
@@ -42,8 +39,7 @@ describe('are named imports', () => {
       ts.ScriptTarget.Latest,
     );
 
-    const namedImports = (statement as ReadonlyDeep<ts.ImportDeclaration>).importClause
-      ?.namedBindings;
+    const namedImports = (statement as ts.ImportDeclaration).importClause?.namedBindings;
 
     expect(areNamedImports(namedImports)).toBe(true);
   });
@@ -53,8 +49,7 @@ describe('are named imports', () => {
       statements: [statement],
     } = ts.createSourceFile('example.ts', 'import "./dep.ts"', ts.ScriptTarget.Latest);
 
-    const namedImports = (statement as ReadonlyDeep<ts.ImportDeclaration>).importClause
-      ?.namedBindings;
+    const namedImports = (statement as ts.ImportDeclaration).importClause?.namedBindings;
 
     expect(areNamedImports(namedImports)).toBe(false);
   });

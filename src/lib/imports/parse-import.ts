@@ -1,4 +1,3 @@
-import type { ReadonlyDeep } from 'type-fest';
 import type ts from 'typescript';
 import areNamedImports from './are-named-imports.js';
 import extractPackageName from './extract-package-name.js';
@@ -14,7 +13,7 @@ const parseImport = (statement: ts.ImportDeclaration, filePath: string): Import 
 
   const named: Record<string, string> | undefined = !areNamedImports(namedBindings)
     ? undefined
-    : (Array.from(namedBindings.elements) as ReadonlyDeep<ts.ImportSpecifier>[]).reduce(
+    : Array.from(namedBindings.elements).reduce(
         // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
         (acc, namedImport: ts.ImportSpecifier) => ({
           ...acc,

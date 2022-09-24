@@ -1,4 +1,3 @@
-import type { ReadonlyDeep } from 'type-fest';
 import ts from 'typescript';
 import parseImport from '../parse-import.js';
 
@@ -11,7 +10,7 @@ describe('parse import', () => {
       statements: [statement],
     } = ts.createSourceFile(filePath, 'import "./dep.ts"', ts.ScriptTarget.Latest);
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
       filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
@@ -27,7 +26,7 @@ describe('parse import', () => {
       statements: [statement],
     } = ts.createSourceFile(filePath, 'import dep from "./dep.ts"', ts.ScriptTarget.Latest);
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
       filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
@@ -43,7 +42,7 @@ describe('parse import', () => {
       statements: [statement],
     } = ts.createSourceFile(filePath, 'import { dep } from "./dep.ts"', ts.ScriptTarget.Latest);
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
       filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
@@ -63,7 +62,7 @@ describe('parse import', () => {
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
       filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
@@ -83,7 +82,7 @@ describe('parse import', () => {
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
       filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
@@ -103,7 +102,7 @@ describe('parse import', () => {
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
       filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
@@ -123,7 +122,7 @@ describe('parse import', () => {
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
       filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
@@ -143,7 +142,7 @@ describe('parse import', () => {
       ts.ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ReadonlyDeep<ts.ImportDeclaration>, filePath)).toStrictEqual({
+    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
       filePath,
       moduleSpecifier: './dep.ts',
       packageName: null,
