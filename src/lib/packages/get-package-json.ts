@@ -10,6 +10,7 @@ const getPackageJson = async (packageName: string): Promise<PackageJson | null> 
     .then((mainModuleUrl) => {
       const packagePath = extractPackagePath(mainModuleUrl, packageName);
       const packageJsonPath = `${packagePath}/package.json`;
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       return JSON.parse(readFileSync(packageJsonPath).toString()) as PackageJson;
     })
     .catch((error) => {
