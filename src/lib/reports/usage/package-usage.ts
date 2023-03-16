@@ -15,7 +15,6 @@ export interface PackageUsage extends PackageUsed {
   modulesNotImported: string[];
 }
 
-// eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
 const listPackages = (pkgs: Set<Package>): PackageUsed[] =>
   Array.from(pkgs).map(({ name }: Readonly<{ name: string }>) => ({
     name,
@@ -23,7 +22,6 @@ const listPackages = (pkgs: Set<Package>): PackageUsed[] =>
     isUsed: isPackageUsed(name),
   }));
 
-// eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
 const filterUsedModules = (modules: Set<string>, packageName: string, isUsed = true): string[] =>
   Array.from(modules).filter((moduleName) => isModuleImported(moduleName, packageName) === isUsed);
 

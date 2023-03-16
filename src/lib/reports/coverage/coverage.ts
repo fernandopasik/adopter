@@ -17,12 +17,10 @@ export interface Coverage {
 
 const coverage = (): Coverage => ({
   summary: summary(),
-  files: getFiles()
-    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-    .map(({ filePath, imports }: Readonly<File>) => ({
-      filePath,
-      trackedImports: getTrackedImports(Array.from(imports)),
-    })),
+  files: getFiles().map(({ filePath, imports }: Readonly<File>) => ({
+    filePath,
+    trackedImports: getTrackedImports(Array.from(imports)),
+  })),
 });
 
 export default coverage;

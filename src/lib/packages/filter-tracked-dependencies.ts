@@ -6,7 +6,6 @@ export interface Dependency {
 }
 
 const filterTrackedDependencies = (
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   packageJson: PackageJson,
   trackedPackageNames: readonly string[] = [],
 ): Dependency[] => {
