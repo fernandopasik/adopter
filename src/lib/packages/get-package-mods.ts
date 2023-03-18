@@ -1,12 +1,11 @@
 import chalk from 'chalk';
 import log from 'loglevel';
-import type { ReadonlyDeep } from 'type-fest';
 import resolvePackage from './resolve-package.js';
 
 const getPackageModules = async (packageName: string): Promise<string[] | null> =>
   resolvePackage(packageName)
     .then(async (packageUrl) => import(packageUrl) as Promise<Record<string, unknown>>)
-    .then((pkg: ReadonlyDeep<Record<string, unknown>>) =>
+    .then((pkg: Record<string, unknown>) =>
       Object.keys(pkg).filter((pkgName) => pkgName !== '__esModule'),
     )
     .catch((error) => {

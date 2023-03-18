@@ -1,4 +1,3 @@
-import type { ReadonlyDeep, Writable } from 'type-fest';
 import type { Import } from '../imports/index.js';
 
 export interface Package {
@@ -29,15 +28,15 @@ export const hasModule = (moduleName: string, packageName: string): boolean =>
   Boolean(packages.get(packageName)?.modules.has(moduleName));
 export const hasPackage = (name: string): boolean => packages.has(name);
 
-export const addPackageImport = (imprt: ReadonlyDeep<Import>): void => {
+export const addPackageImport = (imprt: Import): void => {
   if (imprt.packageName !== null) {
-    packages.get(imprt.packageName)?.imports.add(imprt as Writable<Import>);
+    packages.get(imprt.packageName)?.imports.add(imprt);
   }
 };
 
 export const isModuleImported = (moduleName: string, packageName: string): boolean =>
   Boolean(
-    Array.from(getPackage(packageName)?.imports ?? []).find((pkg: ReadonlyDeep<Import>) =>
+    Array.from(getPackage(packageName)?.imports ?? []).find((pkg: Import) =>
       pkg.moduleNames.includes(moduleName),
     ),
   );
