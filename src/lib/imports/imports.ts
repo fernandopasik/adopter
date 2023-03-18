@@ -1,4 +1,3 @@
-import type { ReadonlyDeep, Writable } from 'type-fest';
 import { addPackageImport } from '../packages/index.js';
 
 export interface Import {
@@ -12,11 +11,11 @@ export interface Import {
 
 export const imports = new Map<string, Import>();
 
-export const importKey = (imprt: ReadonlyDeep<Import>): string =>
+export const importKey = (imprt: Import): string =>
   `${imprt.filePath}**${imprt.moduleSpecifier}**${imprt.moduleNames.join('**')}`;
 
-export const addImport = (imprt: ReadonlyDeep<Import>): void => {
-  imports.set(importKey(imprt), imprt as Writable<Import>);
+export const addImport = (imprt: Import): void => {
+  imports.set(importKey(imprt), imprt);
   addPackageImport(imprt);
 };
 
