@@ -16,7 +16,6 @@ export interface Options {
     filePath: string,
     filename: string,
     content: string,
-    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
     ast?: ts.SourceFile,
     imports?: ReadonlyDeep<Import[]>,
   ) => void;
@@ -60,7 +59,6 @@ const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
   });
 
   log.debug('Processing files');
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   processFiles(files, (filePath, filename, content, ast, imports = []) => {
     log.debug('Processing file', filePath);
 

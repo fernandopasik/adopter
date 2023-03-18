@@ -14,7 +14,6 @@ const processFiles = (
     filePath: string,
     filename: string,
     content: string,
-    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
     ast?: ts.SourceFile,
     imports?: ReadonlyDeep<Import[]>,
   ) => void,
