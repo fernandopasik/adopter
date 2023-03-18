@@ -1,7 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import fs from 'fs';
 import path from 'path';
-import type { ReadonlyDeep } from 'type-fest';
 import type ts from 'typescript';
 import type { Import } from '../imports/index.js';
 import { parseImports } from '../imports/index.js';
@@ -15,7 +14,7 @@ const processFiles = (
     filename: string,
     content: string,
     ast?: ts.SourceFile,
-    imports?: ReadonlyDeep<Import[]>,
+    imports?: Import[],
   ) => void,
 ): void => {
   filePaths.forEach((filePath) => {

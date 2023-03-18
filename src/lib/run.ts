@@ -3,7 +3,6 @@ import chalk from 'chalk';
 import log from 'loglevel';
 import path from 'path';
 import ProgressBar from 'progress';
-import type { ReadonlyDeep } from 'type-fest';
 import type ts from 'typescript';
 import { listFiles, processFiles } from './files/index.js';
 import type { Import } from './imports/index.js';
@@ -17,7 +16,7 @@ export interface Options {
     filename: string,
     content: string,
     ast?: ts.SourceFile,
-    imports?: ReadonlyDeep<Import[]>,
+    imports?: Import[],
   ) => void;
   packages: string[];
   rootDir?: string;
@@ -26,7 +25,7 @@ export interface Options {
   debug?: boolean;
 }
 
-const run = async (options: ReadonlyDeep<Options>): Promise<void> => {
+const run = async (options: Options): Promise<void> => {
   const {
     coverage: displayCoverage = false,
     debug = false,
