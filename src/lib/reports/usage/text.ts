@@ -1,6 +1,5 @@
 import chalk from 'chalk';
 import chalkTemplate from 'chalk-template';
-import type { ReadonlyDeep } from 'type-fest';
 import type { PackageUsage, PackageUsed } from './package-usage.js';
 import type { UsageSummary } from './summary.js';
 import usage from './usage.js';
@@ -17,7 +16,7 @@ Package and Modules Usage
 {dim Packages Usage   :} {bold ${toPercentage(summary.packagesUsage)}}
 `;
 
-const highlightPackage = (pkg: ReadonlyDeep<PackageUsed>): string => {
+const highlightPackage = (pkg: PackageUsed): string => {
   if (pkg.isImported) {
     return chalk.green(pkg.name);
   }
@@ -31,7 +30,7 @@ const highlightPackage = (pkg: ReadonlyDeep<PackageUsed>): string => {
 
 const list = (items: readonly string[]): string => (items.length > 0 ? items.join(', ') : '-');
 
-const packageTemplate = (pkg: ReadonlyDeep<PackageUsage>): string => chalkTemplate`
+const packageTemplate = (pkg: PackageUsage): string => chalkTemplate`
 Package              : {bold ${highlightPackage(pkg)}}
 {dim is Imported          :} ${pkg.isImported ? 'yes' : 'no'}
 {dim is Used              :} ${pkg.isUsed ? 'yes' : 'no'}
@@ -45,7 +44,7 @@ const text = (): string => {
   const { summary, packages } = usage();
   const output = [
     summaryTemplate(summary),
-    ...packages.map((pkg: ReadonlyDeep<PackageUsage>) => packageTemplate(pkg)),
+    ...packages.map((pkg: PackageUsage) => packageTemplate(pkg)),
   ];
 
   return output.join('');
