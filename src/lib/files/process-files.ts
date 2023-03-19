@@ -8,7 +8,7 @@ import { addFile, addFileImports } from './files.js';
 import parseAst from './parse-ast.js';
 
 const processFiles = (
-  filePaths: readonly string[] = [],
+  filePaths: string[] = [],
   callback?: (
     filePath: string,
     filename: string,

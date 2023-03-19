@@ -5,7 +5,7 @@ import sortPaths from '../sort-paths.js';
 jest.mock('globby', () => ({
   globbySync: jest.fn(() => []),
 }));
-jest.mock('../sort-paths', () => jest.fn((paths: readonly string[]): readonly string[] => paths));
+jest.mock('../sort-paths', () => jest.fn((paths: string[]): string[] => paths));
 
 describe('list files from globs', () => {
   beforeEach(() => {

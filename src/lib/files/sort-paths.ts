@@ -1,4 +1,4 @@
-const sortPaths = (paths: readonly string[] = []): string[] =>
+const sortPaths = (paths: string[] = []): string[] =>
   [...paths].sort((path1: string, path2: string): number => {
     const folder1 = path1.substring(0, path1.lastIndexOf('/'));
     const folder2 = path2.substring(0, path2.lastIndexOf('/'));
