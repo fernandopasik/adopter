@@ -13,11 +13,11 @@ const filterTrackedDependencies = (
   const allDependencies = { ...dependencies, ...peerDependencies };
 
   const list = Object.entries(allDependencies)
-    .map(([packageName, version]: Readonly<[string, string | undefined]>) => ({
+    .map(([packageName, version]: [string, string | undefined]) => ({
       name: packageName,
       version,
     }))
-    .filter(({ name }: Readonly<Dependency>) => trackedPackageNames.includes(name));
+    .filter(({ name }: Dependency) => trackedPackageNames.includes(name));
 
   return list;
 };

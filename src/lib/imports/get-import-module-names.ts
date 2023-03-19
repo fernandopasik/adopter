@@ -2,7 +2,7 @@ import type { Import } from './imports.js';
 
 const getImportModuleNames = (
   defaultName?: Import['defaultName'],
-  named: Readonly<Import['named']> = {},
+  named: Import['named'] = {},
 ): string[] => {
   const moduleNames: string[] = [];
 
