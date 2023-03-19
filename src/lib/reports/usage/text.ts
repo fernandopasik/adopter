@@ -28,7 +28,7 @@ const highlightPackage = (pkg: PackageUsed): string => {
   return chalk.red(pkg.name);
 };
 
-const list = (items: readonly string[]): string => (items.length > 0 ? items.join(', ') : '-');
+const list = (items: string[]): string => (items.length > 0 ? items.join(', ') : '-');
 
 const packageTemplate = (pkg: PackageUsage): string => chalkTemplate`
 Package              : {bold ${highlightPackage(pkg)}}

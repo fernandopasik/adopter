@@ -7,7 +7,7 @@ export interface Dependency {
 
 const filterTrackedDependencies = (
   packageJson: PackageJson,
-  trackedPackageNames: readonly string[] = [],
+  trackedPackageNames: string[] = [],
 ): Dependency[] => {
   const { dependencies = {}, peerDependencies = {} } = packageJson;
   const allDependencies = { ...dependencies, ...peerDependencies };
