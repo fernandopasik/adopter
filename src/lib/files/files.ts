@@ -1,4 +1,3 @@
-import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../imports/index.js';
 
 export interface File {
@@ -14,12 +13,12 @@ export const addFile = (filePath: string): void => {
   }
 };
 
-export const addFileImports = (filePath: string, imprts: ReadonlyDeep<Import[]> = []): void => {
+export const addFileImports = (filePath: string, imprts: Import[] = []): void => {
   const file = files.get(filePath);
 
   if (typeof file !== 'undefined') {
     imprts.forEach((imprt) => {
-      file.imports.add(imprt as Import);
+      file.imports.add(imprt);
     });
   }
 };
