@@ -14,7 +14,7 @@ jest.mock('../files/index.js', () => ({
   listFiles: jest.fn(() => []),
   processFiles: jest.fn(
     (
-      files: readonly string[] = [],
+      files: string[] = [],
       callback?: (filePath: string, filename: string, content: string) => void,
     ) => {
       files.forEach((file) => {

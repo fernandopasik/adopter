@@ -32,7 +32,7 @@ const OPTIONS: Record<string, Options> = {
   },
 };
 
-const cli = async (processArgs: readonly string[]): Promise<void> => {
+const cli = async (processArgs: string[]): Promise<void> => {
   const { _: argList, ...options } = yargs(processArgs)
     // eslint-disable-next-line @typescript-eslint/naming-convention
     .parserConfiguration({ 'greedy-arrays': false })
