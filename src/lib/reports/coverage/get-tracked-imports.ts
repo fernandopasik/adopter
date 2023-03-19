@@ -1,4 +1,3 @@
-import type { ReadonlyDeep } from 'type-fest';
 import type { Import } from '../../imports/index.js';
 import { isModuleImported, isPackageImported } from '../../packages/index.js';
 
@@ -7,13 +6,11 @@ export interface TrackedImport {
   moduleNames: string[];
 }
 
-const filterTrackedImports = (imports: ReadonlyDeep<Import[]>): Import[] =>
-  imports.filter(
-    (imprt) => imprt.packageName !== null && isPackageImported(imprt.packageName),
-  ) as Import[];
+const filterTrackedImports = (imports: Import[]): Import[] =>
+  imports.filter((imprt) => imprt.packageName !== null && isPackageImported(imprt.packageName));
 
-const getTrackedImports = (imports: ReadonlyDeep<Import[]> = []): TrackedImport[] =>
-  filterTrackedImports(imports).map(({ packageName, moduleNames }: ReadonlyDeep<Import>) => ({
+const getTrackedImports = (imports: Import[] = []): TrackedImport[] =>
+  filterTrackedImports(imports).map(({ packageName, moduleNames }: Import) => ({
     packageName,
     moduleNames: moduleNames.filter(
       (moduleName) => packageName !== null && isModuleImported(moduleName, packageName),
