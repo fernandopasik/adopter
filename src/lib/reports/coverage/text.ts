@@ -3,7 +3,7 @@ import type { TrackedFile } from './coverage.js';
 import coverage from './coverage.js';
 import type { CoverageSummary } from './summary';
 
-const summaryTemplate = (summary: Readonly<CoverageSummary>): string => chalkTemplate`
+const summaryTemplate = (summary: CoverageSummary): string => chalkTemplate`
 Imported Packages and Modules Coverage
 {dim --------------------------------------}
 

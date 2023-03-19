@@ -7,7 +7,7 @@ import usage from './usage.js';
 // eslint-disable-next-line @typescript-eslint/no-magic-numbers
 const toPercentage = (num: number): string => `${(num * 100).toFixed(2)} %`;
 
-const summaryTemplate = (summary: Readonly<UsageSummary>): string => chalkTemplate`
+const summaryTemplate = (summary: UsageSummary): string => chalkTemplate`
 Package and Modules Usage
 {dim --------------------------------------}
 

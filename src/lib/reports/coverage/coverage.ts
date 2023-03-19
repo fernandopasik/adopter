@@ -17,7 +17,7 @@ export interface Coverage {
 
 const coverage = (): Coverage => ({
   summary: summary(),
-  files: getFiles().map(({ filePath, imports }: Readonly<File>) => ({
+  files: getFiles().map(({ filePath, imports }: File) => ({
     filePath,
     trackedImports: getTrackedImports(Array.from(imports)),
   })),
