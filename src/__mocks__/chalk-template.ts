@@ -1,4 +1,4 @@
-export default (texts: readonly string[], ...vars: readonly string[]): string => {
+export default (texts: string[], ...vars: string[]): string => {
   let result = '';
 
   texts.forEach((text, index) => {
