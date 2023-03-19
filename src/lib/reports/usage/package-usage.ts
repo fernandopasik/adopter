@@ -16,7 +16,7 @@ export interface PackageUsage extends PackageUsed {
 }
 
 const listPackages = (pkgs: Set<Package>): PackageUsed[] =>
-  Array.from(pkgs).map(({ name }: Readonly<{ name: string }>) => ({
+  Array.from(pkgs).map(({ name }: { name: string }) => ({
     name,
     isImported: isPackageImported(name),
     isUsed: isPackageUsed(name),

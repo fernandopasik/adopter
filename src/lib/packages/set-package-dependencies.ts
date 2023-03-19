@@ -13,7 +13,7 @@ const setPackageDependencies = async (name: string): Promise<void> => {
       pkg.isInstalled = true;
       const dependencies = filterTrackedDependencies(packageJson, packageList);
 
-      dependencies.forEach(({ name: dependencyName }: Readonly<{ name: string }>) => {
+      dependencies.forEach(({ name: dependencyName }: { name: string }) => {
         const dependency = getPackage(dependencyName);
         if (typeof dependency !== 'undefined') {
           dependency.dependents.add(pkg);
