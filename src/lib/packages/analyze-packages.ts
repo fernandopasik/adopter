@@ -21,7 +21,7 @@ const analyzePackages = async (packageList: string[]): Promise<void> => {
   });
 
   await sortedList.reduce(
-    async (prev: Readonly<Promise<void>>, packageName) =>
+    async (prev: Promise<void>, packageName) =>
       prev.then(async () => {
         progressBar.tick(1);
         return setPackageMods(packageName);
@@ -30,7 +30,7 @@ const analyzePackages = async (packageList: string[]): Promise<void> => {
   );
 
   await sortedList.reduce(
-    async (prev: Readonly<Promise<void>>, packageName) =>
+    async (prev: Promise<void>, packageName) =>
       prev.then(async () => {
         progressBar.tick(1);
         return setPackageDependencies(packageName);
