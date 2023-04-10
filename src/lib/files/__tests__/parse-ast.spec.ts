@@ -1,6 +1,12 @@
 import ts from 'typescript';
 import parseAst from '../parse-ast.js';
 
+jest.mock('typescript', () => ({
+  createSourceFile: jest.fn(),
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  ScriptTarget: { Latest: 99 },
+}));
+
 describe('parse ast', () => {
   it('creates a typescript file', () => {
     const fileName = 'example1.ts';
