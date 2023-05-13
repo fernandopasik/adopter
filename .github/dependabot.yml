@@ -1,11 +1,21 @@
 version: 2
 updates:
-  - package-ecosystem: npm
-    directory: /
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 0
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: daily
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: daily
+    groups:
+      commitlint:
+        patterns:
+          - '@commitlint*'
+      storybook:
+        patterns:
+          - '@storybook*'
+          - 'storybook*'
+      typescript-eslint:
+        patterns:
+          - '@typescript-eslint*'
