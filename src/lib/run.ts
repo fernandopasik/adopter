@@ -58,6 +58,7 @@ const run = async (options: Options): Promise<void> => {
   });
 
   log.debug('Processing files');
+  // eslint-disable-next-line @typescript-eslint/max-params
   processFiles(files, (filePath, filename, content, ast, imports = []) => {
     log.debug('Processing file', filePath);
 
