@@ -4,7 +4,7 @@
     "plugin:@typescript-eslint/all",
     "plugin:import/typescript",
     "plugin:jest/all",
-    "plugin:security/recommended",
+    "plugin:security/recommended-legacy",
     "prettier"
   ],
   "env": { "node": true },
