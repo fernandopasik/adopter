@@ -6,7 +6,7 @@ import extractPackagePath from './extract-package-path.js';
 import resolvePackage from './resolve-package.js';
 
 const getPackageJson = async (packageName: string): Promise<PackageJson | null> =>
-  resolvePackage(`${packageName}`)
+  resolvePackage(packageName)
     .then((mainModuleUrl) => {
       const packagePath = extractPackagePath(mainModuleUrl, packageName);
       const packageJsonPath = `${packagePath}/package.json`;
