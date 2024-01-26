@@ -37,7 +37,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . --ext js,ts",
-    "prepare": "husky install",
+    "prepare": "husky",
     "preversion": "npm run verify",
     "start": "tsc -p tsconfig.build.json -w",
     "test": "jest",
