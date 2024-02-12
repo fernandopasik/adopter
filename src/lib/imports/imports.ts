@@ -1,11 +1,11 @@
 import { addPackageImport } from '../packages/index.js';
 
 export interface Import {
-  defaultName?: string;
+  defaultName?: string | undefined;
   filePath: string;
   moduleNames: string[];
   moduleSpecifier: string;
-  named?: Record<string, string>;
+  named?: Record<string, string> | undefined;
   packageName: string | null;
 }
 
