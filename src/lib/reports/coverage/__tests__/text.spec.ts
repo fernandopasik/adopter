@@ -64,7 +64,8 @@ describe('usage text report', () => {
       { packageName: 'dep2', moduleNames: ['default'] },
     ];
     const files = [
-      { filePath: 'src/example1.ts', trackedImports: [trackedImports[0]] },
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      { filePath: 'src/example1.ts', trackedImports: [trackedImports[0]!] },
       { filePath: 'src/example2.ts', trackedImports },
       { filePath: 'src/example3.ts', trackedImports: [] },
     ];

@@ -80,7 +80,8 @@ describe('process files', () => {
 
     it('with filename', () => {
       const filenames = ['example1.js', 'example2.js'];
-      const files = [filenames[0], `folder/${filenames[1]}`];
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const files = [filenames[0]!, `folder/${filenames[1]}`];
       const callback = jest.fn();
 
       processFiles(files, callback);
@@ -107,8 +108,10 @@ describe('process files', () => {
       const callback = jest.fn();
 
       (fs.readFileSync as jest.MockedFunction<typeof fs.readFileSync>)
-        .mockReturnValueOnce(contents[0])
-        .mockReturnValueOnce(contents[1]);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        .mockReturnValueOnce(contents[0]!)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        .mockReturnValueOnce(contents[1]!);
 
       processFiles(files, callback);
 

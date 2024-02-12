@@ -9,7 +9,8 @@ const extractPackageName = (importPath = ''): string | null => {
 
   const parts = importPath.split('/');
 
-  return parts[0].startsWith('@') ? `${parts[0]}/${parts[1]}` : parts[0];
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return parts[0]!.startsWith('@') ? `${parts[0]}/${parts[1]}` : parts[0]!;
 };
 
 export default extractPackageName;
