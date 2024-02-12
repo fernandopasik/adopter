@@ -20,6 +20,6 @@
     "strict": true,
     "target": "es2019"
   },
-  "exclude": ["/adopter.*", "/bin", "/lib"],
+  "exclude": ["adopter.*", "bin", "coverage", "lib"],
   "include": [".**/**/*", "**/*"]
 }
