@@ -5,28 +5,28 @@ const MAX_FORMAT_WIDTH = 120;
 
 const OPTIONS: Record<string, Options> = {
   coverage: {
-    describe: 'Report file coverage',
     default: false,
+    describe: 'Report file coverage',
     type: 'boolean',
   },
   debug: {
-    describe: 'Display debugging information',
     default: false,
+    describe: 'Display debugging information',
     type: 'boolean',
   },
   rootDir: {
-    describe: 'Root directory containing files for tracking packages',
     default: '.',
+    describe: 'Root directory containing files for tracking packages',
     type: 'string',
   },
   srcIgnoreMatch: {
-    describe: 'Glob patterns to ignore files for tracking packages',
     default: [],
+    describe: 'Glob patterns to ignore files for tracking packages',
     type: 'array',
   },
   srcMatch: {
-    describe: 'Glob patterns to match files for tracking packages',
     default: ['**/*.[jt]s?(x)'],
+    describe: 'Glob patterns to match files for tracking packages',
     type: 'array',
   },
 };

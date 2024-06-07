@@ -53,8 +53,8 @@ const run = async (options: Options): Promise<void> => {
   const progressBar = new ProgressBar(`Processing files   [${chalk.blue(':bar')}] :percent`, {
     complete: '=',
     incomplete: ' ',
-    width: 30,
     total,
+    width: 30,
   });
 
   log.debug('Processing files');
