@@ -7,8 +7,8 @@ jest.mock('../../../packages/index.js', () => ({
   isPackageImported: jest.fn(() => false),
 }));
 
-const isPackageImportedMock = isPackageImported as jest.MockedFunction<typeof isPackageImported>;
-const isModuleImportedMock = isModuleImported as jest.MockedFunction<typeof isModuleImported>;
+const isPackageImportedMock = jest.mocked(isPackageImported);
+const isModuleImportedMock = jest.mocked(isModuleImported);
 
 describe('get tracked imports', () => {
   beforeEach(() => {

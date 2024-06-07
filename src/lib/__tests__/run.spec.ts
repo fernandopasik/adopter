@@ -88,7 +88,7 @@ describe('run', () => {
     const packages = ['dep1', 'dep2'];
     const files = ['example1.js', 'example2.js'];
 
-    (listFiles as jest.MockedFunction<typeof listFiles>).mockReturnValueOnce(files);
+    jest.mocked(listFiles).mockReturnValueOnce(files);
 
     await run({ packages });
 
@@ -135,7 +135,7 @@ describe('run', () => {
     const packages = ['dep1', 'dep2'];
     const files = ['*'];
 
-    (listFiles as jest.MockedFunction<typeof listFiles>).mockReturnValueOnce(files);
+    jest.mocked(listFiles).mockReturnValueOnce(files);
 
     await run({ packages });
 
@@ -148,7 +148,7 @@ describe('run', () => {
     const files = ['example1.js', 'example2.js'];
     const onFile = jest.fn();
 
-    (listFiles as jest.MockedFunction<typeof listFiles>).mockReturnValueOnce(files);
+    jest.mocked(listFiles).mockReturnValueOnce(files);
 
     await run({ onFile, packages });
 

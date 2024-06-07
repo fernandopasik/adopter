@@ -7,7 +7,7 @@ jest.mock('../../../packages/resolve-package.js', () =>
   jest.fn(async (specifier: string) => Promise.resolve(specifier)),
 );
 
-const usageMock = usage as jest.MockedFunction<typeof usage>;
+const usageMock = jest.mocked(usage);
 
 describe('usage text report', () => {
   beforeEach(() => {

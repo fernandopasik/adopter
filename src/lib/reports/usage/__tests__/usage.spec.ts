@@ -13,9 +13,9 @@ jest.mock('../../../packages/resolve-package.js', () =>
   jest.fn(async (specifier: string) => Promise.resolve(specifier)),
 );
 
-const summaryMock = summary as jest.MockedFunction<typeof summary>;
-const getPackageNamesMock = getPackageNames as jest.MockedFunction<typeof getPackageNames>;
-const packageUsageMock = packageUsage as jest.MockedFunction<typeof packageUsage>;
+const summaryMock = jest.mocked(summary);
+const getPackageNamesMock = jest.mocked(getPackageNames);
+const packageUsageMock = jest.mocked(packageUsage);
 
 describe('usage', () => {
   beforeEach(() => {

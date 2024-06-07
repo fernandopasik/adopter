@@ -32,9 +32,7 @@ describe('get package.json', () => {
     const packageName = 'typescript';
     const packageUrl = '/home/project/node_modules/typescript';
     const mainModuleUrl = `${packageUrl}/lib/main.js`;
-    (resolvePackage as jest.MockedFunction<typeof resolvePackage>).mockResolvedValueOnce(
-      mainModuleUrl,
-    );
+    jest.mocked(resolvePackage).mockResolvedValueOnce(mainModuleUrl);
 
     await getPackageJson(packageName);
 
@@ -45,9 +43,7 @@ describe('get package.json', () => {
   it('reads package.json file', async () => {
     const packageName = 'typescript';
     const packagePath = '/home/project/node_modules/typescript';
-    (extractPackagePath as jest.MockedFunction<typeof extractPackagePath>).mockReturnValueOnce(
-      packagePath,
-    );
+    jest.mocked(extractPackagePath).mockReturnValueOnce(packagePath);
     const spy = jest.spyOn(fs, 'readFileSync');
 
     await getPackageJson(packageName);
@@ -70,9 +66,7 @@ describe('get package.json', () => {
   it('with a non installed module', async () => {
     const spy = jest.spyOn(log, 'warn').mockImplementation();
     const errorMessage = 'Cannot find module';
-    (resolvePackage as jest.MockedFunction<typeof resolvePackage>).mockRejectedValueOnce({
-      message: errorMessage,
-    });
+    jest.mocked(resolvePackage).mockRejectedValueOnce({ message: errorMessage });
 
     const packageJson = await getPackageJson('typescript');
 

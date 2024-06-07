@@ -8,8 +8,8 @@ jest.mock('../../../files/index.js', () => ({
   getFilePaths: jest.fn(() => []),
 }));
 
-const getFileMock = getFile as jest.MockedFunction<typeof getFile>;
-const getFilePathsMock = getFilePaths as jest.MockedFunction<typeof getFilePaths>;
+const getFileMock = jest.mocked(getFile);
+const getFilePathsMock = jest.mocked(getFilePaths);
 
 describe('coverage summary', () => {
   beforeEach(() => {

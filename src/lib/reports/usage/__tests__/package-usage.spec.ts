@@ -12,10 +12,10 @@ jest.mock('../../../packages/index.js', () => ({
   isPackageImported: jest.fn(() => false),
 }));
 
-const isModuleImportedMock = isModuleImported as jest.MockedFunction<typeof isModuleImported>;
-const isPackageImportedMock = isPackageImported as jest.MockedFunction<typeof isPackageImported>;
-const isPackageUsedMock = isPackageUsed as jest.MockedFunction<typeof isPackageUsed>;
-const getPackageMock = getPackage as jest.MockedFunction<typeof getPackage>;
+const isModuleImportedMock = jest.mocked(isModuleImported);
+const isPackageImportedMock = jest.mocked(isPackageImported);
+const isPackageUsedMock = jest.mocked(isPackageUsed);
+const getPackageMock = jest.mocked(getPackage);
 
 describe('package usage', () => {
   beforeEach(() => {

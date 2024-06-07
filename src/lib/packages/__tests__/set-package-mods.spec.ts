@@ -23,7 +23,7 @@ describe('set package modules', () => {
       modules: new Set<string>(),
     };
 
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
+    jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
     expect(pkg.modules.size).toBe(0);
 
@@ -42,10 +42,8 @@ describe('set package modules', () => {
       modules: new Set<string>(),
     };
 
-    (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce([
-      'default',
-    ]);
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
+    jest.mocked(getPackageModules).mockResolvedValueOnce(['default']);
+    jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
     expect(pkg.modules.size).toBe(0);
     expect(pkg.modules.has('default')).toBe(false);
@@ -66,12 +64,8 @@ describe('set package modules', () => {
       modules: new Set<string>(),
     };
 
-    (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce([
-      'default',
-      'moduleA',
-      'moduleB',
-    ]);
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
+    jest.mocked(getPackageModules).mockResolvedValueOnce(['default', 'moduleA', 'moduleB']);
+    jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
     expect(pkg.modules.size).toBe(0);
 
@@ -90,7 +84,7 @@ describe('set package modules', () => {
       modules: new Set<string>(),
     };
 
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
+    jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
     expect(pkg.isInstalled).toBe(false);
 
@@ -109,10 +103,8 @@ describe('set package modules', () => {
       modules: new Set<string>(),
     };
 
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
-    (getPackageModules as jest.MockedFunction<typeof getPackageModules>).mockResolvedValueOnce(
-      null,
-    );
+    jest.mocked(getPackage).mockReturnValueOnce(pkg);
+    jest.mocked(getPackageModules).mockResolvedValueOnce(null);
 
     expect(pkg.isInstalled).toBe(false);
 
@@ -122,7 +114,7 @@ describe('set package modules', () => {
   });
 
   it('with non existent package', () => {
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(undefined);
+    jest.mocked(getPackage).mockReturnValueOnce(undefined);
 
     expect(getPackageModules).not.toHaveBeenCalled();
   });

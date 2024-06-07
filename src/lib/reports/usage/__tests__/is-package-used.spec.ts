@@ -29,8 +29,8 @@ describe('is package used', () => {
   };
 
   it('with a non imported package', () => {
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
-    (isPackageImported as jest.MockedFunction<typeof isPackageUsed>).mockReturnValueOnce(false);
+    jest.mocked(getPackage).mockReturnValueOnce(pkg);
+    jest.mocked(isPackageImported).mockReturnValueOnce(false);
 
     expect(isPackageUsed('example')).toBe(false);
     expect(isPackageImported).toHaveBeenCalledTimes(1);
@@ -38,7 +38,7 @@ describe('is package used', () => {
   });
 
   it('with an imported package', () => {
-    (isPackageImported as jest.MockedFunction<typeof isPackageUsed>).mockReturnValueOnce(true);
+    jest.mocked(isPackageImported).mockReturnValueOnce(true);
 
     expect(isPackageUsed('example')).toBe(true);
     expect(isPackageImported).toHaveBeenCalledTimes(1);
@@ -46,25 +46,25 @@ describe('is package used', () => {
   });
 
   it('with an imported dependent package', () => {
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce({
+    jest.mocked(getPackage).mockReturnValueOnce({
       ...pkg,
       dependents: new Set([pkg2]),
     });
-    (isPackageImported as jest.MockedFunction<typeof isPackageUsed>).mockReturnValueOnce(false);
-    (isPackageImported as jest.MockedFunction<typeof isPackageUsed>).mockReturnValueOnce(true);
+    jest.mocked(isPackageImported).mockReturnValueOnce(false);
+    jest.mocked(isPackageImported).mockReturnValueOnce(true);
 
     expect(isPackageUsed('example')).toBe(true);
     expect(isPackageImported).toHaveBeenCalledTimes(2);
   });
 
   it('with not imported dependent packages', () => {
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce({
+    jest.mocked(getPackage).mockReturnValueOnce({
       ...pkg,
       dependents: new Set([pkg2]),
     });
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg2);
-    (isPackageImported as jest.MockedFunction<typeof isPackageUsed>).mockReturnValueOnce(false);
-    (isPackageImported as jest.MockedFunction<typeof isPackageUsed>).mockReturnValueOnce(false);
+    jest.mocked(getPackage).mockReturnValueOnce(pkg2);
+    jest.mocked(isPackageImported).mockReturnValueOnce(false);
+    jest.mocked(isPackageImported).mockReturnValueOnce(false);
 
     expect(isPackageUsed('example')).toBe(false);
     expect(isPackageImported).toHaveBeenCalledTimes(2);
@@ -72,13 +72,13 @@ describe('is package used', () => {
   });
 
   it('with a non tracked dependent packages', () => {
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce({
+    jest.mocked(getPackage).mockReturnValueOnce({
       ...pkg,
       dependents: new Set([pkg2]),
     });
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(undefined);
-    (isPackageImported as jest.MockedFunction<typeof isPackageUsed>).mockReturnValueOnce(false);
-    (isPackageImported as jest.MockedFunction<typeof isPackageUsed>).mockReturnValueOnce(false);
+    jest.mocked(getPackage).mockReturnValueOnce(undefined);
+    jest.mocked(isPackageImported).mockReturnValueOnce(false);
+    jest.mocked(isPackageImported).mockReturnValueOnce(false);
 
     expect(isPackageUsed('example')).toBe(false);
     expect(isPackageImported).toHaveBeenCalledTimes(2);

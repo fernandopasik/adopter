@@ -108,7 +108,8 @@ describe('process files', () => {
       const contents = ['this is example1', 'this is example2'];
       const callback = jest.fn();
 
-      (fs.readFileSync as jest.MockedFunction<typeof fs.readFileSync>)
+      jest
+        .mocked(fs.readFileSync)
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         .mockReturnValueOnce(contents[0]!)
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -125,7 +126,8 @@ describe('process files', () => {
       const asts = [{ fileName: files[0] }, { fileName: files[1] }];
       const callback = jest.fn();
 
-      (parseAst as jest.MockedFunction<typeof parseAst>)
+      jest
+        .mocked(parseAst)
         .mockReturnValueOnce(asts[0] as ts.SourceFile)
         .mockReturnValueOnce(asts[1] as ts.SourceFile);
 
@@ -149,11 +151,12 @@ describe('process files', () => {
       ];
       const callback = jest.fn();
 
-      (parseAst as jest.MockedFunction<typeof parseAst>)
+      jest
+        .mocked(parseAst)
         .mockReturnValueOnce(asts[0] as ts.SourceFile)
         .mockReturnValueOnce(asts[1] as ts.SourceFile);
 
-      (parseImports as jest.MockedFunction<typeof parseImports>).mockReturnValueOnce(imports);
+      jest.mocked(parseImports).mockReturnValueOnce(imports);
 
       processFiles(files, callback);
 
@@ -174,11 +177,12 @@ describe('process files', () => {
         },
       ];
 
-      (parseAst as jest.MockedFunction<typeof parseAst>)
+      jest
+        .mocked(parseAst)
         .mockReturnValueOnce(asts[0] as ts.SourceFile)
         .mockReturnValueOnce(asts[1] as ts.SourceFile);
 
-      (parseImports as jest.MockedFunction<typeof parseImports>).mockReturnValueOnce(imports);
+      jest.mocked(parseImports).mockReturnValueOnce(imports);
 
       processFiles(files);
 

@@ -8,8 +8,8 @@ jest.mock('../../../packages/index.js', () => ({
 }));
 jest.mock('../is-package-used.js');
 
-const getPackageNamesMock = getPackageNames as jest.MockedFunction<typeof getPackageNames>;
-const isPackageUsedMock = isPackageUsed as jest.MockedFunction<typeof isPackageUsed>;
+const getPackageNamesMock = jest.mocked(getPackageNames);
+const isPackageUsedMock = jest.mocked(isPackageUsed);
 
 describe('usage summary', () => {
   beforeEach(() => {

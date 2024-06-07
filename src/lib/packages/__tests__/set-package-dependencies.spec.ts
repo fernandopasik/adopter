@@ -25,7 +25,7 @@ describe('set package dependencies', () => {
       modules: new Set<string>(),
     };
 
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
+    jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
     expect(pkg.dependencies.size).toBe(0);
 
@@ -62,15 +62,13 @@ describe('set package dependencies', () => {
       modules: new Set<string>(),
     };
 
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
-    (
-      filterTrackedDependencies as jest.MockedFunction<typeof filterTrackedDependencies>
-    ).mockReturnValueOnce([
+    jest.mocked(getPackage).mockReturnValueOnce(pkg);
+    jest.mocked(filterTrackedDependencies).mockReturnValueOnce([
       { name: 'dep1', version: '*' },
       { name: 'dep2', version: '*' },
     ]);
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(dep1);
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(dep2);
+    jest.mocked(getPackage).mockReturnValueOnce(dep1);
+    jest.mocked(getPackage).mockReturnValueOnce(dep2);
 
     expect(pkg.dependencies.size).toBe(0);
     expect(pkg.dependencies.has(dep1)).toBe(false);
@@ -93,7 +91,7 @@ describe('set package dependencies', () => {
       modules: new Set<string>(),
     };
 
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
+    jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
     expect(pkg.isInstalled).toBe(false);
 
@@ -112,8 +110,8 @@ describe('set package dependencies', () => {
       modules: new Set<string>(),
     };
 
-    (getPackageJson as jest.MockedFunction<typeof getPackageJson>).mockResolvedValueOnce(null);
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(pkg);
+    jest.mocked(getPackageJson).mockResolvedValueOnce(null);
+    jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
     expect(pkg.isInstalled).toBe(false);
 
@@ -123,7 +121,7 @@ describe('set package dependencies', () => {
   });
 
   it('with non existent package', () => {
-    (getPackage as jest.MockedFunction<typeof getPackage>).mockReturnValueOnce(undefined);
+    jest.mocked(getPackage).mockReturnValueOnce(undefined);
 
     expect(getPackageJson).not.toHaveBeenCalled();
   });

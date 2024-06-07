@@ -14,9 +14,9 @@ jest.mock('../summary.js', () =>
   jest.fn().mockReturnValue({ filesTracked: 0, filesWithImports: 0 }),
 );
 
-const getFilesMock = getFiles as jest.MockedFunction<typeof getFiles>;
-const getTrackedImportsMock = getTrackedImports as jest.MockedFunction<typeof getTrackedImports>;
-const summaryMock = summary as jest.MockedFunction<typeof summary>;
+const getFilesMock = jest.mocked(getFiles);
+const getTrackedImportsMock = jest.mocked(getTrackedImports);
+const summaryMock = jest.mocked(summary);
 
 describe('coverage', () => {
   beforeEach(() => {
