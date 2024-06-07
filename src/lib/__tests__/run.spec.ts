@@ -125,7 +125,7 @@ describe('run', () => {
     const srcMatch = ['*'];
     const ignore = '*.js';
 
-    await run({ packages, srcMatch, srcIgnoreMatch: [ignore] });
+    await run({ packages, srcIgnoreMatch: [ignore], srcMatch });
 
     expect(listFiles).toHaveBeenCalledTimes(1);
     expect(listFiles).toHaveBeenCalledWith([...srcMatch, `!${ignore}`]);
@@ -175,7 +175,7 @@ describe('run', () => {
 
   it('can print coverage report', async () => {
     const spy = jest.spyOn(reports.coverage, 'text');
-    await run({ packages: [], coverage: true });
+    await run({ coverage: true, packages: [] });
 
     expect(spy).toHaveBeenCalledTimes(1);
     spy.mockRestore();

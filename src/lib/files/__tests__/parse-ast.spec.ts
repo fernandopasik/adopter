@@ -3,9 +3,9 @@ import ts from 'typescript';
 import parseAst from '../parse-ast.js';
 
 jest.mock('typescript', () => ({
-  createSourceFile: jest.fn(),
   // eslint-disable-next-line @typescript-eslint/naming-convention
   ScriptTarget: { Latest: 99 },
+  createSourceFile: jest.fn(),
 }));
 
 describe('parse ast', () => {
