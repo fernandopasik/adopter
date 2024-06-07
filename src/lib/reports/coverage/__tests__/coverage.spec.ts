@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { getFiles } from '../../../files/index.js';
 import type { Import } from '../../../imports/index.js';
 import coverage from '../coverage.js';

@@ -1,3 +1,4 @@
+import { describe, expect, it, jest } from '@jest/globals';
 import ts from 'typescript';
 import parseImport from '../parse-import.js';
 

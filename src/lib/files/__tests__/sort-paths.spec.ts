@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import sortPaths from '../sort-paths.js';
 
 describe('sort paths', () => {

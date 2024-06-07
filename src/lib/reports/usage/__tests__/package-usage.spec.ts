@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import type { Import } from '../../../imports/index.js';
 import type { Package } from '../../../packages/index.js';
 import { getPackage, isModuleImported, isPackageImported } from '../../../packages/index.js';

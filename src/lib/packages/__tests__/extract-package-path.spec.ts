@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import extractPackagePath from '../extract-package-path.js';
 
 describe('extract package path', () => {

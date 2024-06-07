@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import analyzePackages from '../analyze-packages.js';
 import { addPackage } from '../packages.js';
 import setPackageDependencies from '../set-package-dependencies.js';

@@ -1,3 +1,4 @@
+import { describe, expect, it, jest } from '@jest/globals';
 import analyzePackages from '../analyze-packages.js';
 import extractPackagePath from '../extract-package-path.js';
 import filterTrackedDependencies from '../filter-tracked-dependencies.js';

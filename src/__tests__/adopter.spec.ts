@@ -1,3 +1,4 @@
+import { describe, expect, it, jest } from '@jest/globals';
 import adopter from '../adopter.js';
 import run from '../lib/run.js';
 

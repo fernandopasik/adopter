@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { isModuleImported, isPackageImported } from '../../../packages/index.js';
 import getTrackedImports from '../get-tracked-imports.js';
 

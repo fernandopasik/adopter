@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import ts from 'typescript';
 import areNamedImports from '../are-named-imports.js';
 

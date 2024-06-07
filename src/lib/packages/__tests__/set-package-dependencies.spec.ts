@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import type { Import } from '../../imports/index.js';
 import filterTrackedDependencies from '../filter-tracked-dependencies.js';
 import getPackageJson from '../get-package-json.js';

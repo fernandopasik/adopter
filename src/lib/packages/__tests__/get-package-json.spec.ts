@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import fs from 'fs';
 import log from 'loglevel';
 import extractPackagePath from '../extract-package-path.js';

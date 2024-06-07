@@ -1,3 +1,4 @@
+import { describe, expect, it, jest } from '@jest/globals';
 import { getFile, getFilePaths, getFiles } from '../files.js';
 import * as imports from '../index.js';
 import listFiles from '../list-files.js';

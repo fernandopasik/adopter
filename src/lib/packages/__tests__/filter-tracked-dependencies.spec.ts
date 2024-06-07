@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import filterTrackedDependencies from '../filter-tracked-dependencies.js';
 
 describe('filter tracked dependencies', () => {

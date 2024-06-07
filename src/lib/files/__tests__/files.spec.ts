@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from '@jest/globals';
 import { addFile, addFileImports, files, getFile, getFilePaths, getFiles } from '../files.js';
 
 describe('files', () => {

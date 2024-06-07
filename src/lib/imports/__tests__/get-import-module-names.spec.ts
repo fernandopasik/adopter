@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import getImportModuleNames from '../get-import-module-names.js';
 
 describe('get import module names', () => {

@@ -1,3 +1,4 @@
+import { describe, expect, it, jest } from '@jest/globals';
 import json from '../coverage.js';
 import * as coverage from '../index.js';
 import text from '../text.js';

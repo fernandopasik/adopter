@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import coverage from '../coverage.js';
 import text from '../text.js';
 

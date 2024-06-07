@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import fs from 'fs';
 import type ts from 'typescript';
 import type { Import } from '../../imports/index.js';

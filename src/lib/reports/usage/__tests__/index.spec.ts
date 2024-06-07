@@ -1,3 +1,4 @@
+import { describe, expect, it, jest } from '@jest/globals';
 import * as usage from '../index.js';
 import text from '../text.js';
 import json from '../usage.js';
