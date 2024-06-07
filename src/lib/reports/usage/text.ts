@@ -34,8 +34,8 @@ const packageTemplate = (pkg: PackageUsage): string => chalkTemplate`
 Package              : {bold ${highlightPackage(pkg)}}
 {dim is Imported          :} ${pkg.isImported ? 'yes' : 'no'}
 {dim is Used              :} ${pkg.isUsed ? 'yes' : 'no'}
-{dim Dependencies Tracked :} ${list(pkg.dependencies.map((p) => highlightPackage(p)))}
-{dim Dependents Tracked   :} ${list(pkg.dependents.map((p) => highlightPackage(p)))}
+{dim Dependencies Tracked :} ${list(pkg.dependencies.map((dependency) => highlightPackage(dependency)))}
+{dim Dependents Tracked   :} ${list(pkg.dependents.map((dependent) => highlightPackage(dependent)))}
 {dim Modules Imported     :} ${list(pkg.modulesImported)}
 {dim Modules not Imported :} ${list(pkg.modulesNotImported)}
 `;
