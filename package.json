@@ -82,6 +82,5 @@
     "prettier-plugin-sh": "^0.14.0",
     "ts-jest": "^29.1.4",
     "type-fest": "^4.20.0"
-  },
-  "sideEffects": false
+  }
 }
