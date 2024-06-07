@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import fs from 'fs';
 import type ts from 'typescript';
-import type { Import } from '../../imports/index.js';
-import { parseImports } from '../../imports/index.js';
+import { parseImports, type Import } from '../../imports/index.js';
 import { addFile, addFileImports } from '../files.js';
 import parseAst from '../parse-ast.js';
 import processFiles from '../process-files.js';

@@ -2,8 +2,7 @@ import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import type { Import } from '../../imports/index.js';
 import filterTrackedDependencies from '../filter-tracked-dependencies.js';
 import getPackageJson from '../get-package-json.js';
-import type { Package } from '../packages.js';
-import { getPackage } from '../packages.js';
+import { getPackage, type Package } from '../packages.js';
 import setPackageDependencies from '../set-package-dependencies.js';
 
 jest.mock('../get-package-json.js', () => jest.fn(async () => Promise.resolve({})));

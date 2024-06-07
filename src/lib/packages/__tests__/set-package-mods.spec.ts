@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import type { Import } from '../../imports/index.js';
 import getPackageModules from '../get-package-mods.js';
-import type { Package } from '../packages.js';
-import { getPackage } from '../packages.js';
+import { getPackage, type Package } from '../packages.js';
 import setPackageMods from '../set-package-mods.js';
 
 jest.mock('../get-package-mods.js', () => jest.fn(async () => Promise.resolve([])));

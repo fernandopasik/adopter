@@ -1,5 +1,9 @@
-import type { Package } from '../../packages/index.js';
-import { getPackage, isModuleImported, isPackageImported } from '../../packages/index.js';
+import {
+  getPackage,
+  isModuleImported,
+  isPackageImported,
+  type Package,
+} from '../../packages/index.js';
 import isPackageUsed from './is-package-used.js';
 
 export interface PackageUsed {

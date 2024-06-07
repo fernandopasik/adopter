@@ -1,6 +1,5 @@
 import ts from 'typescript';
-import type { Import } from './imports.js';
-import { addImport } from './imports.js';
+import { addImport, type Import } from './imports.js';
 import parseImport from './parse-import.js';
 
 const parseImports = (source: ts.SourceFile, filePath: string): Import[] => {

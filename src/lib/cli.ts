@@ -1,5 +1,4 @@
-import type { Options } from 'yargs';
-import yargs from 'yargs';
+import yargs, { type Options } from 'yargs';
 import run from './run.js';
 
 const MAX_FORMAT_WIDTH = 120;
