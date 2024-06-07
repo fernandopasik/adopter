@@ -3,8 +3,8 @@ import isPackageUsed from './is-package-used.js';
 
 export interface UsageSummary {
   packagesTracked: number;
-  packagesUsed: number;
   packagesUsage: number;
+  packagesUsed: number;
 }
 
 const summary = (): UsageSummary => {
@@ -13,7 +13,7 @@ const summary = (): UsageSummary => {
   const { length: packagesUsed } = packageNames.filter((packageName) => isPackageUsed(packageName));
   const packagesUsage = packagesTracked === 0 ? 0 : packagesUsed / packagesTracked;
 
-  return { packagesTracked, packagesUsed, packagesUsage };
+  return { packagesTracked, packagesUsage, packagesUsed };
 };
 
 export default summary;
