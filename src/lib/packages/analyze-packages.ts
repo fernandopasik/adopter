@@ -6,7 +6,7 @@ import setPackageDependencies from './set-package-dependencies.js';
 import setPackageMods from './set-package-mods.js';
 
 const analyzePackages = async (packageList: string[]): Promise<void> => {
-  const sortedList = [...packageList].sort((a, b) => a.localeCompare(b));
+  const sortedList = [...packageList].sort((first, second) => first.localeCompare(second));
 
   const progressBar = new ProgressBar(`Analyzing packages [${chalk.blue(':bar')}] :percent`, {
     complete: '=',
