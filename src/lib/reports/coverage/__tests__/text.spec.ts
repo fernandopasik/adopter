@@ -19,16 +19,6 @@ describe('usage text report', () => {
     filesWithImports: 1,
   };
 
-  // const pkg = {
-  //   name: 'example',
-  //   isImported: false,
-  //   isUsed: false,
-  //   dependents: [],
-  //   dependencies: [],
-  //   modulesImported: [],
-  //   modulesNotImported: [],
-  // };
-
   it('displays a title', () => {
     coverageMock.mockReturnValueOnce({ summary, files: [] });
 
