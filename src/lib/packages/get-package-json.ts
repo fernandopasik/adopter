@@ -13,7 +13,7 @@ const getPackageJson = async (packageName: string): Promise<PackageJson | null> 
       // eslint-disable-next-line security/detect-non-literal-fs-filename
       return JSON.parse(readFileSync(packageJsonPath).toString()) as PackageJson;
     })
-    .catch((error) => {
+    .catch((error: unknown) => {
       const { message } = error as { message: string };
       log.warn(chalk.yellow(message));
       return null;

@@ -8,7 +8,7 @@ const getPackageModules = async (packageName: string): Promise<string[] | null> 
     .then((pkg: Record<string, unknown>) =>
       Object.keys(pkg).filter((pkgName) => pkgName !== '__esModule'),
     )
-    .catch((error) => {
+    .catch((error: unknown) => {
       const { message } = error as { message: string };
       log.warn(chalk.yellow(message));
       return null;
