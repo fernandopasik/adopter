@@ -25,7 +25,7 @@ describe('get package modules', () => {
   });
 
   it('with a non installed module', async () => {
-    const spy = jest.spyOn(log, 'warn').mockImplementation();
+    const spy = jest.spyOn(log, 'warn').mockImplementation(jest.fn());
     const packageName = 'typescriptzzz';
 
     const exports = await getPackageModules(packageName);

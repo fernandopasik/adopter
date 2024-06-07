@@ -64,7 +64,7 @@ describe('get package.json', () => {
   });
 
   it('with a non installed module', async () => {
-    const spy = jest.spyOn(log, 'warn').mockImplementation();
+    const spy = jest.spyOn(log, 'warn').mockImplementation(jest.fn());
     const errorMessage = 'Cannot find module';
     jest.mocked(resolvePackage).mockRejectedValueOnce({ message: errorMessage });
 
