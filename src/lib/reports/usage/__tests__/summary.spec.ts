@@ -19,8 +19,8 @@ describe('usage summary', () => {
   it('empty', () => {
     expect(summary()).toStrictEqual({
       packagesTracked: 0,
-      packagesUsed: 0,
       packagesUsage: 0,
+      packagesUsed: 0,
     });
   });
 

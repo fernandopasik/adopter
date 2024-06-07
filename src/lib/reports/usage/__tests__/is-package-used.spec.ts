@@ -14,12 +14,12 @@ describe('is package used', () => {
   });
 
   const pkg = {
-    name: 'example',
-    isInstalled: true,
-    dependents: new Set<Package>(),
     dependencies: new Set<Package>(),
+    dependents: new Set<Package>(),
     imports: new Set<Import>(),
+    isInstalled: true,
     modules: new Set<string>(),
+    name: 'example',
   };
 
   const pkg2 = {

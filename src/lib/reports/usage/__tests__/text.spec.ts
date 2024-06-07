@@ -16,28 +16,28 @@ describe('usage text report', () => {
 
   const summary = {
     packagesTracked: 5,
-    packagesUsed: 2,
     packagesUsage: 0.4,
+    packagesUsed: 2,
   };
 
   const pkg = {
-    name: 'example',
+    dependencies: [],
+    dependents: [],
     isImported: false,
     isUsed: false,
-    dependents: [],
-    dependencies: [],
     modulesImported: [],
     modulesNotImported: [],
+    name: 'example',
   };
 
   it('displays a title', () => {
-    usageMock.mockReturnValueOnce({ summary, packages: [] });
+    usageMock.mockReturnValueOnce({ packages: [], summary });
 
     expect(text()).toContain('Package and Modules Usage');
   });
 
   it('displays a sumary', () => {
-    usageMock.mockReturnValueOnce({ summary, packages: [] });
+    usageMock.mockReturnValueOnce({ packages: [], summary });
 
     const usageText = text();
 
@@ -48,12 +48,12 @@ describe('usage text report', () => {
 
   it('displays packages', () => {
     usageMock.mockReturnValueOnce({
-      summary,
       packages: [
         { ...pkg, name: 'example1' },
         { ...pkg, name: 'example2' },
         { ...pkg, name: 'example3' },
       ],
+      summary,
     });
 
     const usageText = text();
@@ -65,12 +65,12 @@ describe('usage text report', () => {
 
   it('displays used and imported packages', () => {
     usageMock.mockReturnValueOnce({
-      summary,
       packages: [
-        { ...pkg, name: 'example1', isImported: true, isUsed: true },
-        { ...pkg, name: 'example2', isImported: false, isUsed: true },
-        { ...pkg, name: 'example3', isImported: false, isUsed: false },
+        { ...pkg, isImported: true, isUsed: true, name: 'example1' },
+        { ...pkg, isImported: false, isUsed: true, name: 'example2' },
+        { ...pkg, isImported: false, isUsed: false, name: 'example3' },
       ],
+      summary,
     });
 
     const usageText = text();
@@ -88,15 +88,15 @@ describe('usage text report', () => {
 
   it('displays package modules', () => {
     usageMock.mockReturnValueOnce({
-      summary,
       packages: [
         {
           ...pkg,
-          name: 'example1',
           modulesImported: ['example2', 'example3'],
           modulesNotImported: ['example4'],
+          name: 'example1',
         },
       ],
+      summary,
     });
 
     const usageText = text();
@@ -107,18 +107,18 @@ describe('usage text report', () => {
 
   it('displays dependents and dependencies', () => {
     usageMock.mockReturnValueOnce({
-      summary,
       packages: [
         {
           ...pkg,
-          name: 'example1',
           dependencies: [
             { ...pkg, name: 'example2' },
             { ...pkg, name: 'example3' },
           ],
           dependents: [{ ...pkg, name: 'example4' }],
+          name: 'example1',
         },
       ],
+      summary,
     });
 
     const usageText = text();

@@ -25,8 +25,8 @@ describe('usage', () => {
   it('has a summary', () => {
     const sum = {
       packagesTracked: 5,
-      packagesUsed: 2,
       packagesUsage: 0.4,
+      packagesUsed: 2,
     };
 
     summaryMock.mockReturnValueOnce(sum);
@@ -37,13 +37,13 @@ describe('usage', () => {
 
   it('has packages', () => {
     const pkgUsage = {
-      name: 'example',
+      dependencies: [],
+      dependents: [],
       isImported: false,
       isUsed: false,
-      dependents: [],
-      dependencies: [],
       modulesImported: [],
       modulesNotImported: [],
+      name: 'example',
     };
 
     getPackageNamesMock.mockReturnValueOnce(['example1', 'example2', 'example3']);
