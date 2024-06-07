@@ -13,12 +13,12 @@ export const packages = new Map<string, Package>();
 
 export const addPackage = (name: string): void => {
   packages.set(name, {
-    name,
-    isInstalled: false,
-    dependents: new Set(),
     dependencies: new Set(),
+    dependents: new Set(),
     imports: new Set(),
+    isInstalled: false,
     modules: new Set(),
+    name,
   });
 };
 
