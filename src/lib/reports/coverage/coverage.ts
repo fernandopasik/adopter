@@ -13,11 +13,11 @@ export interface Coverage {
 }
 
 const coverage = (): Coverage => ({
-  summary: summary(),
   files: getFiles().map(({ filePath, imports }: File) => ({
     filePath,
     trackedImports: getTrackedImports(Array.from(imports)),
   })),
+  summary: summary(),
 });
 
 export default coverage;

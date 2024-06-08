@@ -11,10 +11,10 @@ const filterTrackedImports = (imports: Import[]): Import[] =>
 
 const getTrackedImports = (imports: Import[] = []): TrackedImport[] =>
   filterTrackedImports(imports).map(({ packageName, moduleNames }: Import) => ({
-    packageName,
     moduleNames: moduleNames.filter(
       (moduleName) => packageName !== null && isModuleImported(moduleName, packageName),
     ),
+    packageName,
   })) as TrackedImport[];
 
 export default getTrackedImports;
