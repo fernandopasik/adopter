@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/namespace, import/default
 import chalk from 'chalk';
 import chalkTemplate from 'chalk-template';
 import type { PackageUsage, PackageUsed } from './package-usage.js';
