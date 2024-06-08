@@ -10,15 +10,15 @@ const parseImport = (statement: ts.ImportDeclaration, filePath: string): Import 
   const { text: defaultName } = statement.importClause?.name ?? {};
   const { namedBindings } = statement.importClause ?? {};
 
-  const named: Record<string, string> | undefined = !areNamedImports(namedBindings)
-    ? undefined
-    : Array.from(namedBindings.elements).reduce(
+  const named: Record<string, string> | undefined = areNamedImports(namedBindings)
+    ? Array.from(namedBindings.elements).reduce(
         (acc, namedImport: ts.ImportSpecifier) => ({
           ...acc,
           [namedImport.propertyName?.text ?? namedImport.name.text]: namedImport.name.text,
         }),
         {},
-      );
+      )
+    : undefined;
 
   const moduleNames = getImportModuleNames(defaultName, named);
 
