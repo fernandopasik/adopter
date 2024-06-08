@@ -16,12 +16,12 @@ describe('set package dependencies', () => {
 
   it('with none', async () => {
     const pkg = {
-      name: 'example',
-      isInstalled: false,
-      dependents: new Set<Package>(),
       dependencies: new Set<Package>(),
+      dependents: new Set<Package>(),
       imports: new Set<Import>(),
+      isInstalled: false,
       modules: new Set<string>(),
+      name: 'example',
     };
 
     jest.mocked(getPackage).mockReturnValueOnce(pkg);
@@ -35,30 +35,30 @@ describe('set package dependencies', () => {
 
   it('with multiple', async () => {
     const pkg = {
-      name: 'example',
-      isInstalled: false,
-      dependents: new Set<Package>(),
       dependencies: new Set<Package>(),
+      dependents: new Set<Package>(),
       imports: new Set<Import>(),
+      isInstalled: false,
       modules: new Set<string>(),
+      name: 'example',
     };
 
     const dep1 = {
-      name: 'example1',
-      isInstalled: false,
-      dependents: new Set<Package>(),
       dependencies: new Set<Package>(),
+      dependents: new Set<Package>(),
       imports: new Set<Import>(),
+      isInstalled: false,
       modules: new Set<string>(),
+      name: 'example1',
     };
 
     const dep2 = {
-      name: 'example1',
-      isInstalled: false,
-      dependents: new Set<Package>(),
       dependencies: new Set<Package>(),
+      dependents: new Set<Package>(),
       imports: new Set<Import>(),
+      isInstalled: false,
       modules: new Set<string>(),
+      name: 'example1',
     };
 
     jest.mocked(getPackage).mockReturnValueOnce(pkg);
@@ -82,12 +82,12 @@ describe('set package dependencies', () => {
 
   it('sets installed true', async () => {
     const pkg = {
-      name: 'example',
-      isInstalled: false,
-      dependents: new Set<Package>(),
       dependencies: new Set<Package>(),
+      dependents: new Set<Package>(),
       imports: new Set<Import>(),
+      isInstalled: false,
       modules: new Set<string>(),
+      name: 'example',
     };
 
     jest.mocked(getPackage).mockReturnValueOnce(pkg);
@@ -101,12 +101,12 @@ describe('set package dependencies', () => {
 
   it('handles an uninstalled package', async () => {
     const pkg = {
-      name: 'example',
-      isInstalled: false,
-      dependents: new Set<Package>(),
       dependencies: new Set<Package>(),
+      dependents: new Set<Package>(),
       imports: new Set<Import>(),
+      isInstalled: false,
       modules: new Set<string>(),
+      name: 'example',
     };
 
     jest.mocked(getPackageJson).mockResolvedValueOnce(null);

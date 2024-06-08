@@ -3,11 +3,11 @@ import filterTrackedDependencies from '../filter-tracked-dependencies.js';
 
 describe('filter tracked dependencies', () => {
   const packageJson = {
-    name: 'dep',
     dependencies: {
       dep1: '*',
       dep2: '*',
     },
+    name: 'dep',
     peerDependencies: {
       dep3: '*',
       dep4: '*',

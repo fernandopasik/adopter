@@ -52,12 +52,12 @@ describe('packages', () => {
     addPackage('example');
 
     expect(getPackage('example')).toStrictEqual({
-      name: 'example',
-      isInstalled: false,
-      dependents: new Set(),
       dependencies: new Set(),
+      dependents: new Set(),
       imports: new Set(),
+      isInstalled: false,
       modules: new Set(),
+      name: 'example',
     });
   });
 
