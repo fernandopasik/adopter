@@ -7,7 +7,7 @@ const setPackageMods = async (name: string): Promise<void> => {
   if (typeof pkg !== 'undefined') {
     const moduleNames = await getPackageModules(name);
 
-    if (moduleNames !== null) {
+    if (moduleNames !== null && typeof pkg !== 'undefined') {
       pkg.isInstalled = true;
 
       moduleNames.forEach((moduleName) => {

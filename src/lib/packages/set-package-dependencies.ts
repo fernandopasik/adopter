@@ -9,7 +9,7 @@ const setPackageDependencies = async (name: string): Promise<void> => {
     const packageJson = await getPackageJson(name);
     const packageList = Array.from(getPackageNames());
 
-    if (packageJson !== null) {
+    if (packageJson !== null && typeof pkg !== 'undefined') {
       pkg.isInstalled = true;
       const dependencies = filterTrackedDependencies(packageJson, packageList);
 
