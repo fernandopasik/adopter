@@ -4,7 +4,7 @@ import ts from 'typescript';
 const parseAst = (filename: string, content: string): ts.SourceFile | undefined => {
   const extension = path.extname(filename);
 
-  return /.[jt]sx?/.test(extension)
+  return /.[jt]sx?/u.test(extension)
     ? ts.createSourceFile(filename, content, ts.ScriptTarget.Latest)
     : undefined;
 };
