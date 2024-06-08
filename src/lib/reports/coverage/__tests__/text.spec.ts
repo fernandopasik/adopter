@@ -20,13 +20,13 @@ describe('usage text report', () => {
   };
 
   it('displays a title', () => {
-    coverageMock.mockReturnValueOnce({ summary, files: [] });
+    coverageMock.mockReturnValueOnce({ files: [], summary });
 
     expect(text()).toContain('Imported Packages and Modules Coverage');
   });
 
   it('displays a sumary', () => {
-    coverageMock.mockReturnValueOnce({ summary, files: [] });
+    coverageMock.mockReturnValueOnce({ files: [], summary });
 
     const usageText = text();
 
@@ -40,7 +40,7 @@ describe('usage text report', () => {
       { filePath: 'src/example2.ts', trackedImports: [] },
       { filePath: 'src/example3.ts', trackedImports: [] },
     ];
-    coverageMock.mockReturnValueOnce({ summary, files });
+    coverageMock.mockReturnValueOnce({ files, summary });
 
     const usageText = text();
 
@@ -51,8 +51,8 @@ describe('usage text report', () => {
 
   it('displays files with tracked packages', () => {
     const trackedImports = [
-      { packageName: 'dep1', moduleNames: ['default', 'methodA'] },
-      { packageName: 'dep2', moduleNames: ['default'] },
+      { moduleNames: ['default', 'methodA'], packageName: 'dep1' },
+      { moduleNames: ['default'], packageName: 'dep2' },
     ];
     const files = [
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -60,7 +60,7 @@ describe('usage text report', () => {
       { filePath: 'src/example2.ts', trackedImports },
       { filePath: 'src/example3.ts', trackedImports: [] },
     ];
-    coverageMock.mockReturnValueOnce({ summary, files });
+    coverageMock.mockReturnValueOnce({ files, summary });
 
     const usageText = text();
 

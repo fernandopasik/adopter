@@ -72,9 +72,9 @@ describe('get tracked imports', () => {
     const trackedImports = getTrackedImports(imports);
 
     expect(trackedImports).toStrictEqual([
-      { packageName: 'dep1', moduleNames: [] },
-      { packageName: 'dep2', moduleNames: [] },
-      { packageName: 'dep3', moduleNames: [] },
+      { moduleNames: [], packageName: 'dep1' },
+      { moduleNames: [], packageName: 'dep2' },
+      { moduleNames: [], packageName: 'dep3' },
     ]);
   });
 
@@ -85,9 +85,9 @@ describe('get tracked imports', () => {
     const trackedImports = getTrackedImports(imports);
 
     expect(trackedImports).toStrictEqual([
-      { packageName: 'dep1', moduleNames: ['default'] },
-      { packageName: 'dep2', moduleNames: ['methodA', 'methodB'] },
-      { packageName: 'dep3', moduleNames: ['default', 'methodA'] },
+      { moduleNames: ['default'], packageName: 'dep1' },
+      { moduleNames: ['methodA', 'methodB'], packageName: 'dep2' },
+      { moduleNames: ['default', 'methodA'], packageName: 'dep3' },
     ]);
   });
 
@@ -103,9 +103,9 @@ describe('get tracked imports', () => {
     const trackedImports = getTrackedImports(imports);
 
     expect(trackedImports).toStrictEqual([
-      { packageName: 'dep1', moduleNames: ['default'] },
-      { packageName: 'dep2', moduleNames: ['methodB'] },
-      { packageName: 'dep3', moduleNames: ['methodA'] },
+      { moduleNames: ['default'], packageName: 'dep1' },
+      { moduleNames: ['methodB'], packageName: 'dep2' },
+      { moduleNames: ['methodA'], packageName: 'dep3' },
     ]);
   });
 });
