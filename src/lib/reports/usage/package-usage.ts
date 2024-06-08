@@ -7,23 +7,23 @@ import {
 import isPackageUsed from './is-package-used.js';
 
 export interface PackageUsed {
-  name: string;
   isImported: boolean;
   isUsed: boolean;
+  name: string;
 }
 
 export interface PackageUsage extends PackageUsed {
-  dependents: PackageUsed[];
   dependencies: PackageUsed[];
+  dependents: PackageUsed[];
   modulesImported: string[];
   modulesNotImported: string[];
 }
 
 const listPackages = (pkgs: Set<Package>): PackageUsed[] =>
   Array.from(pkgs).map(({ name }: { name: string }) => ({
-    name,
     isImported: isPackageImported(name),
     isUsed: isPackageUsed(name),
+    name,
   }));
 
 const filterUsedModules = (modules: Set<string>, packageName: string, isUsed = true): string[] =>
@@ -37,13 +37,13 @@ const packageUsage = (name: string): PackageUsage => {
   } = getPackage(name) ?? {};
 
   return {
-    name,
+    dependencies: listPackages(dependencies),
+    dependents: listPackages(dependents),
     isImported: isPackageImported(name),
     isUsed: isPackageUsed(name),
-    dependents: listPackages(dependents),
-    dependencies: listPackages(dependencies),
     modulesImported: filterUsedModules(modules, name),
     modulesNotImported: filterUsedModules(modules, name, false),
+    name,
   };
 };
 
