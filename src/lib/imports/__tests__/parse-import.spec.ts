@@ -12,12 +12,12 @@ describe('parse import', () => {
     } = ts.createSourceFile(filePath, 'import "./dep.ts"', ts.ScriptTarget.Latest);
 
     expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
-      filePath,
-      moduleSpecifier: './dep.ts',
-      packageName: null,
       defaultName: undefined,
-      named: undefined,
+      filePath,
       moduleNames: [],
+      moduleSpecifier: './dep.ts',
+      named: undefined,
+      packageName: null,
     });
   });
 
@@ -28,12 +28,12 @@ describe('parse import', () => {
     } = ts.createSourceFile(filePath, 'import dep from "./dep.ts"', ts.ScriptTarget.Latest);
 
     expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
-      filePath,
-      moduleSpecifier: './dep.ts',
-      packageName: null,
       defaultName: 'dep',
-      named: undefined,
+      filePath,
       moduleNames: ['default'],
+      moduleSpecifier: './dep.ts',
+      named: undefined,
+      packageName: null,
     });
   });
 
@@ -44,12 +44,12 @@ describe('parse import', () => {
     } = ts.createSourceFile(filePath, 'import { dep } from "./dep.ts"', ts.ScriptTarget.Latest);
 
     expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
-      filePath,
-      moduleSpecifier: './dep.ts',
-      packageName: null,
       defaultName: undefined,
-      named: { dep: 'dep' },
+      filePath,
       moduleNames: ['dep'],
+      moduleSpecifier: './dep.ts',
+      named: { dep: 'dep' },
+      packageName: null,
     });
   });
 
@@ -64,12 +64,12 @@ describe('parse import', () => {
     );
 
     expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
-      filePath,
-      moduleSpecifier: './dep.ts',
-      packageName: null,
       defaultName: undefined,
-      named: { dep1: 'dep1', dep2: 'dep2' },
+      filePath,
       moduleNames: ['dep1', 'dep2'],
+      moduleSpecifier: './dep.ts',
+      named: { dep1: 'dep1', dep2: 'dep2' },
+      packageName: null,
     });
   });
 
@@ -84,12 +84,12 @@ describe('parse import', () => {
     );
 
     expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
-      filePath,
-      moduleSpecifier: './dep.ts',
-      packageName: null,
       defaultName: undefined,
-      named: { dep1: 'dep3', dep2: 'dep2' },
+      filePath,
       moduleNames: ['dep1', 'dep2'],
+      moduleSpecifier: './dep.ts',
+      named: { dep1: 'dep3', dep2: 'dep2' },
+      packageName: null,
     });
   });
 
@@ -104,12 +104,12 @@ describe('parse import', () => {
     );
 
     expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
-      filePath,
-      moduleSpecifier: './dep.ts',
-      packageName: null,
       defaultName: 'dep',
-      named: { dep1: 'dep1', dep2: 'dep2' },
+      filePath,
       moduleNames: ['default', 'dep1', 'dep2'],
+      moduleSpecifier: './dep.ts',
+      named: { dep1: 'dep1', dep2: 'dep2' },
+      packageName: null,
     });
   });
 
@@ -124,12 +124,12 @@ describe('parse import', () => {
     );
 
     expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
-      filePath,
-      moduleSpecifier: './dep.ts',
-      packageName: null,
       defaultName: 'dep',
-      named: { dep1: 'dep1', dep2: 'dep3' },
+      filePath,
       moduleNames: ['default', 'dep1', 'dep2'],
+      moduleSpecifier: './dep.ts',
+      named: { dep1: 'dep1', dep2: 'dep3' },
+      packageName: null,
     });
   });
 
@@ -144,15 +144,15 @@ describe('parse import', () => {
     );
 
     expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
-      filePath,
-      moduleSpecifier: './dep.ts',
-      packageName: null,
       defaultName: undefined,
+      filePath,
+      moduleNames: ['Dep'],
+      moduleSpecifier: './dep.ts',
       named: {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         Dep: 'Dep',
       },
-      moduleNames: ['Dep'],
+      packageName: null,
     });
   });
 });
