@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/namespace, import/default
 import chalk from 'chalk';
 import log from 'loglevel';
 import resolvePackage from './resolve-package.js';

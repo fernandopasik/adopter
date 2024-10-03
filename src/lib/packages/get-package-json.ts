@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/namespace, import/default
 import chalk from 'chalk';
 import { readFileSync } from 'fs';
 import log from 'loglevel';

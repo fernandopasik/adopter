@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-// eslint-disable-next-line import/namespace, import/default
+
 import chalk from 'chalk';
 import log from 'loglevel';
 import path from 'path';
