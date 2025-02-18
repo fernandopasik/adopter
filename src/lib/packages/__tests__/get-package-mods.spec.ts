@@ -44,7 +44,7 @@ describe('get package modules', () => {
 
     const exports = await getPackageModules('typescript');
 
-    expect(exports).toStrictEqual(['default']);
+    expect(exports).toStrictEqual(['length', 'name', 'default']);
   });
 
   it('with a default and named exports', async () => {
