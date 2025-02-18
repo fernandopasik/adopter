@@ -8,6 +8,7 @@ import parseAst from './parse-ast.js';
 
 const processFiles = (
   filePaths: string[] = [],
+  // eslint-disable-next-line @typescript-eslint/max-params
   callback?: (
     filePath: string,
     filename: string,

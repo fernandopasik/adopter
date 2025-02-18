@@ -12,6 +12,7 @@ import { coverage, print, usage } from './reports/index.js';
 
 export interface Options {
   coverage?: boolean;
+  // eslint-disable-next-line @typescript-eslint/max-params
   onFile?: (
     filePath: string,
     filename: string,
