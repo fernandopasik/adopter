@@ -8,9 +8,7 @@ import processFiles from '../process-files.js';
 
 jest.mock('fs');
 jest.mock('../parse-ast.js', () => jest.fn());
-jest.mock('../../imports/index.js', () => ({
-  parseImports: jest.fn(),
-}));
+jest.mock('../../imports/index.js', () => ({ parseImports: jest.fn() }));
 jest.mock('../files.js');
 
 describe('process files', () => {
