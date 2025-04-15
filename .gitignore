@@ -27,6 +27,6 @@ yarn.lock
 /coverage
 
 # build and temp folders
+/adopter.*
 /bin
 /lib
-/adopter.*
