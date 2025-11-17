@@ -48,7 +48,7 @@
     "chalk": "^5.4.1",
     "chalk-template": "^1.1.0",
     "execa": "^9.5.2",
-    "globby": "^15.0.0",
+    "globby": "^16.0.0",
     "loglevel": "^1.9.2",
     "progress": "^2.0.3",
     "typescript": "^5.8.3",
