@@ -51,6 +51,7 @@ export default ts.config(
     rules: {
       '@typescript-eslint/no-floating-promises': 'off',
       '@typescript-eslint/no-magic-numbers': 'off',
+      '@typescript-eslint/strict-void-return': 'off',
       'max-lines': 'off',
       'max-lines-per-function': 'off',
     },
