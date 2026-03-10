@@ -17,7 +17,11 @@ describe('process files', () => {
   });
 
   it('reads reads from provided list', () => {
-    const files = ['example1.js', 'folder/example2.js', '/another/example3.ts'];
+    const files: [string, string, string] = [
+      'example1.js',
+      'folder/example2.js',
+      '/another/example3.ts',
+    ];
     const spy = jest.spyOn(fs, 'readFileSync');
 
     processFiles(files);
@@ -135,7 +139,7 @@ describe('process files', () => {
     });
 
     it('with file imports', () => {
-      const files = ['example1.js', 'example2.js'];
+      const files: [string, string] = ['example1.js', 'example2.js'];
       const asts = [{ fileName: files[0] }, { fileName: files[1] }];
       const imports: Import[] = [
         {
@@ -162,7 +166,7 @@ describe('process files', () => {
     });
 
     it('add file and file imports', () => {
-      const files = ['example1.js', 'example2.js'];
+      const files: [string, string] = ['example1.js', 'example2.js'];
       const asts = [{ fileName: files[0] }, { fileName: files[1] }];
       const imports: Import[] = [
         {
