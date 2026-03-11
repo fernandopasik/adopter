@@ -1,11 +1,11 @@
 import path from 'path';
-import ts from 'typescript';
+import { createSourceFile, ScriptTarget, type SourceFile } from 'typescript';
 
-const parseAst = (filename: string, content: string): ts.SourceFile | undefined => {
+const parseAst = (filename: string, content: string): SourceFile | undefined => {
   const extension = path.extname(filename);
 
   return /.[jt]sx?/u.test(extension)
-    ? ts.createSourceFile(filename, content, ts.ScriptTarget.Latest)
+    ? createSourceFile(filename, content, ScriptTarget.Latest)
     : undefined;
 };
 

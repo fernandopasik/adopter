@@ -1,5 +1,5 @@
 import { describe, expect, it, jest } from '@jest/globals';
-import ts from 'typescript';
+import ts, { ScriptTarget, type SourceFile } from 'typescript';
 import parseAst from './parse-ast.js';
 
 jest.mock('typescript', () => ({
@@ -18,7 +18,7 @@ describe('parse ast', () => {
     parseAst(fileName, content);
 
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(fileName, content, ts.ScriptTarget.Latest);
+    expect(spy).toHaveBeenCalledWith(fileName, content, ScriptTarget.Latest);
 
     spy.mockRestore();
   });
@@ -28,7 +28,7 @@ describe('parse ast', () => {
     const content = 'console.log(true)';
     const ast = { fileName };
 
-    const spy = jest.spyOn(ts, 'createSourceFile').mockReturnValueOnce(ast as ts.SourceFile);
+    const spy = jest.spyOn(ts, 'createSourceFile').mockReturnValueOnce(ast as SourceFile);
 
     const result = parseAst(fileName, content);
 

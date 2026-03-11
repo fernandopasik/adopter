@@ -1,8 +1,8 @@
-import ts from 'typescript';
+import { isNamedImports, type NamedImportBindings, type NamedImports } from 'typescript';
 
 export const areNamedImports = (
-  namedBindings?: ts.NamedImportBindings,
-): namedBindings is ts.NamedImports =>
-  typeof namedBindings !== 'undefined' && ts.isNamedImports(namedBindings);
+  namedBindings?: NamedImportBindings,
+): namedBindings is NamedImports =>
+  typeof namedBindings !== 'undefined' && isNamedImports(namedBindings);
 
 export default areNamedImports;

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import ts from 'typescript';
+import { createSourceFile, ScriptTarget } from 'typescript';
 import { addImport } from './imports.js';
 import parseImports from './parse-imports.js';
 
@@ -13,10 +13,10 @@ describe('parse imports', () => {
 
   it('with default imports', () => {
     const filePath = 'example.ts';
-    const source = ts.createSourceFile(
+    const source = createSourceFile(
       filePath,
       'import dep1 from "dep1"; import dep2 from "dep2";',
-      ts.ScriptTarget.Latest,
+      ScriptTarget.Latest,
     );
 
     const imports = parseImports(source, filePath);
@@ -28,10 +28,10 @@ describe('parse imports', () => {
 
   it('with default and named imports', () => {
     const filePath = 'example.ts';
-    const source = ts.createSourceFile(
+    const source = createSourceFile(
       filePath,
       'import dep1 from "dep1"; import { moduleA, moduleB } from "dep2";',
-      ts.ScriptTarget.Latest,
+      ScriptTarget.Latest,
     );
 
     const imports = parseImports(source, filePath);
@@ -45,10 +45,10 @@ describe('parse imports', () => {
 
   it('with unnamed, default and named imports with alias', () => {
     const filePath = 'example.ts';
-    const source = ts.createSourceFile(
+    const source = createSourceFile(
       filePath,
       'import dep1 from "dep1"; import { moduleA, moduleB as aliasB } from "dep2"; import "dep5"',
-      ts.ScriptTarget.Latest,
+      ScriptTarget.Latest,
     );
 
     const imports = parseImports(source, filePath);
@@ -66,10 +66,10 @@ describe('parse imports', () => {
 
   it('with imports and non imports', () => {
     const filePath = 'example.ts';
-    const source = ts.createSourceFile(
+    const source = createSourceFile(
       filePath,
       'import dep1 from "dep1"; import { moduleA } from "dep2"; console.log(true)',
-      ts.ScriptTarget.Latest,
+      ScriptTarget.Latest,
     );
 
     const imports = parseImports(source, filePath);
@@ -81,10 +81,10 @@ describe('parse imports', () => {
 
   it('with module imports and type imports', () => {
     const filePath = 'example.ts';
-    const source = ts.createSourceFile(
+    const source = createSourceFile(
       filePath,
       'import dep1 from "dep1"; import type { Dep2 } from "dep2"; console.log(true)',
-      ts.ScriptTarget.Latest,
+      ScriptTarget.Latest,
     );
 
     const imports = parseImports(source, filePath);
@@ -96,10 +96,10 @@ describe('parse imports', () => {
 
   it('with relative imports', () => {
     const filePath = 'example.ts';
-    const source = ts.createSourceFile(
+    const source = createSourceFile(
       filePath,
       'import dep1 from "dep1"; import dep2 from "./dep2/example.ts"',
-      ts.ScriptTarget.Latest,
+      ScriptTarget.Latest,
     );
 
     const imports = parseImports(source, filePath);
@@ -115,10 +115,10 @@ describe('parse imports', () => {
 
   it('with internal files in package imports', () => {
     const filePath = 'example.ts';
-    const source = ts.createSourceFile(
+    const source = createSourceFile(
       filePath,
       'import dep1 from "dep1"; import dep2 from "dep2/example.ts"',
-      ts.ScriptTarget.Latest,
+      ScriptTarget.Latest,
     );
 
     const imports = parseImports(source, filePath);
@@ -134,10 +134,10 @@ describe('parse imports', () => {
 
   it('stores each import', () => {
     const filePath = 'example.ts';
-    const source = ts.createSourceFile(
+    const source = createSourceFile(
       filePath,
       'import dep1 from "dep1"; import dep2 from "dep2";',
-      ts.ScriptTarget.Latest,
+      ScriptTarget.Latest,
     );
 
     parseImports(source, filePath);

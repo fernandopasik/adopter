@@ -1,5 +1,5 @@
 import { describe, expect, it, jest } from '@jest/globals';
-import ts from 'typescript';
+import { createSourceFile, ScriptTarget, type ImportDeclaration } from 'typescript';
 import parseImport from './parse-import.js';
 
 jest.mock('../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
@@ -9,9 +9,9 @@ describe('parse import', () => {
     const filePath = 'example.ts';
     const {
       statements: [statement],
-    } = ts.createSourceFile(filePath, 'import "./dep.ts"', ts.ScriptTarget.Latest);
+    } = createSourceFile(filePath, 'import "./dep.ts"', ScriptTarget.Latest);
 
-    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
+    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
       defaultName: undefined,
       filePath,
       moduleNames: [],
@@ -25,9 +25,9 @@ describe('parse import', () => {
     const filePath = 'example.ts';
     const {
       statements: [statement],
-    } = ts.createSourceFile(filePath, 'import dep from "./dep.ts"', ts.ScriptTarget.Latest);
+    } = createSourceFile(filePath, 'import dep from "./dep.ts"', ScriptTarget.Latest);
 
-    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
+    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
       defaultName: 'dep',
       filePath,
       moduleNames: ['default'],
@@ -41,9 +41,9 @@ describe('parse import', () => {
     const filePath = 'example.ts';
     const {
       statements: [statement],
-    } = ts.createSourceFile(filePath, 'import { dep } from "./dep.ts"', ts.ScriptTarget.Latest);
+    } = createSourceFile(filePath, 'import { dep } from "./dep.ts"', ScriptTarget.Latest);
 
-    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
+    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
       defaultName: undefined,
       filePath,
       moduleNames: ['dep'],
@@ -57,13 +57,9 @@ describe('parse import', () => {
     const filePath = 'example.ts';
     const {
       statements: [statement],
-    } = ts.createSourceFile(
-      filePath,
-      'import { dep1, dep2 } from "./dep.ts"',
-      ts.ScriptTarget.Latest,
-    );
+    } = createSourceFile(filePath, 'import { dep1, dep2 } from "./dep.ts"', ScriptTarget.Latest);
 
-    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
+    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
       defaultName: undefined,
       filePath,
       moduleNames: ['dep1', 'dep2'],
@@ -77,13 +73,13 @@ describe('parse import', () => {
     const filePath = 'example.js';
     const {
       statements: [statement],
-    } = ts.createSourceFile(
+    } = createSourceFile(
       filePath,
       'import { dep1 as dep3, dep2 } from "./dep.ts"',
-      ts.ScriptTarget.Latest,
+      ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
+    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
       defaultName: undefined,
       filePath,
       moduleNames: ['dep1', 'dep2'],
@@ -97,13 +93,13 @@ describe('parse import', () => {
     const filePath = 'example.js';
     const {
       statements: [statement],
-    } = ts.createSourceFile(
+    } = createSourceFile(
       filePath,
       'import dep, { dep1, dep2 } from "./dep.ts"',
-      ts.ScriptTarget.Latest,
+      ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
+    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
       defaultName: 'dep',
       filePath,
       moduleNames: ['default', 'dep1', 'dep2'],
@@ -117,13 +113,13 @@ describe('parse import', () => {
     const filePath = 'example.js';
     const {
       statements: [statement],
-    } = ts.createSourceFile(
+    } = createSourceFile(
       filePath,
       'import dep, { dep1, dep2 as dep3 } from "./dep.ts"',
-      ts.ScriptTarget.Latest,
+      ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
+    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
       defaultName: 'dep',
       filePath,
       moduleNames: ['default', 'dep1', 'dep2'],
@@ -137,13 +133,9 @@ describe('parse import', () => {
     const filePath = 'example.js';
     const {
       statements: [statement],
-    } = ts.createSourceFile(
-      filePath,
-      'import type { Dep } from "./dep.ts"',
-      ts.ScriptTarget.Latest,
-    );
+    } = createSourceFile(filePath, 'import type { Dep } from "./dep.ts"', ScriptTarget.Latest);
 
-    expect(parseImport(statement as ts.ImportDeclaration, filePath)).toStrictEqual({
+    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
       defaultName: undefined,
       filePath,
       moduleNames: ['Dep'],
