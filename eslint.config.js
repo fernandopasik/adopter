@@ -1,6 +1,7 @@
 import eslint from '@eslint/js';
 import prettier from 'eslint-config-prettier';
-import importPlugin from 'eslint-plugin-import';
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
+import { createNodeResolver, flatConfigs as importConfigs } from 'eslint-plugin-import-x';
 import securityPlugin from 'eslint-plugin-security';
 import ymlPlugin from 'eslint-plugin-yml';
 import globals from 'globals';
@@ -10,8 +11,8 @@ export default ts.config(
   { ignores: ['coverage/', 'lib/', 'bin/', 'adopter.*'] },
   eslint.configs.all,
   securityPlugin.configs.recommended,
-  importPlugin.flatConfigs.recommended,
-  importPlugin.configs.typescript,
+  importConfigs.recommended,
+  importConfigs.typescript,
   ...ymlPlugin.configs['flat/recommended'],
   ...ymlPlugin.configs['flat/prettier'],
   {
@@ -34,7 +35,9 @@ export default ts.config(
       'one-var': 'off',
       'sort-imports': 'off',
     },
-    settings: { 'import/resolver': { typescript: {} } },
+    settings: {
+      'import-x/resolver-next': [createTypeScriptImportResolver(), createNodeResolver()],
+    },
   },
   {
     extends: [...ts.configs.all],
