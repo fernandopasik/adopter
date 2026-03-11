@@ -4,7 +4,7 @@ import ProgressBar from 'progress';
 import { listFiles, processFiles } from './files/index.js';
 import { analyzePackages } from './packages/index.js';
 import * as reports from './reports/index.js';
-import run from './run.js';
+import run, { type OnFile } from './run.js';
 
 jest.mock('./packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
 
@@ -144,9 +144,9 @@ describe('run', () => {
   });
 
   it('runs on file callback in options', async () => {
-    const packages = ['dep1', 'dep2'];
-    const files = ['example1.js', 'example2.js'];
-    const onFile = jest.fn();
+    const packages: [string, string] = ['dep1', 'dep2'];
+    const files: [string, string] = ['example1.js', 'example2.js'];
+    const onFile = jest.fn<OnFile>();
 
     jest.mocked(listFiles).mockReturnValueOnce(files);
 

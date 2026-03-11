@@ -4,7 +4,7 @@ import type ts from 'typescript';
 import { parseImports, type Import } from '../imports/index.js';
 import { addFile, addFileImports } from './files.js';
 import parseAst from './parse-ast.js';
-import processFiles from './process-files.js';
+import processFiles, { type Callback } from './process-files.js';
 
 jest.mock('fs');
 jest.mock('./parse-ast.js', () => jest.fn());
@@ -52,7 +52,7 @@ describe('process files', () => {
         '/another/example3.ts',
       ];
       const spy = jest.spyOn(fs, 'readFileSync');
-      const callback = jest.fn();
+      const callback = jest.fn<Callback>();
 
       processFiles(files, callback);
 
@@ -64,7 +64,7 @@ describe('process files', () => {
 
     it('with file path', () => {
       const files: [string, string] = ['example1.js', 'folder/example2.js'];
-      const callback = jest.fn();
+      const callback = jest.fn<Callback>();
 
       processFiles(files, callback);
 
@@ -87,7 +87,7 @@ describe('process files', () => {
     it('with filename', () => {
       const filenames: [string, string] = ['example1.js', 'example2.js'];
       const files: [string, string] = [filenames[0], `folder/${filenames[1]}`];
-      const callback = jest.fn();
+      const callback = jest.fn<Callback>();
 
       processFiles(files, callback);
 
@@ -110,7 +110,7 @@ describe('process files', () => {
     it('with file contents', () => {
       const files: [string, string] = ['example1.js', 'example2.js'];
       const contents: [string, string] = ['this is example1', 'this is example2'];
-      const callback = jest.fn();
+      const callback = jest.fn<Callback>();
 
       jest
         .mocked(fs.readFileSync)
@@ -126,7 +126,7 @@ describe('process files', () => {
     it('with file asts', () => {
       const files: [string, string] = ['example1.js', 'example2.js'];
       const asts = [{ fileName: files[0] }, { fileName: files[1] }];
-      const callback = jest.fn();
+      const callback = jest.fn<Callback>();
 
       jest
         .mocked(parseAst)
@@ -151,7 +151,7 @@ describe('process files', () => {
           packageName: 'dep1',
         },
       ];
-      const callback = jest.fn();
+      const callback = jest.fn<Callback>();
 
       jest
         .mocked(parseAst)

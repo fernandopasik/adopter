@@ -10,16 +10,18 @@ import type { Import } from './imports/index.js';
 import { analyzePackages } from './packages/index.js';
 import { coverage, print, usage } from './reports/index.js';
 
+// eslint-disable-next-line @typescript-eslint/max-params
+export type OnFile = (
+  filePath: string,
+  filename: string,
+  content?: string,
+  ast?: ts.SourceFile,
+  imports?: Import[],
+) => void;
+
 export interface Options {
   coverage?: boolean;
-  // eslint-disable-next-line @typescript-eslint/max-params
-  onFile?: (
-    filePath: string,
-    filename: string,
-    content: string,
-    ast?: ts.SourceFile,
-    imports?: Import[],
-  ) => void;
+  onFile?: OnFile;
   packages: string[];
   rootDir?: string;
   srcIgnoreMatch?: string[];
