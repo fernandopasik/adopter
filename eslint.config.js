@@ -4,10 +4,11 @@ import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescrip
 import { createNodeResolver, flatConfigs as importConfigs } from 'eslint-plugin-import-x';
 import securityPlugin from 'eslint-plugin-security';
 import { configs as ymlConfigs } from 'eslint-plugin-yml';
+import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import ts from 'typescript-eslint';
 
-export default ts.config(
+export default defineConfig([
   { ignores: ['coverage/', 'lib/', 'bin/', 'adopter.*'] },
   eslint.configs.all,
   securityPlugin.configs.recommended,
@@ -62,4 +63,4 @@ export default ts.config(
     },
   },
   prettier,
-);
+]);
