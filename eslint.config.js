@@ -3,7 +3,7 @@ import prettier from 'eslint-config-prettier';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import { createNodeResolver, flatConfigs as importConfigs } from 'eslint-plugin-import-x';
 import securityPlugin from 'eslint-plugin-security';
-import ymlPlugin from 'eslint-plugin-yml';
+import { configs as ymlConfigs } from 'eslint-plugin-yml';
 import globals from 'globals';
 import ts from 'typescript-eslint';
 
@@ -13,8 +13,10 @@ export default ts.config(
   securityPlugin.configs.recommended,
   importConfigs.recommended,
   importConfigs.typescript,
-  ...ymlPlugin.configs['flat/recommended'],
-  ...ymlPlugin.configs['flat/prettier'],
+  {
+    extends: [ymlConfigs['flat/standard'], ymlConfigs['flat/prettier']],
+    files: ['*.yaml', '*.yml'],
+  },
   {
     files: ['**/*.js', '**/*.ts'],
     languageOptions: {
