@@ -46,7 +46,11 @@ describe('process files', () => {
 
   describe('executes callback', () => {
     it('on each file', () => {
-      const files = ['example1.js', 'folder/example2.js', '/another/example3.ts'];
+      const files: [string, string, string] = [
+        'example1.js',
+        'folder/example2.js',
+        '/another/example3.ts',
+      ];
       const spy = jest.spyOn(fs, 'readFileSync');
       const callback = jest.fn();
 
@@ -59,7 +63,7 @@ describe('process files', () => {
     });
 
     it('with file path', () => {
-      const files = ['example1.js', 'folder/example2.js'];
+      const files: [string, string] = ['example1.js', 'folder/example2.js'];
       const callback = jest.fn();
 
       processFiles(files, callback);
@@ -81,9 +85,8 @@ describe('process files', () => {
     });
 
     it('with filename', () => {
-      const filenames = ['example1.js', 'example2.js'];
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const files = [filenames[0]!, `folder/${filenames[1]}`];
+      const filenames: [string, string] = ['example1.js', 'example2.js'];
+      const files: [string, string] = [filenames[0], `folder/${filenames[1]}`];
       const callback = jest.fn();
 
       processFiles(files, callback);
@@ -105,16 +108,14 @@ describe('process files', () => {
     });
 
     it('with file contents', () => {
-      const files = ['example1.js', 'example2.js'];
-      const contents = ['this is example1', 'this is example2'];
+      const files: [string, string] = ['example1.js', 'example2.js'];
+      const contents: [string, string] = ['this is example1', 'this is example2'];
       const callback = jest.fn();
 
       jest
         .mocked(fs.readFileSync)
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        .mockReturnValueOnce(contents[0]!)
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        .mockReturnValueOnce(contents[1]!);
+        .mockReturnValueOnce(contents[0])
+        .mockReturnValueOnce(contents[1]);
 
       processFiles(files, callback);
 
@@ -123,7 +124,7 @@ describe('process files', () => {
     });
 
     it('with file asts', () => {
-      const files = ['example1.js', 'example2.js'];
+      const files: [string, string] = ['example1.js', 'example2.js'];
       const asts = [{ fileName: files[0] }, { fileName: files[1] }];
       const callback = jest.fn();
 
