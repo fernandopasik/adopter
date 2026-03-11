@@ -12,7 +12,6 @@ const analyzePackages = async (packageList: string[]): Promise<void> => {
   const progressBar = new ProgressBar(`Analyzing packages [${chalk.blue(':bar')}] :percent`, {
     complete: '=',
     incomplete: ' ',
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     total: packageList.length * 2,
     width: 30,
   });
