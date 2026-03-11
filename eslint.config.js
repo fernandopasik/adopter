@@ -6,7 +6,7 @@ import securityPlugin from 'eslint-plugin-security';
 import { configs as ymlConfigs } from 'eslint-plugin-yml';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
-import ts from 'typescript-eslint';
+import { configs as tsConfigs } from 'typescript-eslint';
 
 export default defineConfig([
   { ignores: ['coverage/', 'lib/', 'bin/', 'adopter.*'] },
@@ -43,7 +43,7 @@ export default defineConfig([
     },
   },
   {
-    extends: [...ts.configs.all],
+    extends: [...tsConfigs.all],
     files: ['**/*.ts'],
     rules: {
       // eslint-disable-next-line no-magic-numbers
