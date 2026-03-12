@@ -1,18 +1,18 @@
-import type ts from 'typescript';
+import type { ImportDeclaration, ImportSpecifier, LiteralExpression } from 'typescript';
 import areNamedImports from './are-named-imports.js';
 import extractPackageName from './extract-package-name.js';
 import getImportModuleNames from './get-import-module-names.js';
 import type { Import } from './imports.js';
 
-const parseImport = (statement: ts.ImportDeclaration, filePath: string): Import => {
-  const { text: moduleSpecifier } = statement.moduleSpecifier as ts.LiteralExpression;
+const parseImport = (statement: ImportDeclaration, filePath: string): Import => {
+  const { text: moduleSpecifier } = statement.moduleSpecifier as LiteralExpression;
   const packageName = extractPackageName(moduleSpecifier);
   const { text: defaultName } = statement.importClause?.name ?? {};
   const { namedBindings } = statement.importClause ?? {};
 
   const named: Record<string, string> | undefined = areNamedImports(namedBindings)
     ? Array.from(namedBindings.elements).reduce(
-        (acc, namedImport: ts.ImportSpecifier) => ({
+        (acc, namedImport: ImportSpecifier) => ({
           ...acc,
           [namedImport.propertyName?.text ?? namedImport.name.text]: namedImport.name.text,
         }),

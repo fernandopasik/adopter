@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import log from 'loglevel';
 import path from 'path';
 import ProgressBar from 'progress';
-import type ts from 'typescript';
+import type { SourceFile } from 'typescript';
 import { listFiles, processFiles } from './files/index.js';
 import type { Import } from './imports/index.js';
 import { analyzePackages } from './packages/index.js';
@@ -15,7 +15,7 @@ export type OnFile = (
   filePath: string,
   filename: string,
   content?: string,
-  ast?: ts.SourceFile,
+  ast?: SourceFile,
   imports?: Import[],
 ) => void;
 

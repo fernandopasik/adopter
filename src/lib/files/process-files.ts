@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import type ts from 'typescript';
+import type { SourceFile } from 'typescript';
 import { parseImports, type Import } from '../imports/index.js';
 import { addFile, addFileImports } from './files.js';
 import parseAst from './parse-ast.js';
@@ -10,7 +10,7 @@ export type Callback = (
   filePath: string,
   filename: string,
   content?: string,
-  ast?: ts.SourceFile,
+  ast?: SourceFile,
   imports?: Import[],
 ) => void;
 

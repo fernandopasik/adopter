@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import fs from 'fs';
-import type ts from 'typescript';
+import type { SourceFile } from 'typescript';
 import { parseImports, type Import } from '../imports/index.js';
 import { addFile, addFileImports } from './files.js';
 import parseAst from './parse-ast.js';
@@ -130,8 +130,8 @@ describe('process files', () => {
 
       jest
         .mocked(parseAst)
-        .mockReturnValueOnce(asts[0] as ts.SourceFile)
-        .mockReturnValueOnce(asts[1] as ts.SourceFile);
+        .mockReturnValueOnce(asts[0] as SourceFile)
+        .mockReturnValueOnce(asts[1] as SourceFile);
 
       processFiles(files, callback);
 
@@ -155,8 +155,8 @@ describe('process files', () => {
 
       jest
         .mocked(parseAst)
-        .mockReturnValueOnce(asts[0] as ts.SourceFile)
-        .mockReturnValueOnce(asts[1] as ts.SourceFile);
+        .mockReturnValueOnce(asts[0] as SourceFile)
+        .mockReturnValueOnce(asts[1] as SourceFile);
 
       jest.mocked(parseImports).mockReturnValueOnce(imports);
 
@@ -181,8 +181,8 @@ describe('process files', () => {
 
       jest
         .mocked(parseAst)
-        .mockReturnValueOnce(asts[0] as ts.SourceFile)
-        .mockReturnValueOnce(asts[1] as ts.SourceFile);
+        .mockReturnValueOnce(asts[0] as SourceFile)
+        .mockReturnValueOnce(asts[1] as SourceFile);
 
       jest.mocked(parseImports).mockReturnValueOnce(imports);
 
