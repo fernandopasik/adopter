@@ -125,13 +125,10 @@ describe('process files', () => {
 
     it('with file asts', () => {
       const files: [string, string] = ['example1.js', 'example2.js'];
-      const asts = [{ fileName: files[0] }, { fileName: files[1] }];
+      const asts = [{ fileName: files[0] }, { fileName: files[1] }] as [SourceFile, SourceFile];
       const callback = jest.fn<Callback>();
 
-      jest
-        .mocked(parseAst)
-        .mockReturnValueOnce(asts[0] as SourceFile)
-        .mockReturnValueOnce(asts[1] as SourceFile);
+      jest.mocked(parseAst).mockReturnValueOnce(asts[0]).mockReturnValueOnce(asts[1]);
 
       processFiles(files, callback);
 
@@ -141,7 +138,7 @@ describe('process files', () => {
 
     it('with file imports', () => {
       const files: [string, string] = ['example1.js', 'example2.js'];
-      const asts = [{ fileName: files[0] }, { fileName: files[1] }];
+      const asts = [{ fileName: files[0] }, { fileName: files[1] }] as [SourceFile, SourceFile];
       const imports: Import[] = [
         {
           defaultName: 'dep1',
@@ -153,10 +150,7 @@ describe('process files', () => {
       ];
       const callback = jest.fn<Callback>();
 
-      jest
-        .mocked(parseAst)
-        .mockReturnValueOnce(asts[0] as SourceFile)
-        .mockReturnValueOnce(asts[1] as SourceFile);
+      jest.mocked(parseAst).mockReturnValueOnce(asts[0]).mockReturnValueOnce(asts[1]);
 
       jest.mocked(parseImports).mockReturnValueOnce(imports);
 
@@ -168,7 +162,7 @@ describe('process files', () => {
 
     it('add file and file imports', () => {
       const files: [string, string] = ['example1.js', 'example2.js'];
-      const asts = [{ fileName: files[0] }, { fileName: files[1] }];
+      const asts = [{ fileName: files[0] }, { fileName: files[1] }] as [SourceFile, SourceFile];
       const imports: Import[] = [
         {
           defaultName: 'dep1',
@@ -179,10 +173,7 @@ describe('process files', () => {
         },
       ];
 
-      jest
-        .mocked(parseAst)
-        .mockReturnValueOnce(asts[0] as SourceFile)
-        .mockReturnValueOnce(asts[1] as SourceFile);
+      jest.mocked(parseAst).mockReturnValueOnce(asts[0]).mockReturnValueOnce(asts[1]);
 
       jest.mocked(parseImports).mockReturnValueOnce(imports);
 
