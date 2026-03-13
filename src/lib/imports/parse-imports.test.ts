@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
 import { createSourceFile, ScriptTarget } from 'typescript';
 import { addImport } from './imports.ts';
@@ -120,6 +120,7 @@ describe('parse imports', () => {
   });
 
   it('stores each import', () => {
+    const addImportMock = jest.mocked(addImport);
     const filePath = 'example.ts';
     const source = createSourceFile(
       filePath,
@@ -129,6 +130,6 @@ describe('parse imports', () => {
 
     parseImports(source, filePath);
 
-    expect(addImport).toHaveBeenCalledTimes(2);
+    assert.strictEqual(addImportMock.mock.calls.length, 2);
   });
 });

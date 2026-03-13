@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
 import { getPackageNames } from '../../packages/index.ts';
 import packageUsage from './package-usage.ts';
@@ -33,7 +33,7 @@ describe('usage', () => {
     summaryMock.mockReturnValueOnce(sum);
 
     assert.partialDeepStrictEqual(usage(), { summary: sum });
-    expect(summary).toHaveBeenCalledTimes(1);
+    assert.strictEqual(summaryMock.mock.calls.length, 1);
   });
 
   it('has packages', () => {
@@ -55,7 +55,7 @@ describe('usage', () => {
 
     usage();
 
-    expect(getPackageNames).toHaveBeenCalledTimes(1);
-    expect(packageUsage).toHaveBeenCalledTimes(3);
+    assert.strictEqual(getPackageNamesMock.mock.calls.length, 1);
+    assert.strictEqual(packageUsageMock.mock.calls.length, 3);
   });
 });

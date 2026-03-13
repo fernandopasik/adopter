@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
 import type { Import } from '../imports/index.ts';
 import filterTrackedDependencies from './filter-tracked-dependencies.ts';
@@ -120,9 +120,12 @@ describe('set package dependencies', () => {
     assert.strictEqual(pkg.isInstalled, false);
   });
 
-  it('with non existent package', () => {
+  it('with non existent package', async () => {
+    const getPackageJsonMock = jest.mocked(getPackageJson);
     jest.mocked(getPackage).mockReturnValueOnce(undefined);
 
-    expect(getPackageJson).not.toHaveBeenCalled();
+    await setPackageDependencies('nonexistent');
+
+    assert.strictEqual(getPackageJsonMock.mock.calls.length, 0);
   });
 });
