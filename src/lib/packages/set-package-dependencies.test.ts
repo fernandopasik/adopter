@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import type { Import } from '../imports/index.ts';
 import filterTrackedDependencies from './filter-tracked-dependencies.ts';
 import getPackageJson from './get-package-json.ts';
@@ -26,11 +27,11 @@ describe('set package dependencies', () => {
 
     jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
-    expect(pkg.dependencies.size).toBe(0);
+    assert.strictEqual(pkg.dependencies.size, 0);
 
     await setPackageDependencies('example');
 
-    expect(pkg.dependencies.size).toBe(0);
+    assert.strictEqual(pkg.dependencies.size, 0);
   });
 
   it('with multiple', async () => {
@@ -69,15 +70,15 @@ describe('set package dependencies', () => {
     jest.mocked(getPackage).mockReturnValueOnce(dep1);
     jest.mocked(getPackage).mockReturnValueOnce(dep2);
 
-    expect(pkg.dependencies.size).toBe(0);
-    expect(pkg.dependencies.has(dep1)).toBe(false);
-    expect(pkg.dependencies.has(dep2)).toBe(false);
+    assert.strictEqual(pkg.dependencies.size, 0);
+    assert.strictEqual(pkg.dependencies.has(dep1), false);
+    assert.strictEqual(pkg.dependencies.has(dep2), false);
 
     await setPackageDependencies('example');
 
-    expect(pkg.dependencies.size).toBe(2);
-    expect(pkg.dependencies.has(dep1)).toBe(true);
-    expect(pkg.dependencies.has(dep2)).toBe(true);
+    assert.strictEqual(pkg.dependencies.size, 2);
+    assert.strictEqual(pkg.dependencies.has(dep1), true);
+    assert.strictEqual(pkg.dependencies.has(dep2), true);
   });
 
   it('sets installed true', async () => {
@@ -92,11 +93,11 @@ describe('set package dependencies', () => {
 
     jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
-    expect(pkg.isInstalled).toBe(false);
+    assert.strictEqual(pkg.isInstalled, false);
 
     await setPackageDependencies('example');
 
-    expect(pkg.isInstalled).toBe(true);
+    assert.strictEqual(pkg.isInstalled, true);
   });
 
   it('handles an uninstalled package', async () => {
@@ -112,11 +113,11 @@ describe('set package dependencies', () => {
     jest.mocked(getPackageJson).mockResolvedValueOnce(null);
     jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
-    expect(pkg.isInstalled).toBe(false);
+    assert.strictEqual(pkg.isInstalled, false);
 
     await setPackageDependencies('example');
 
-    expect(pkg.isInstalled).toBe(false);
+    assert.strictEqual(pkg.isInstalled, false);
   });
 
   it('with non existent package', () => {

@@ -9,9 +9,9 @@ describe('files', () => {
 
   it('can add a file', () => {
     const filePath = 'src/example.js';
-    expect(files.has(filePath)).toBe(false);
+    assert.strictEqual(files.has(filePath), false);
     addFile(filePath);
-    expect(files.has(filePath)).toBe(true);
+    assert.strictEqual(files.has(filePath), true);
   });
 
   it('can not re add an existing file', () => {
@@ -20,7 +20,7 @@ describe('files', () => {
     const file = files.get(filePath);
 
     addFile(filePath);
-    expect(file).toBe(files.get(filePath));
+    assert.strictEqual(file, files.get(filePath));
   });
 
   it('can get a file', () => {

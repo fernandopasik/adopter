@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, it } from '@jest/globals';
 import assert from 'node:assert/strict';
 import extractPackageName from './extract-package-name.ts';
 
@@ -8,19 +8,19 @@ describe('get package name', () => {
   });
 
   it('with valid package name', () => {
-    expect(extractPackageName('hello')).toBe('hello');
+    assert.strictEqual(extractPackageName('hello'), 'hello');
   });
 
   it('with org scoped package', () => {
-    expect(extractPackageName('@my/hello')).toBe('@my/hello');
+    assert.strictEqual(extractPackageName('@my/hello'), '@my/hello');
   });
 
   it('with file in package', () => {
-    expect(extractPackageName('hello/world.ts')).toBe('hello');
+    assert.strictEqual(extractPackageName('hello/world.ts'), 'hello');
   });
 
   it('with file in scoped package', () => {
-    expect(extractPackageName('@hello/world/example.ts')).toBe('@hello/world');
+    assert.strictEqual(extractPackageName('@hello/world/example.ts'), '@hello/world');
   });
 
   it('with relative path', () => {

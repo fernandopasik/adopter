@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import type { Import } from '../../imports/index.ts';
 import { getPackage, isPackageImported, type Package } from '../../packages/index.ts';
 import isPackageUsed from './is-package-used.ts';
@@ -31,7 +32,7 @@ describe('is package used', () => {
     jest.mocked(getPackage).mockReturnValueOnce(pkg);
     jest.mocked(isPackageImported).mockReturnValueOnce(false);
 
-    expect(isPackageUsed('example')).toBe(false);
+    assert.strictEqual(isPackageUsed('example'), false);
     expect(isPackageImported).toHaveBeenCalledTimes(1);
     expect(getPackage).toHaveBeenCalledTimes(1);
   });
@@ -39,7 +40,7 @@ describe('is package used', () => {
   it('with an imported package', () => {
     jest.mocked(isPackageImported).mockReturnValueOnce(true);
 
-    expect(isPackageUsed('example')).toBe(true);
+    assert.strictEqual(isPackageUsed('example'), true);
     expect(isPackageImported).toHaveBeenCalledTimes(1);
     expect(getPackage).not.toHaveBeenCalled();
   });
@@ -52,7 +53,7 @@ describe('is package used', () => {
     jest.mocked(isPackageImported).mockReturnValueOnce(false);
     jest.mocked(isPackageImported).mockReturnValueOnce(true);
 
-    expect(isPackageUsed('example')).toBe(true);
+    assert.strictEqual(isPackageUsed('example'), true);
     expect(isPackageImported).toHaveBeenCalledTimes(2);
   });
 
@@ -65,7 +66,7 @@ describe('is package used', () => {
     jest.mocked(isPackageImported).mockReturnValueOnce(false);
     jest.mocked(isPackageImported).mockReturnValueOnce(false);
 
-    expect(isPackageUsed('example')).toBe(false);
+    assert.strictEqual(isPackageUsed('example'), false);
     expect(isPackageImported).toHaveBeenCalledTimes(2);
     expect(getPackage).toHaveBeenCalledTimes(2);
   });
@@ -79,7 +80,7 @@ describe('is package used', () => {
     jest.mocked(isPackageImported).mockReturnValueOnce(false);
     jest.mocked(isPackageImported).mockReturnValueOnce(false);
 
-    expect(isPackageUsed('example')).toBe(false);
+    assert.strictEqual(isPackageUsed('example'), false);
     expect(isPackageImported).toHaveBeenCalledTimes(2);
     expect(getPackage).toHaveBeenCalledTimes(2);
   });

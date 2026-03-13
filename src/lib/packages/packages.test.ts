@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
+import assert from 'node:assert/strict';
 import {
   addPackage,
   addPackageImport,
@@ -19,24 +20,24 @@ describe('packages', () => {
   it('can add package', () => {
     addPackage('example');
 
-    expect(packages.has('example')).toBe(true);
+    assert.strictEqual(packages.has('example'), true);
   });
 
   it('does not have a package', () => {
-    expect(hasPackage('nonexistent')).toBe(false);
+    assert.strictEqual(hasPackage('nonexistent'), false);
   });
 
   it('can have a package', () => {
     addPackage('example');
 
-    expect(hasPackage('example')).toBe(true);
+    assert.strictEqual(hasPackage('example'), true);
   });
 
   it('does not have a module', () => {
     addPackage('example');
 
-    expect(hasModule('moduleA', 'example')).toBe(false);
-    expect(hasModule('moduleA', 'example2')).toBe(false);
+    assert.strictEqual(hasModule('moduleA', 'example'), false);
+    assert.strictEqual(hasModule('moduleA', 'example2'), false);
   });
 
   it('can have a module', () => {
@@ -45,7 +46,7 @@ describe('packages', () => {
     const pkg = getPackage('example');
     pkg?.modules.add('moduleA');
 
-    expect(hasModule('moduleA', 'example')).toBe(true);
+    assert.strictEqual(hasModule('moduleA', 'example'), true);
   });
 
   it('get package', () => {
@@ -78,10 +79,10 @@ describe('packages', () => {
 
     it('add package import', () => {
       addPackage('example1');
-      expect(getPackage('example1')?.imports.has(imprt)).toBe(false);
+      assert.strictEqual(getPackage('example1')?.imports.has(imprt), false);
 
       addPackageImport(imprt);
-      expect(getPackage('example1')?.imports.has(imprt)).toBe(true);
+      assert.strictEqual(getPackage('example1')?.imports.has(imprt), true);
     });
 
     it('add non existing package import', () => {
@@ -93,51 +94,51 @@ describe('packages', () => {
       };
 
       addPackage('example1');
-      expect(getPackage('example1')?.imports.has(imprt2)).toBe(false);
+      assert.strictEqual(getPackage('example1')?.imports.has(imprt2), false);
 
       addPackageImport(imprt2);
 
-      expect(getPackage('example1')?.imports.has(imprt2)).toBe(false);
+      assert.strictEqual(getPackage('example1')?.imports.has(imprt2), false);
     });
 
     describe('is package imported', () => {
       it('with existent and imported package', () => {
         addPackage('example1');
-        expect(isPackageImported('example1')).toBe(false);
+        assert.strictEqual(isPackageImported('example1'), false);
 
         addPackageImport(imprt);
-        expect(isPackageImported('example1')).toBe(true);
+        assert.strictEqual(isPackageImported('example1'), true);
       });
 
       it('with existent and non imported package', () => {
         addPackage('example1');
-        expect(isPackageImported('example1')).toBe(false);
+        assert.strictEqual(isPackageImported('example1'), false);
       });
 
       it('with non existent package', () => {
-        expect(isPackageImported('example2')).toBe(false);
+        assert.strictEqual(isPackageImported('example2'), false);
       });
     });
 
     describe('is module imported', () => {
       it('with imported package and module', () => {
         addPackage('example1');
-        expect(isModuleImported('default', 'example1')).toBe(false);
+        assert.strictEqual(isModuleImported('default', 'example1'), false);
 
         addPackageImport(imprt);
-        expect(isModuleImported('default', 'example1')).toBe(true);
+        assert.strictEqual(isModuleImported('default', 'example1'), true);
       });
 
       it('with imported package and not module', () => {
         addPackage('example1');
-        expect(isModuleImported('module1', 'example1')).toBe(false);
+        assert.strictEqual(isModuleImported('module1', 'example1'), false);
 
         addPackageImport(imprt);
-        expect(isModuleImported('module1', 'example1')).toBe(false);
+        assert.strictEqual(isModuleImported('module1', 'example1'), false);
       });
 
       it('with non imported package', () => {
-        expect(isModuleImported('module1', 'example1')).toBe(false);
+        assert.strictEqual(isModuleImported('module1', 'example1'), false);
       });
     });
   });

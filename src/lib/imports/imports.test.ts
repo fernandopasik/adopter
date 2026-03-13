@@ -20,7 +20,7 @@ describe('imports', () => {
         packageName: 'dep1',
       };
 
-      expect(importKey(imprt)).toBe('example.js**dep1**default');
+      assert.strictEqual(importKey(imprt), 'example.js**dep1**default');
     });
 
     it('with named modules in package', () => {
@@ -31,7 +31,7 @@ describe('imports', () => {
         packageName: 'dep1',
       };
 
-      expect(importKey(imprt)).toBe('example.js**dep1**methodA**methodB');
+      assert.strictEqual(importKey(imprt), 'example.js**dep1**methodA**methodB');
     });
 
     it('with default and  modules in package', () => {
@@ -42,7 +42,7 @@ describe('imports', () => {
         packageName: 'dep1',
       };
 
-      expect(importKey(imprt)).toBe('example.js**dep1**default**methodA**methodB');
+      assert.strictEqual(importKey(imprt), 'example.js**dep1**default**methodA**methodB');
     });
 
     it('with a relative import', () => {
@@ -53,7 +53,7 @@ describe('imports', () => {
         packageName: null,
       };
 
-      expect(importKey(imprt)).toBe('example.js**./src/example.ts**default');
+      assert.strictEqual(importKey(imprt), 'example.js**./src/example.ts**default');
     });
   });
 

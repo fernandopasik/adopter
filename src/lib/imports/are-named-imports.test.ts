@@ -1,10 +1,11 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, it } from '@jest/globals';
+import assert from 'node:assert/strict';
 import { createSourceFile, ScriptTarget, type ImportDeclaration } from 'typescript';
 import areNamedImports from './are-named-imports.ts';
 
 describe('are named imports', () => {
   it('with empty', () => {
-    expect(areNamedImports()).toBe(false);
+    assert.strictEqual(areNamedImports(), false);
   });
 
   it('with only named imports', () => {
@@ -14,7 +15,7 @@ describe('are named imports', () => {
 
     const namedImports = (statement as ImportDeclaration).importClause?.namedBindings;
 
-    expect(areNamedImports(namedImports)).toBe(true);
+    assert.strictEqual(areNamedImports(namedImports), true);
   });
 
   it('with only default import', () => {
@@ -24,7 +25,7 @@ describe('are named imports', () => {
 
     const namedImports = (statement as ImportDeclaration).importClause?.namedBindings;
 
-    expect(areNamedImports(namedImports)).toBe(false);
+    assert.strictEqual(areNamedImports(namedImports), false);
   });
 
   it('with default and named import', () => {
@@ -34,7 +35,7 @@ describe('are named imports', () => {
 
     const namedImports = (statement as ImportDeclaration).importClause?.namedBindings;
 
-    expect(areNamedImports(namedImports)).toBe(true);
+    assert.strictEqual(areNamedImports(namedImports), true);
   });
 
   it('with no default nor named import', () => {
@@ -44,6 +45,6 @@ describe('are named imports', () => {
 
     const namedImports = (statement as ImportDeclaration).importClause?.namedBindings;
 
-    expect(areNamedImports(namedImports)).toBe(false);
+    assert.strictEqual(areNamedImports(namedImports), false);
   });
 });

@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import type { Import } from '../imports/index.ts';
 import getPackageModules from './get-package-mods.ts';
 import { getPackage, type Package } from './packages.ts';
@@ -24,11 +25,11 @@ describe('set package modules', () => {
 
     jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
-    expect(pkg.modules.size).toBe(0);
+    assert.strictEqual(pkg.modules.size, 0);
 
     await setPackageMods('example');
 
-    expect(pkg.modules.size).toBe(0);
+    assert.strictEqual(pkg.modules.size, 0);
   });
 
   it('with a default module', async () => {
@@ -44,13 +45,13 @@ describe('set package modules', () => {
     jest.mocked(getPackageModules).mockResolvedValueOnce(['default']);
     jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
-    expect(pkg.modules.size).toBe(0);
-    expect(pkg.modules.has('default')).toBe(false);
+    assert.strictEqual(pkg.modules.size, 0);
+    assert.strictEqual(pkg.modules.has('default'), false);
 
     await setPackageMods('example');
 
-    expect(pkg.modules.size).toBe(1);
-    expect(pkg.modules.has('default')).toBe(true);
+    assert.strictEqual(pkg.modules.size, 1);
+    assert.strictEqual(pkg.modules.has('default'), true);
   });
 
   it('with a multiple modules', async () => {
@@ -66,11 +67,11 @@ describe('set package modules', () => {
     jest.mocked(getPackageModules).mockResolvedValueOnce(['default', 'moduleA', 'moduleB']);
     jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
-    expect(pkg.modules.size).toBe(0);
+    assert.strictEqual(pkg.modules.size, 0);
 
     await setPackageMods('example');
 
-    expect(pkg.modules.size).toBe(3);
+    assert.strictEqual(pkg.modules.size, 3);
   });
 
   it('sets installed true', async () => {
@@ -85,11 +86,11 @@ describe('set package modules', () => {
 
     jest.mocked(getPackage).mockReturnValueOnce(pkg);
 
-    expect(pkg.isInstalled).toBe(false);
+    assert.strictEqual(pkg.isInstalled, false);
 
     await setPackageMods('example');
 
-    expect(pkg.isInstalled).toBe(true);
+    assert.strictEqual(pkg.isInstalled, true);
   });
 
   it('handles an uninstalled package', async () => {
@@ -105,11 +106,11 @@ describe('set package modules', () => {
     jest.mocked(getPackage).mockReturnValueOnce(pkg);
     jest.mocked(getPackageModules).mockResolvedValueOnce(null);
 
-    expect(pkg.isInstalled).toBe(false);
+    assert.strictEqual(pkg.isInstalled, false);
 
     await setPackageMods('example');
 
-    expect(pkg.isInstalled).toBe(false);
+    assert.strictEqual(pkg.isInstalled, false);
   });
 
   it('with non existent package', () => {
