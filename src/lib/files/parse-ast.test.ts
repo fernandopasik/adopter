@@ -1,4 +1,5 @@
 import { describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import ts, { ScriptTarget, type SourceFile } from 'typescript';
 import parseAst from './parse-ast.ts';
 
@@ -41,6 +42,6 @@ describe('parse ast', () => {
   it('returns undefined when no ts file provided', () => {
     const result = parseAst('example.txt', '');
 
-    expect(result).toBeUndefined();
+    assert.strictEqual(result, undefined);
   });
 });

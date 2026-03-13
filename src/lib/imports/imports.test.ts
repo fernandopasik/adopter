@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import { addPackageImport } from '../packages/index.ts';
 import { addImport, getImport, importKey, imports } from './imports.ts';
 
@@ -97,6 +98,6 @@ describe('imports', () => {
   });
 
   it('can not get a non existing import', () => {
-    expect(getImport('dep1**default')).toBeUndefined();
+    assert.strictEqual(getImport('dep1**default'), undefined);
   });
 });

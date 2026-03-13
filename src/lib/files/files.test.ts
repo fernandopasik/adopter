@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
+import assert from 'node:assert/strict';
 import { addFile, addFileImports, files, getFile, getFilePaths, getFiles } from './files.ts';
 
 describe('files', () => {
@@ -30,7 +31,7 @@ describe('files', () => {
 
   it('can not get a non existing file', () => {
     const filePath = 'src/non-existing-example.js';
-    expect(getFile(filePath)).toBeUndefined();
+    assert.strictEqual(getFile(filePath), undefined);
   });
 
   it('can get all file paths', () => {
@@ -97,7 +98,7 @@ describe('files', () => {
     const filePath = 'src/example.js';
 
     addFileImports(filePath, imports);
-    expect(getFile(filePath)).toBeUndefined();
+    assert.strictEqual(getFile(filePath), undefined);
   });
 
   it('can add empty file imports', () => {
