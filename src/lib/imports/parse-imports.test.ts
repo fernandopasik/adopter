@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import { createSourceFile, ScriptTarget } from 'typescript';
 import { addImport } from './imports.ts';
 import parseImports from './parse-imports.ts';
@@ -21,7 +22,7 @@ describe('parse imports', () => {
 
     const imports = parseImports(source, filePath);
 
-    expect(imports).toHaveLength(2);
+    assert.strictEqual(imports.length, 2);
     expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
     expect(imports[1]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
   });
@@ -36,7 +37,7 @@ describe('parse imports', () => {
 
     const imports = parseImports(source, filePath);
 
-    expect(imports).toHaveLength(2);
+    assert.strictEqual(imports.length, 2);
     expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
     expect(imports[1]).toStrictEqual(
       expect.objectContaining({ moduleNames: ['moduleA', 'moduleB'] }),
@@ -53,7 +54,7 @@ describe('parse imports', () => {
 
     const imports = parseImports(source, filePath);
 
-    expect(imports).toHaveLength(3);
+    assert.strictEqual(imports.length, 3);
     expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
     expect(imports[1]).toStrictEqual(
       expect.objectContaining({ moduleNames: ['moduleA', 'moduleB'] }),
@@ -74,7 +75,7 @@ describe('parse imports', () => {
 
     const imports = parseImports(source, filePath);
 
-    expect(imports).toHaveLength(2);
+    assert.strictEqual(imports.length, 2);
     expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
     expect(imports[1]).toStrictEqual(expect.objectContaining({ moduleNames: ['moduleA'] }));
   });
@@ -89,7 +90,7 @@ describe('parse imports', () => {
 
     const imports = parseImports(source, filePath);
 
-    expect(imports).toHaveLength(2);
+    assert.strictEqual(imports.length, 2);
     expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
     expect(imports[1]).toStrictEqual(expect.objectContaining({ moduleNames: ['Dep2'] }));
   });
@@ -104,7 +105,7 @@ describe('parse imports', () => {
 
     const imports = parseImports(source, filePath);
 
-    expect(imports).toHaveLength(2);
+    assert.strictEqual(imports.length, 2);
     expect(imports[0]).toStrictEqual(
       expect.objectContaining({ moduleNames: ['default'], packageName: 'dep1' }),
     );
@@ -123,7 +124,7 @@ describe('parse imports', () => {
 
     const imports = parseImports(source, filePath);
 
-    expect(imports).toHaveLength(2);
+    assert.strictEqual(imports.length, 2);
     expect(imports[0]).toStrictEqual(
       expect.objectContaining({ moduleNames: ['default'], packageName: 'dep1' }),
     );
