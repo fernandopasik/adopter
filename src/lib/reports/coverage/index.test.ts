@@ -1,4 +1,5 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import json from './coverage.ts';
 import * as coverage from './index.ts';
 import text from './text.ts';
@@ -7,10 +8,10 @@ jest.mock('../../packages/resolve-package.ts', () => jest.fn((specifier: string)
 
 describe('coverage report', () => {
   it('json', () => {
-    expect(coverage.json).toStrictEqual(json);
+    assert.strictEqual(coverage.json, json);
   });
 
   it('text', () => {
-    expect(coverage.text).toStrictEqual(text);
+    assert.strictEqual(coverage.text, text);
   });
 });

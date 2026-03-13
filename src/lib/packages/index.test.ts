@@ -1,4 +1,5 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import analyzePackages from './analyze-packages.ts';
 import extractPackagePath from './extract-package-path.ts';
 import filterTrackedDependencies from './filter-tracked-dependencies.ts';
@@ -19,50 +20,50 @@ jest.mock('./resolve-package.ts', () => jest.fn((specifier: string) => specifier
 
 describe('packages', () => {
   it('add package import', () => {
-    expect(packages.addPackageImport).toStrictEqual(addPackageImport);
+    assert.strictEqual(packages.addPackageImport, addPackageImport);
   });
 
   it('analyze packages', () => {
-    expect(packages.analyzePackages).toStrictEqual(analyzePackages);
+    assert.strictEqual(packages.analyzePackages, analyzePackages);
   });
 
   it('extract package path', () => {
-    expect(packages.extractPackagePath).toStrictEqual(extractPackagePath);
+    assert.strictEqual(packages.extractPackagePath, extractPackagePath);
   });
 
   it('filter tracked dependencies', () => {
-    expect(packages.filterTrackedDependencies).toStrictEqual(filterTrackedDependencies);
+    assert.strictEqual(packages.filterTrackedDependencies, filterTrackedDependencies);
   });
 
   it('get package', () => {
-    expect(packages.getPackage).toStrictEqual(getPackage);
+    assert.strictEqual(packages.getPackage, getPackage);
   });
 
   it('get package json', () => {
-    expect(packages.getPackageJson).toStrictEqual(getPackageJson);
+    assert.strictEqual(packages.getPackageJson, getPackageJson);
   });
 
   it('get package mods', () => {
-    expect(packages.getPackageModules).toStrictEqual(getPackageModules);
+    assert.strictEqual(packages.getPackageModules, getPackageModules);
   });
 
   it('get package names', () => {
-    expect(packages.getPackageNames).toStrictEqual(getPackageNames);
+    assert.strictEqual(packages.getPackageNames, getPackageNames);
   });
 
   it('has module', () => {
-    expect(packages.hasModule).toStrictEqual(hasModule);
+    assert.strictEqual(packages.hasModule, hasModule);
   });
 
   it('has package', () => {
-    expect(packages.hasPackage).toStrictEqual(hasPackage);
+    assert.strictEqual(packages.hasPackage, hasPackage);
   });
 
   it('is module imported', () => {
-    expect(packages.isModuleImported).toStrictEqual(isModuleImported);
+    assert.strictEqual(packages.isModuleImported, isModuleImported);
   });
 
   it('is package imported', () => {
-    expect(packages.isPackageImported).toStrictEqual(isPackageImported);
+    assert.strictEqual(packages.isPackageImported, isPackageImported);
   });
 });

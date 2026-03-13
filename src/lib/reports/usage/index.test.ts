@@ -1,4 +1,5 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import * as usage from './index.ts';
 import text from './text.ts';
 import json from './usage.ts';
@@ -7,10 +8,10 @@ jest.mock('../../packages/resolve-package.ts', () => jest.fn((specifier: string)
 
 describe('usage report', () => {
   it('json', () => {
-    expect(usage.json).toStrictEqual(json);
+    assert.strictEqual(usage.json, json);
   });
 
   it('text', () => {
-    expect(usage.text).toStrictEqual(text);
+    assert.strictEqual(usage.text, text);
   });
 });

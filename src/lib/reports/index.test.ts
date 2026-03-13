@@ -1,4 +1,5 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import * as coverage from './coverage/index.ts';
 import * as reports from './index.ts';
 import print from './print.ts';
@@ -8,14 +9,14 @@ jest.mock('../packages/resolve-package.ts', () => jest.fn((specifier: string) =>
 
 describe('reports', () => {
   it('coverage', () => {
-    expect(reports.coverage).toStrictEqual(coverage);
+    assert.strictEqual(reports.coverage, coverage);
   });
 
   it('print', () => {
-    expect(reports.print).toStrictEqual(print);
+    assert.strictEqual(reports.print, print);
   });
 
   it('usage', () => {
-    expect(reports.usage).toStrictEqual(usage);
+    assert.strictEqual(reports.usage, usage);
   });
 });

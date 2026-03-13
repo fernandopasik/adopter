@@ -1,4 +1,5 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import { getFile, getFilePaths, getFiles } from './files.ts';
 import * as imports from './index.ts';
 import listFiles from './list-files.ts';
@@ -8,22 +9,22 @@ jest.mock('../packages/resolve-package.ts', () => jest.fn((specifier: string) =>
 
 describe('files', () => {
   it('get files', () => {
-    expect(imports.getFile).toStrictEqual(getFile);
+    assert.strictEqual(imports.getFile, getFile);
   });
 
   it('get all filepaths', () => {
-    expect(imports.getFilePaths).toStrictEqual(getFilePaths);
+    assert.strictEqual(imports.getFilePaths, getFilePaths);
   });
 
   it('get all files', () => {
-    expect(imports.getFiles).toStrictEqual(getFiles);
+    assert.strictEqual(imports.getFiles, getFiles);
   });
 
   it('list files from glob', () => {
-    expect(imports.listFiles).toStrictEqual(listFiles);
+    assert.strictEqual(imports.listFiles, listFiles);
   });
 
   it('process files', () => {
-    expect(imports.processFiles).toStrictEqual(processFiles);
+    assert.strictEqual(imports.processFiles, processFiles);
   });
 });
