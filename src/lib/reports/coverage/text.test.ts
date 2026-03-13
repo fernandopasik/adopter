@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
 import coverage from './coverage.ts';
 import text from './text.ts';
@@ -23,7 +23,7 @@ describe('usage text report', () => {
   it('displays a title', () => {
     coverageMock.mockReturnValueOnce({ files: [], summary });
 
-    expect(text()).toContain('Imported Packages and Modules Coverage');
+    assert.match(text(), /Imported Packages and Modules Coverage/u);
   });
 
   it('displays a sumary', () => {

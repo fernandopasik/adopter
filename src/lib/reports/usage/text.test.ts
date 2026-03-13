@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
 import text from './text.ts';
 import usage from './usage.ts';
@@ -34,7 +34,7 @@ describe('usage text report', () => {
   it('displays a title', () => {
     usageMock.mockReturnValueOnce({ packages: [], summary });
 
-    expect(text()).toContain('Package and Modules Usage');
+    assert.match(text(), /Package and Modules Usage/u);
   });
 
   it('displays a sumary', () => {
