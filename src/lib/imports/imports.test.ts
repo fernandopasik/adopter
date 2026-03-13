@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
 import { addPackageImport } from '../packages/index.ts';
 import { addImport, getImport, importKey, imports } from './imports.ts';
@@ -71,6 +71,7 @@ describe('imports', () => {
   });
 
   it('tracks imports in packages', () => {
+    const addPackageImportMock = jest.mocked(addPackageImport);
     const imprt = {
       filePath: 'example.js',
       moduleNames: ['default'],
@@ -80,8 +81,8 @@ describe('imports', () => {
 
     addImport(imprt);
 
-    expect(addPackageImport).toHaveBeenCalledTimes(1);
-    expect(addPackageImport).toHaveBeenCalledWith(imprt);
+    assert.strictEqual(addPackageImportMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(addPackageImportMock.mock.calls.at(0), [imprt]);
   });
 
   it('can get an existing import', () => {

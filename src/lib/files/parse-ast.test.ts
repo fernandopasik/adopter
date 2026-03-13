@@ -1,4 +1,4 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
 import ts, { ScriptTarget, type SourceFile } from 'typescript';
 import parseAst from './parse-ast.ts';
@@ -10,6 +10,10 @@ jest.mock('typescript', () => ({
 }));
 
 describe('parse ast', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('creates a typescript file', () => {
     const fileName = 'example1.ts';
     const content = 'console.log(true)';
@@ -18,8 +22,8 @@ describe('parse ast', () => {
 
     parseAst(fileName, content);
 
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(fileName, content, ScriptTarget.Latest);
+    assert.strictEqual(spy.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(spy.mock.calls.at(0), [fileName, content, ScriptTarget.Latest]);
 
     spy.mockRestore();
   });
@@ -33,7 +37,7 @@ describe('parse ast', () => {
 
     const result = parseAst(fileName, content);
 
-    expect(spy).toHaveBeenCalledTimes(1);
+    assert.strictEqual(spy.mock.calls.length, 1);
     assert.deepStrictEqual(result, ast);
 
     spy.mockRestore();

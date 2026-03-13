@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
 import type { Import } from '../../imports/index.ts';
 import {
@@ -39,8 +39,8 @@ describe('package usage', () => {
   it('get the package', () => {
     packageUsage('example');
 
-    expect(getPackage).toHaveBeenCalledTimes(1);
-    expect(getPackage).toHaveBeenCalledWith('example');
+    assert.strictEqual(getPackageMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(getPackageMock.mock.calls.at(0), ['example']);
   });
 
   it('returns the package name', () => {
@@ -55,8 +55,8 @@ describe('package usage', () => {
 
     const usage = packageUsage(name);
 
-    expect(isPackageImported).toHaveBeenCalledTimes(1);
-    expect(isPackageImported).toHaveBeenCalledWith(name);
+    assert.strictEqual(isPackageImportedMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(isPackageImportedMock.mock.calls.at(0), [name]);
     assert.partialDeepStrictEqual(usage, { isImported: true });
   });
 
@@ -66,8 +66,8 @@ describe('package usage', () => {
 
     const usage = packageUsage(name);
 
-    expect(isPackageUsed).toHaveBeenCalledTimes(1);
-    expect(isPackageUsed).toHaveBeenCalledWith(name);
+    assert.strictEqual(isPackageUsedMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(isPackageUsedMock.mock.calls.at(0), [name]);
     assert.partialDeepStrictEqual(usage, { isUsed: true });
   });
 

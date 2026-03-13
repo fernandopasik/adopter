@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import log from 'loglevel';
 import assert from 'node:assert/strict';
 import getPackageModules from './get-package-mods.ts';
@@ -31,10 +31,12 @@ describe('get package modules', () => {
 
     const exports = await getPackageModules(packageName);
 
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(
-      expect.stringContaining(`Cannot find module '${packageName}' from`),
+    assert.strictEqual(spy.mock.calls.length, 1);
+    assert.match(
+      spy.mock.calls.at(0)?.at(0) as string,
+      new RegExp(`Cannot find module '${packageName}' from`, 'u'),
     );
+
     assert.strictEqual(exports, null);
 
     spy.mockRestore();

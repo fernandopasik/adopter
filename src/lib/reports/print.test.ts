@@ -1,5 +1,6 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import log from 'loglevel';
+import assert from 'node:assert/strict';
 import print from './print.ts';
 
 jest.mock('loglevel');
@@ -15,10 +16,10 @@ describe('print', () => {
 
     print();
 
-    expect(spy1).toHaveBeenCalledTimes(1);
-    expect(spy2).toHaveBeenCalledTimes(2);
-    expect(spy2).toHaveBeenCalledWith('INFO');
-    expect(spy2).toHaveBeenCalledWith(1);
+    assert.strictEqual(spy1.mock.calls.length, 1);
+    assert.strictEqual(spy2.mock.calls.length, 2);
+    assert.partialDeepStrictEqual(spy2.mock.calls.at(0), ['INFO']);
+    assert.partialDeepStrictEqual(spy2.mock.calls.at(1), [1]);
 
     spy1.mockRestore();
     spy2.mockRestore();
@@ -30,8 +31,8 @@ describe('print', () => {
 
     print(text);
 
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(text);
+    assert.strictEqual(spy.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(spy.mock.calls.at(0), [text]);
 
     spy.mockRestore();
   });
