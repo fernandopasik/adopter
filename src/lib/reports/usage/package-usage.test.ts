@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import type { Import } from '../../imports/index.ts';
 import {
   getPackage,
@@ -45,7 +46,7 @@ describe('package usage', () => {
   it('returns the package name', () => {
     const name = 'example';
 
-    expect(packageUsage(name)).toStrictEqual(expect.objectContaining({ name }));
+    assert.partialDeepStrictEqual(packageUsage(name), { name });
   });
 
   it('returns if package is imported', () => {
@@ -56,7 +57,7 @@ describe('package usage', () => {
 
     expect(isPackageImported).toHaveBeenCalledTimes(1);
     expect(isPackageImported).toHaveBeenCalledWith(name);
-    expect(usage).toStrictEqual(expect.objectContaining({ isImported: true }));
+    assert.partialDeepStrictEqual(usage, { isImported: true });
   });
 
   it('returns if package is used', () => {
@@ -67,7 +68,7 @@ describe('package usage', () => {
 
     expect(isPackageUsed).toHaveBeenCalledTimes(1);
     expect(isPackageUsed).toHaveBeenCalledWith(name);
-    expect(usage).toStrictEqual(expect.objectContaining({ isUsed: true }));
+    assert.partialDeepStrictEqual(usage, { isUsed: true });
   });
 
   it('tracks its modules', () => {
@@ -83,12 +84,10 @@ describe('package usage', () => {
 
     const usage = packageUsage('example');
 
-    expect(usage).toStrictEqual(
-      expect.objectContaining({
-        modulesImported: ['example2'],
-        modulesNotImported: ['example1', 'example3'],
-      }),
-    );
+    assert.partialDeepStrictEqual(usage, {
+      modulesImported: ['example2'],
+      modulesNotImported: ['example1', 'example3'],
+    });
   });
 
   it('tracks its dependencies and dependents', () => {
@@ -98,11 +97,9 @@ describe('package usage', () => {
 
     const usage = packageUsage('example');
 
-    expect(usage).toStrictEqual(
-      expect.objectContaining({
-        dependencies: [{ isImported: false, isUsed: false, name: 'example2' }],
-        dependents: [{ isImported: false, isUsed: false, name: 'example1' }],
-      }),
-    );
+    assert.partialDeepStrictEqual(usage, {
+      dependencies: [{ isImported: false, isUsed: false, name: 'example2' }],
+      dependents: [{ isImported: false, isUsed: false, name: 'example1' }],
+    });
   });
 });

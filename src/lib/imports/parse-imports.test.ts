@@ -23,8 +23,8 @@ describe('parse imports', () => {
     const imports = parseImports(source, filePath);
 
     assert.strictEqual(imports.length, 2);
-    expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
-    expect(imports[1]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
+    assert.partialDeepStrictEqual(imports[0], { moduleNames: ['default'] });
+    assert.partialDeepStrictEqual(imports[1], { moduleNames: ['default'] });
   });
 
   it('with default and named imports', () => {
@@ -38,10 +38,8 @@ describe('parse imports', () => {
     const imports = parseImports(source, filePath);
 
     assert.strictEqual(imports.length, 2);
-    expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
-    expect(imports[1]).toStrictEqual(
-      expect.objectContaining({ moduleNames: ['moduleA', 'moduleB'] }),
-    );
+    assert.partialDeepStrictEqual(imports[0], { moduleNames: ['default'] });
+    assert.partialDeepStrictEqual(imports[1], { moduleNames: ['moduleA', 'moduleB'] });
   });
 
   it('with unnamed, default and named imports with alias', () => {
@@ -55,14 +53,10 @@ describe('parse imports', () => {
     const imports = parseImports(source, filePath);
 
     assert.strictEqual(imports.length, 3);
-    expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
-    expect(imports[1]).toStrictEqual(
-      expect.objectContaining({ moduleNames: ['moduleA', 'moduleB'] }),
-    );
-    expect(imports[1]).toStrictEqual(
-      expect.objectContaining({ named: { moduleA: 'moduleA', moduleB: 'aliasB' } }),
-    );
-    expect(imports[2]).toStrictEqual(expect.objectContaining({ moduleNames: [] }));
+    assert.partialDeepStrictEqual(imports[0], { moduleNames: ['default'] });
+    assert.partialDeepStrictEqual(imports[1], { moduleNames: ['moduleA', 'moduleB'] });
+    assert.partialDeepStrictEqual(imports[1], { named: { moduleA: 'moduleA', moduleB: 'aliasB' } });
+    assert.partialDeepStrictEqual(imports[2], { moduleNames: [] });
   });
 
   it('with imports and non imports', () => {
@@ -76,8 +70,8 @@ describe('parse imports', () => {
     const imports = parseImports(source, filePath);
 
     assert.strictEqual(imports.length, 2);
-    expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
-    expect(imports[1]).toStrictEqual(expect.objectContaining({ moduleNames: ['moduleA'] }));
+    assert.partialDeepStrictEqual(imports[0], { moduleNames: ['default'] });
+    assert.partialDeepStrictEqual(imports[1], { moduleNames: ['moduleA'] });
   });
 
   it('with module imports and type imports', () => {
@@ -91,8 +85,8 @@ describe('parse imports', () => {
     const imports = parseImports(source, filePath);
 
     assert.strictEqual(imports.length, 2);
-    expect(imports[0]).toStrictEqual(expect.objectContaining({ moduleNames: ['default'] }));
-    expect(imports[1]).toStrictEqual(expect.objectContaining({ moduleNames: ['Dep2'] }));
+    assert.partialDeepStrictEqual(imports[0], { moduleNames: ['default'] });
+    assert.partialDeepStrictEqual(imports[1], { moduleNames: ['Dep2'] });
   });
 
   it('with relative imports', () => {
@@ -106,12 +100,8 @@ describe('parse imports', () => {
     const imports = parseImports(source, filePath);
 
     assert.strictEqual(imports.length, 2);
-    expect(imports[0]).toStrictEqual(
-      expect.objectContaining({ moduleNames: ['default'], packageName: 'dep1' }),
-    );
-    expect(imports[1]).toStrictEqual(
-      expect.objectContaining({ moduleNames: ['default'], packageName: null }),
-    );
+    assert.partialDeepStrictEqual(imports[0], { moduleNames: ['default'], packageName: 'dep1' });
+    assert.partialDeepStrictEqual(imports[1], { moduleNames: ['default'], packageName: null });
   });
 
   it('with internal files in package imports', () => {
@@ -125,12 +115,8 @@ describe('parse imports', () => {
     const imports = parseImports(source, filePath);
 
     assert.strictEqual(imports.length, 2);
-    expect(imports[0]).toStrictEqual(
-      expect.objectContaining({ moduleNames: ['default'], packageName: 'dep1' }),
-    );
-    expect(imports[1]).toStrictEqual(
-      expect.objectContaining({ moduleNames: ['default'], packageName: 'dep2' }),
-    );
+    assert.partialDeepStrictEqual(imports[0], { moduleNames: ['default'], packageName: 'dep1' });
+    assert.partialDeepStrictEqual(imports[1], { moduleNames: ['default'], packageName: 'dep2' });
   });
 
   it('stores each import', () => {

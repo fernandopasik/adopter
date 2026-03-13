@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import { isModuleImported, isPackageImported } from '../../packages/index.ts';
 import getTrackedImports from './get-tracked-imports.ts';
 
@@ -49,9 +50,9 @@ describe('get tracked imports', () => {
 
     const trackedImports = getTrackedImports(imports);
 
-    expect(trackedImports[0]).toStrictEqual(expect.objectContaining({ packageName: 'dep1' }));
-    expect(trackedImports[1]).toStrictEqual(expect.objectContaining({ packageName: 'dep2' }));
-    expect(trackedImports[2]).toStrictEqual(expect.objectContaining({ packageName: 'dep3' }));
+    assert.partialDeepStrictEqual(trackedImports[0], { packageName: 'dep1' });
+    assert.partialDeepStrictEqual(trackedImports[1], { packageName: 'dep2' });
+    assert.partialDeepStrictEqual(trackedImports[2], { packageName: 'dep3' });
   });
 
   it('with some tracked packages', () => {
@@ -62,8 +63,8 @@ describe('get tracked imports', () => {
 
     const trackedImports = getTrackedImports(imports);
 
-    expect(trackedImports[0]).toStrictEqual(expect.objectContaining({ packageName: 'dep1' }));
-    expect(trackedImports[1]).toStrictEqual(expect.objectContaining({ packageName: 'dep3' }));
+    assert.partialDeepStrictEqual(trackedImports[0], { packageName: 'dep1' });
+    assert.partialDeepStrictEqual(trackedImports[1], { packageName: 'dep3' });
   });
 
   it('with no tracked modules', () => {

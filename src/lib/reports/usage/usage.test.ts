@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import { getPackageNames } from '../../packages/index.ts';
 import packageUsage from './package-usage.ts';
 import summary from './summary.ts';
@@ -31,7 +32,7 @@ describe('usage', () => {
 
     summaryMock.mockReturnValueOnce(sum);
 
-    expect(usage()).toStrictEqual(expect.objectContaining({ summary: sum }));
+    assert.partialDeepStrictEqual(usage(), { summary: sum });
     expect(summary).toHaveBeenCalledTimes(1);
   });
 

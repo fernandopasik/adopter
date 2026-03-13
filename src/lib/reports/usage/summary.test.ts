@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import { getPackageNames } from '../../packages/index.ts';
 import isPackageUsed from './is-package-used.ts';
 import summary from './summary.ts';
@@ -27,7 +28,7 @@ describe('usage summary', () => {
   it('has number of packages tracked', () => {
     getPackageNamesMock.mockReturnValueOnce(['example1', 'example2', 'example3']);
 
-    expect(summary()).toStrictEqual(expect.objectContaining({ packagesTracked: 3 }));
+    assert.partialDeepStrictEqual(summary(), { packagesTracked: 3 });
   });
 
   it('has number of packages used', () => {
@@ -37,7 +38,7 @@ describe('usage summary', () => {
       .mockReturnValueOnce(true)
       .mockReturnValueOnce(true);
 
-    expect(summary()).toStrictEqual(expect.objectContaining({ packagesUsed: 2 }));
+    assert.partialDeepStrictEqual(summary(), { packagesUsed: 2 });
   });
 
   it('has percentage of packages used', () => {
@@ -48,6 +49,6 @@ describe('usage summary', () => {
       .mockReturnValueOnce(true)
       .mockReturnValueOnce(true);
 
-    expect(summary()).toStrictEqual(expect.objectContaining({ packagesUsage: 0.75 }));
+    assert.partialDeepStrictEqual(summary(), { packagesUsage: 0.75 });
   });
 });

@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import { getFile, getFilePaths } from '../../files/index.ts';
 import summary from './summary.ts';
 
@@ -26,7 +27,7 @@ describe('coverage summary', () => {
   it('tracks ammount of files', () => {
     const filePaths = ['src/example1.ts', 'src/example2.ts'];
     getFilePathsMock.mockReturnValueOnce(filePaths);
-    expect(summary()).toStrictEqual(expect.objectContaining({ filesTracked: 2 }));
+    assert.partialDeepStrictEqual(summary(), { filesTracked: 2 });
   });
 
   it('tracks ammount of files with imports', () => {
@@ -41,6 +42,6 @@ describe('coverage summary', () => {
     ];
     getFilePathsMock.mockReturnValueOnce(filePaths);
     getFileMock.mockReturnValueOnce({ filePath: 'src/example1.ts', imports: new Set(imports) });
-    expect(summary()).toStrictEqual(expect.objectContaining({ filesWithImports: 1 }));
+    assert.partialDeepStrictEqual(summary(), { filesWithImports: 1 });
   });
 });
