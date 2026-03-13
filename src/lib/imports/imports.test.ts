@@ -67,7 +67,7 @@ describe('imports', () => {
 
     addImport(imprt);
 
-    expect(imports.get('example.js**dep1**default')).toStrictEqual(imprt);
+    assert.deepStrictEqual(imports.get('example.js**dep1**default'), imprt);
   });
 
   it('tracks imports in packages', () => {
@@ -94,7 +94,7 @@ describe('imports', () => {
 
     addImport(imprt);
 
-    expect(getImport('example.js**dep1**default')).toStrictEqual(imprt);
+    assert.deepStrictEqual(getImport('example.js**dep1**default'), imprt);
   });
 
   it('can not get a non existing import', () => {

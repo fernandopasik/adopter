@@ -1,4 +1,5 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import adopter from './adopter.ts';
 import run from './lib/run.ts';
 
@@ -6,6 +7,6 @@ jest.mock('./lib/packages/resolve-package.ts', () => jest.fn((specifier: string)
 
 describe('adopter', () => {
   it('export runner', () => {
-    expect(adopter).toStrictEqual(run);
+    assert.strictEqual(adopter, run);
   });
 });

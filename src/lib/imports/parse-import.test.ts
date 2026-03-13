@@ -1,4 +1,5 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import { createSourceFile, ScriptTarget, type ImportDeclaration } from 'typescript';
 import parseImport from './parse-import.ts';
 
@@ -11,7 +12,7 @@ describe('parse import', () => {
       statements: [statement],
     } = createSourceFile(filePath, 'import "./dep.ts"', ScriptTarget.Latest);
 
-    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
+    assert.deepStrictEqual(parseImport(statement as ImportDeclaration, filePath), {
       defaultName: undefined,
       filePath,
       moduleNames: [],
@@ -27,7 +28,7 @@ describe('parse import', () => {
       statements: [statement],
     } = createSourceFile(filePath, 'import dep from "./dep.ts"', ScriptTarget.Latest);
 
-    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
+    assert.deepStrictEqual(parseImport(statement as ImportDeclaration, filePath), {
       defaultName: 'dep',
       filePath,
       moduleNames: ['default'],
@@ -43,7 +44,7 @@ describe('parse import', () => {
       statements: [statement],
     } = createSourceFile(filePath, 'import { dep } from "./dep.ts"', ScriptTarget.Latest);
 
-    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
+    assert.deepStrictEqual(parseImport(statement as ImportDeclaration, filePath), {
       defaultName: undefined,
       filePath,
       moduleNames: ['dep'],
@@ -59,7 +60,7 @@ describe('parse import', () => {
       statements: [statement],
     } = createSourceFile(filePath, 'import { dep1, dep2 } from "./dep.ts"', ScriptTarget.Latest);
 
-    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
+    assert.deepStrictEqual(parseImport(statement as ImportDeclaration, filePath), {
       defaultName: undefined,
       filePath,
       moduleNames: ['dep1', 'dep2'],
@@ -79,7 +80,7 @@ describe('parse import', () => {
       ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
+    assert.deepStrictEqual(parseImport(statement as ImportDeclaration, filePath), {
       defaultName: undefined,
       filePath,
       moduleNames: ['dep1', 'dep2'],
@@ -99,7 +100,7 @@ describe('parse import', () => {
       ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
+    assert.deepStrictEqual(parseImport(statement as ImportDeclaration, filePath), {
       defaultName: 'dep',
       filePath,
       moduleNames: ['default', 'dep1', 'dep2'],
@@ -119,7 +120,7 @@ describe('parse import', () => {
       ScriptTarget.Latest,
     );
 
-    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
+    assert.deepStrictEqual(parseImport(statement as ImportDeclaration, filePath), {
       defaultName: 'dep',
       filePath,
       moduleNames: ['default', 'dep1', 'dep2'],
@@ -135,7 +136,7 @@ describe('parse import', () => {
       statements: [statement],
     } = createSourceFile(filePath, 'import type { Dep } from "./dep.ts"', ScriptTarget.Latest);
 
-    expect(parseImport(statement as ImportDeclaration, filePath)).toStrictEqual({
+    assert.deepStrictEqual(parseImport(statement as ImportDeclaration, filePath), {
       defaultName: undefined,
       filePath,
       moduleNames: ['Dep'],

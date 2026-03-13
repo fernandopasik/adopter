@@ -1,24 +1,25 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, it } from '@jest/globals';
+import assert from 'node:assert/strict';
 import getImportModuleNames from './get-import-module-names.ts';
 
 describe('get import module names', () => {
   it('with no modules', () => {
-    expect(getImportModuleNames()).toStrictEqual([]);
+    assert.deepStrictEqual(getImportModuleNames(), []);
   });
 
   it('with only default module', () => {
-    expect(getImportModuleNames('dep')).toStrictEqual(['default']);
+    assert.deepStrictEqual(getImportModuleNames('dep'), ['default']);
   });
 
   it('with only named modules', () => {
-    expect(getImportModuleNames(undefined, { dep1: 'dep1', dep2: 'dep2' })).toStrictEqual([
+    assert.deepStrictEqual(getImportModuleNames(undefined, { dep1: 'dep1', dep2: 'dep2' }), [
       'dep1',
       'dep2',
     ]);
   });
 
   it('with default and named modules', () => {
-    expect(getImportModuleNames('dep', { dep1: 'dep1', dep2: 'dep2' })).toStrictEqual([
+    assert.deepStrictEqual(getImportModuleNames('dep', { dep1: 'dep1', dep2: 'dep2' }), [
       'default',
       'dep1',
       'dep2',

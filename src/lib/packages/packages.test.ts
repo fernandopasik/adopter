@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from '@jest/globals';
+import { beforeEach, describe, it } from '@jest/globals';
 import assert from 'node:assert/strict';
 import {
   addPackage,
@@ -52,7 +52,7 @@ describe('packages', () => {
   it('get package', () => {
     addPackage('example');
 
-    expect(getPackage('example')).toStrictEqual({
+    assert.deepStrictEqual(getPackage('example'), {
       dependencies: new Set(),
       dependents: new Set(),
       imports: new Set(),
@@ -66,7 +66,7 @@ describe('packages', () => {
     addPackage('example1');
     addPackage('example2');
 
-    expect(getPackageNames()).toStrictEqual(['example1', 'example2']);
+    assert.deepStrictEqual(getPackageNames(), ['example1', 'example2']);
   });
 
   describe('package imports', () => {

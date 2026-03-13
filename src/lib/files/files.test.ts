@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from '@jest/globals';
+import { beforeEach, describe, it } from '@jest/globals';
 import assert from 'node:assert/strict';
 import { addFile, addFileImports, files, getFile, getFilePaths, getFiles } from './files.ts';
 
@@ -26,7 +26,7 @@ describe('files', () => {
   it('can get a file', () => {
     const filePath = 'src/example.js';
     addFile(filePath);
-    expect(getFile(filePath)).toStrictEqual({ filePath, imports: new Set() });
+    assert.deepStrictEqual(getFile(filePath), { filePath, imports: new Set() });
   });
 
   it('can not get a non existing file', () => {
@@ -43,7 +43,7 @@ describe('files', () => {
     addFile(filePath2);
     addFile(filePath3);
 
-    expect(getFilePaths()).toStrictEqual([filePath1, filePath2, filePath3]);
+    assert.deepStrictEqual(getFilePaths(), [filePath1, filePath2, filePath3]);
   });
 
   it('can get all files', () => {
@@ -51,13 +51,13 @@ describe('files', () => {
     const filePath2 = 'src/example2.js';
     const filePath3 = 'src/example3.js';
 
-    expect(getFilePaths()).toStrictEqual([]);
+    assert.deepStrictEqual(getFilePaths(), []);
 
     addFile(filePath1);
     addFile(filePath2);
     addFile(filePath3);
 
-    expect(getFiles()).toStrictEqual([
+    assert.deepStrictEqual(getFiles(), [
       { filePath: filePath1, imports: new Set() },
       { filePath: filePath2, imports: new Set() },
       { filePath: filePath3, imports: new Set() },
@@ -83,7 +83,7 @@ describe('files', () => {
     addFile(filePath);
 
     addFileImports(filePath, imports);
-    expect(getFile(filePath)).toStrictEqual({ filePath, imports: new Set(imports) });
+    assert.deepStrictEqual(getFile(filePath), { filePath, imports: new Set(imports) });
   });
 
   it('can not add imports to non existent file', () => {
@@ -106,6 +106,6 @@ describe('files', () => {
     addFile(filePath);
 
     addFileImports(filePath);
-    expect(getFile(filePath)).toStrictEqual({ filePath, imports: new Set() });
+    assert.deepStrictEqual(getFile(filePath), { filePath, imports: new Set() });
   });
 });

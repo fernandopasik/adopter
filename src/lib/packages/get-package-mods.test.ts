@@ -22,7 +22,7 @@ describe('get package modules', () => {
 
     const exports = await getPackageModules('typescript');
 
-    expect(exports).toStrictEqual([]);
+    assert.deepStrictEqual(exports, []);
   });
 
   it('with a non installed module', async () => {
@@ -45,7 +45,7 @@ describe('get package modules', () => {
 
     const exports = await getPackageModules('typescript');
 
-    expect(exports).toStrictEqual(['length', 'name', 'default']);
+    assert.deepStrictEqual(exports, ['length', 'name', 'default']);
   });
 
   it('with a default and named exports', async () => {
@@ -59,7 +59,7 @@ describe('get package modules', () => {
 
     const exports = await getPackageModules('typescript');
 
-    expect(exports).toStrictEqual(['default', 'example1', 'example2']);
+    assert.deepStrictEqual(exports, ['default', 'example1', 'example2']);
   });
 
   it('with named exports', async () => {
@@ -73,6 +73,6 @@ describe('get package modules', () => {
 
     const exports = await getPackageModules('typescript');
 
-    expect(exports).toStrictEqual(['example1', 'example2', 'example3']);
+    assert.deepStrictEqual(exports, ['example1', 'example2', 'example3']);
   });
 });

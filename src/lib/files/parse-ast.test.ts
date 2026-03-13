@@ -34,7 +34,7 @@ describe('parse ast', () => {
     const result = parseAst(fileName, content);
 
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(result).toStrictEqual(ast);
+    assert.deepStrictEqual(result, ast);
 
     spy.mockRestore();
   });
