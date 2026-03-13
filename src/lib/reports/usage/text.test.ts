@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import text from './text.ts';
 import usage from './usage.ts';
 
@@ -41,9 +42,9 @@ describe('usage text report', () => {
 
     const usageText = text();
 
-    expect(usageText).toStrictEqual(expect.stringMatching('Packages Tracked.*5'));
-    expect(usageText).toStrictEqual(expect.stringMatching('Packages Used.*2'));
-    expect(usageText).toStrictEqual(expect.stringMatching('Packages Usage.*40.00 %'));
+    assert.match(usageText, /Packages Tracked.*5/u);
+    assert.match(usageText, /Packages Used.*2/u);
+    assert.match(usageText, /Packages Usage.*40.00 %/u);
   });
 
   it('displays packages', () => {
@@ -58,9 +59,9 @@ describe('usage text report', () => {
 
     const usageText = text();
 
-    expect(usageText).toStrictEqual(expect.stringMatching('Package.*example1'));
-    expect(usageText).toStrictEqual(expect.stringMatching('Package.*example2'));
-    expect(usageText).toStrictEqual(expect.stringMatching('Package.*example3'));
+    assert.match(usageText, /Package.*example1/u);
+    assert.match(usageText, /Package.*example2/u);
+    assert.match(usageText, /Package.*example3/u);
   });
 
   it('displays used and imported packages', () => {
@@ -75,15 +76,9 @@ describe('usage text report', () => {
 
     const usageText = text();
 
-    expect(usageText).toStrictEqual(
-      expect.stringMatching('Package.*example1.*\n.*is Imported.*yes.*\n.*is Used.*yes'),
-    );
-    expect(usageText).toStrictEqual(
-      expect.stringMatching('Package.*example2.*\n.*is Imported.*no.*\n.*is Used.*yes'),
-    );
-    expect(usageText).toStrictEqual(
-      expect.stringMatching('Package.*example3.*\n.*is Imported.*no.*\n.*is Used.*no'),
-    );
+    assert.match(usageText, /Package.*example1.*\n.*is Imported.*yes.*\n.*is Used.*yes/u);
+    assert.match(usageText, /Package.*example2.*\n.*is Imported.*no.*\n.*is Used.*yes/u);
+    assert.match(usageText, /Package.*example3.*\n.*is Imported.*no.*\n.*is Used.*no/u);
   });
 
   it('displays package modules', () => {
@@ -101,8 +96,8 @@ describe('usage text report', () => {
 
     const usageText = text();
 
-    expect(usageText).toStrictEqual(expect.stringMatching('Modules Imported.*example2, example3'));
-    expect(usageText).toStrictEqual(expect.stringMatching('Modules not Imported.*example4'));
+    assert.match(usageText, /Modules Imported.*example2, example3/u);
+    assert.match(usageText, /Modules not Imported.*example4/u);
   });
 
   it('displays dependents and dependencies', () => {
@@ -123,9 +118,7 @@ describe('usage text report', () => {
 
     const usageText = text();
 
-    expect(usageText).toStrictEqual(
-      expect.stringMatching('Dependencies Tracked.*example2, example3'),
-    );
-    expect(usageText).toStrictEqual(expect.stringMatching('Dependents Tracked.*example4'));
+    assert.match(usageText, /Dependencies Tracked.*example2, example3/u);
+    assert.match(usageText, /Dependents Tracked.*example4/u);
   });
 });

@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import coverage from './coverage.ts';
 import text from './text.ts';
 
@@ -30,8 +31,8 @@ describe('usage text report', () => {
 
     const usageText = text();
 
-    expect(usageText).toStrictEqual(expect.stringMatching('Files Tracked.*2'));
-    expect(usageText).toStrictEqual(expect.stringMatching('Files with Imports.*1'));
+    assert.match(usageText, /Files Tracked.*2/u);
+    assert.match(usageText, /Files with Imports.*1/u);
   });
 
   it('displays files', () => {
@@ -44,9 +45,9 @@ describe('usage text report', () => {
 
     const usageText = text();
 
-    expect(usageText).toStrictEqual(expect.stringMatching('src/example1.ts'));
-    expect(usageText).toStrictEqual(expect.stringMatching('src/example2.ts'));
-    expect(usageText).toStrictEqual(expect.stringMatching('src/example3.ts'));
+    assert.match(usageText, /src\/example1.ts/u);
+    assert.match(usageText, /src\/example2.ts/u);
+    assert.match(usageText, /src\/example3.ts/u);
   });
 
   it('displays files with tracked packages', () => {
@@ -64,10 +65,10 @@ describe('usage text report', () => {
 
     const usageText = text();
 
-    expect(usageText).toStrictEqual(expect.stringMatching('src/example1.ts'));
-    expect(usageText).toStrictEqual(expect.stringMatching('dep1.*/.*default,methodA'));
-    expect(usageText).toStrictEqual(expect.stringMatching('src/example2.ts'));
-    expect(usageText).toStrictEqual(expect.stringMatching('dep2.*/.*default'));
-    expect(usageText).toStrictEqual(expect.stringMatching('src/example3.ts'));
+    assert.match(usageText, /src\/example1.ts/u);
+    assert.match(usageText, /dep1.*\/.*default,methodA/u);
+    assert.match(usageText, /src\/example2.ts/u);
+    assert.match(usageText, /dep2.*\/.*default/u);
+    assert.match(usageText, /src\/example3.ts/u);
   });
 });
