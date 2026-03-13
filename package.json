@@ -52,7 +52,7 @@
     "loglevel": "^1.9.2",
     "progress": "^2.0.3",
     "typescript": "^5.9.3",
-    "yargs": "^18.0.0"
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
