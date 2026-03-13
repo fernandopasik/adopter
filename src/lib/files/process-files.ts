@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import type { SourceFile } from 'typescript';
-import { parseImports, type Import } from '../imports/index.js';
-import { addFile, addFileImports } from './files.js';
-import parseAst from './parse-ast.js';
+import { parseImports, type Import } from '../imports/index.ts';
+import { addFile, addFileImports } from './files.ts';
+import parseAst from './parse-ast.ts';
 
 // eslint-disable-next-line @typescript-eslint/max-params
 export type Callback = (

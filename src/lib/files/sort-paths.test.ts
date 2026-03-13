@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import sortPaths from './sort-paths.js';
+import sortPaths from './sort-paths.ts';
 
 describe('sort paths', () => {
   it('with empty list', () => {

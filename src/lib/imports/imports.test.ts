@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { addPackageImport } from '../packages/index.js';
-import { addImport, getImport, importKey, imports } from './imports.js';
+import { addPackageImport } from '../packages/index.ts';
+import { addImport, getImport, importKey, imports } from './imports.ts';
 
-jest.mock('../packages/index.js', () => ({ addPackageImport: jest.fn() }));
+jest.mock('../packages/index.ts', () => ({ addPackageImport: jest.fn() }));
 
 describe('imports', () => {
   beforeEach(() => {

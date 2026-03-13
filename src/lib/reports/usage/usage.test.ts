@@ -1,15 +1,15 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { getPackageNames } from '../../packages/index.js';
-import packageUsage from './package-usage.js';
-import summary from './summary.js';
-import usage from './usage.js';
+import { getPackageNames } from '../../packages/index.ts';
+import packageUsage from './package-usage.ts';
+import summary from './summary.ts';
+import usage from './usage.ts';
 
 jest.mock('./summary');
-jest.mock('../../packages/index.js', () => ({
+jest.mock('../../packages/index.ts', () => ({
   getPackageNames: jest.fn(() => []),
 }));
-jest.mock('./package-usage.js');
-jest.mock('../../packages/resolve-package.js', () =>
+jest.mock('./package-usage.ts');
+jest.mock('../../packages/resolve-package.ts', () =>
   jest.fn(async (specifier: string) => Promise.resolve(specifier)),
 );
 

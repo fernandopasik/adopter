@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { createSourceFile, ScriptTarget, type ImportDeclaration } from 'typescript';
-import areNamedImports from './are-named-imports.js';
+import areNamedImports from './are-named-imports.ts';
 
 describe('are named imports', () => {
   it('with empty', () => {

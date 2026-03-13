@@ -2,9 +2,9 @@
 
 import chalk from 'chalk';
 import ProgressBar from 'progress';
-import { addPackage } from './packages.js';
-import setPackageDependencies from './set-package-dependencies.js';
-import setPackageMods from './set-package-mods.js';
+import { addPackage } from './packages.ts';
+import setPackageDependencies from './set-package-dependencies.ts';
+import setPackageMods from './set-package-mods.ts';
 
 const analyzePackages = async (packageList: string[]): Promise<void> => {
   const sortedList = [...packageList].sort((first, second) => first.localeCompare(second));

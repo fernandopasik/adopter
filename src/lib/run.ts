@@ -5,10 +5,10 @@ import log from 'loglevel';
 import path from 'path';
 import ProgressBar from 'progress';
 import type { SourceFile } from 'typescript';
-import { listFiles, processFiles } from './files/index.js';
-import type { Import } from './imports/index.js';
-import { analyzePackages } from './packages/index.js';
-import { coverage, print, usage } from './reports/index.js';
+import { listFiles, processFiles } from './files/index.ts';
+import type { Import } from './imports/index.ts';
+import { analyzePackages } from './packages/index.ts';
+import { coverage, print, usage } from './reports/index.ts';
 
 // eslint-disable-next-line @typescript-eslint/max-params
 export type OnFile = (

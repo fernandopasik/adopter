@@ -1,8 +1,8 @@
 import chalk from 'chalk';
 import chalkTemplate from 'chalk-template';
-import type { PackageUsage, PackageUsed } from './package-usage.js';
-import type { UsageSummary } from './summary.js';
-import usage from './usage.js';
+import type { PackageUsage, PackageUsed } from './package-usage.ts';
+import type { UsageSummary } from './summary.ts';
+import usage from './usage.ts';
 
 // eslint-disable-next-line @typescript-eslint/no-magic-numbers
 const toPercentage = (num: number): string => `${(num * 100).toFixed(2)} %`;

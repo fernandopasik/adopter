@@ -1,10 +1,10 @@
 import { describe, expect, it, jest } from '@jest/globals';
-import analyzePackages from './analyze-packages.js';
-import extractPackagePath from './extract-package-path.js';
-import filterTrackedDependencies from './filter-tracked-dependencies.js';
-import getPackageJson from './get-package-json.js';
-import getPackageModules from './get-package-mods.js';
-import * as packages from './index.js';
+import analyzePackages from './analyze-packages.ts';
+import extractPackagePath from './extract-package-path.ts';
+import filterTrackedDependencies from './filter-tracked-dependencies.ts';
+import getPackageJson from './get-package-json.ts';
+import getPackageModules from './get-package-mods.ts';
+import * as packages from './index.ts';
 import {
   addPackageImport,
   getPackage,
@@ -13,9 +13,9 @@ import {
   hasPackage,
   isModuleImported,
   isPackageImported,
-} from './packages.js';
+} from './packages.ts';
 
-jest.mock('./resolve-package.js', () => jest.fn((specifier: string) => specifier));
+jest.mock('./resolve-package.ts', () => jest.fn((specifier: string) => specifier));
 
 describe('packages', () => {
   it('add package import', () => {

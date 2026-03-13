@@ -1,4 +1,4 @@
-import type { Import } from '../imports/index.js';
+import type { Import } from '../imports/index.ts';
 
 export interface Package {
   name: string;

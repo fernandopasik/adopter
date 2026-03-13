@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import extractPackageName from './extract-package-name.js';
+import extractPackageName from './extract-package-name.ts';
 
 describe('get package name', () => {
   it('with empty', () => {

@@ -1,5 +1,5 @@
 import chalkTemplate from 'chalk-template';
-import coverage, { type TrackedFile } from './coverage.js';
+import coverage, { type TrackedFile } from './coverage.ts';
 import type { CoverageSummary } from './summary';
 
 const summaryTemplate = (summary: CoverageSummary): string => chalkTemplate`

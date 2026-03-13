@@ -1,15 +1,15 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import fs from 'fs';
 import type { SourceFile } from 'typescript';
-import { parseImports, type Import } from '../imports/index.js';
-import { addFile, addFileImports } from './files.js';
-import parseAst from './parse-ast.js';
-import processFiles, { type Callback } from './process-files.js';
+import { parseImports, type Import } from '../imports/index.ts';
+import { addFile, addFileImports } from './files.ts';
+import parseAst from './parse-ast.ts';
+import processFiles, { type Callback } from './process-files.ts';
 
 jest.mock('fs');
-jest.mock('./parse-ast.js', () => jest.fn());
-jest.mock('../imports/index.js', () => ({ parseImports: jest.fn() }));
-jest.mock('./files.js');
+jest.mock('./parse-ast.ts', () => jest.fn());
+jest.mock('../imports/index.ts', () => ({ parseImports: jest.fn() }));
+jest.mock('./files.ts');
 
 describe('process files', () => {
   beforeEach(() => {

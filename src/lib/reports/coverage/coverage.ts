@@ -1,6 +1,6 @@
-import { getFiles, type File } from '../../files/index.js';
-import getTrackedImports, { type TrackedImport } from './get-tracked-imports.js';
-import summary, { type CoverageSummary } from './summary.js';
+import { getFiles, type File } from '../../files/index.ts';
+import getTrackedImports, { type TrackedImport } from './get-tracked-imports.ts';
+import summary, { type CoverageSummary } from './summary.ts';
 
 export interface TrackedFile {
   filePath: string;

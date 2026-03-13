@@ -1,8 +1,8 @@
 import { describe, expect, it, jest } from '@jest/globals';
 import { createSourceFile, ScriptTarget, type ImportDeclaration } from 'typescript';
-import parseImport from './parse-import.js';
+import parseImport from './parse-import.ts';
 
-jest.mock('../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
+jest.mock('../packages/resolve-package.ts', () => jest.fn((specifier: string) => specifier));
 
 describe('parse import', () => {
   it('without default nor named imports', () => {

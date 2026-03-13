@@ -9,7 +9,7 @@ import {
   isModuleImported,
   isPackageImported,
   packages,
-} from './packages.js';
+} from './packages.ts';
 
 describe('packages', () => {
   beforeEach(() => {

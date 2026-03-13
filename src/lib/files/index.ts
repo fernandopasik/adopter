@@ -1,4 +1,4 @@
-export { getFile, getFilePaths, getFiles } from './files.js';
-export type { File } from './files.js';
-export { default as listFiles } from './list-files.js';
-export { default as processFiles } from './process-files.js';
+export { getFile, getFilePaths, getFiles } from './files.ts';
+export type { File } from './files.ts';
+export { default as listFiles } from './list-files.ts';
+export { default as processFiles } from './process-files.ts';

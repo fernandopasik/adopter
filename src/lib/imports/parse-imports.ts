@@ -1,6 +1,6 @@
 import { isImportDeclaration, type SourceFile, type Statement } from 'typescript';
-import { addImport, type Import } from './imports.js';
-import parseImport from './parse-import.js';
+import { addImport, type Import } from './imports.ts';
+import parseImport from './parse-import.ts';
 
 const parseImports = (source: SourceFile, filePath: string): Import[] => {
   const { statements } = source;

@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { createSourceFile, ScriptTarget } from 'typescript';
-import { addImport } from './imports.js';
-import parseImports from './parse-imports.js';
+import { addImport } from './imports.ts';
+import parseImports from './parse-imports.ts';
 
-jest.mock('./imports.js');
-jest.mock('../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
+jest.mock('./imports.ts');
+jest.mock('../packages/resolve-package.ts', () => jest.fn((specifier: string) => specifier));
 
 describe('parse imports', () => {
   beforeEach(() => {

@@ -1,4 +1,4 @@
-import type { Import } from './imports.js';
+import type { Import } from './imports.ts';
 
 const getImportModuleNames = (
   defaultName?: Import['defaultName'],

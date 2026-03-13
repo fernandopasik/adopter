@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import analyzePackages from './analyze-packages.js';
-import { addPackage } from './packages.js';
-import setPackageDependencies from './set-package-dependencies.js';
-import setPackageMods from './set-package-mods.js';
+import analyzePackages from './analyze-packages.ts';
+import { addPackage } from './packages.ts';
+import setPackageDependencies from './set-package-dependencies.ts';
+import setPackageMods from './set-package-mods.ts';
 
-jest.mock('./packages.js', () => ({ addPackage: jest.fn() }));
-jest.mock('./set-package-dependencies.js');
-jest.mock('./set-package-mods.js');
-jest.mock('./resolve-package.js', () =>
+jest.mock('./packages.ts', () => ({ addPackage: jest.fn() }));
+jest.mock('./set-package-dependencies.ts');
+jest.mock('./set-package-mods.ts');
+jest.mock('./resolve-package.ts', () =>
   jest.fn(async (specifier: string) => Promise.resolve(specifier)),
 );
 

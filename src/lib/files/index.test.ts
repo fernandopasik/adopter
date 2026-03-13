@@ -1,10 +1,10 @@
 import { describe, expect, it, jest } from '@jest/globals';
-import { getFile, getFilePaths, getFiles } from './files.js';
-import * as imports from './index.js';
-import listFiles from './list-files.js';
-import processFiles from './process-files.js';
+import { getFile, getFilePaths, getFiles } from './files.ts';
+import * as imports from './index.ts';
+import listFiles from './list-files.ts';
+import processFiles from './process-files.ts';
 
-jest.mock('../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
+jest.mock('../packages/resolve-package.ts', () => jest.fn((specifier: string) => specifier));
 
 describe('files', () => {
   it('get files', () => {

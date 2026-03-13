@@ -1,10 +1,10 @@
 import { describe, expect, it, jest } from '@jest/globals';
-import * as coverage from './coverage/index.js';
-import * as reports from './index.js';
-import print from './print.js';
-import * as usage from './usage/index.js';
+import * as coverage from './coverage/index.ts';
+import * as reports from './index.ts';
+import print from './print.ts';
+import * as usage from './usage/index.ts';
 
-jest.mock('../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
+jest.mock('../packages/resolve-package.ts', () => jest.fn((specifier: string) => specifier));
 
 describe('reports', () => {
   it('coverage', () => {

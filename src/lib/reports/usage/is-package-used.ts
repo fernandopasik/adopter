@@ -1,4 +1,4 @@
-import { getPackage, isPackageImported } from '../../packages/index.js';
+import { getPackage, isPackageImported } from '../../packages/index.ts';
 
 const isPackageUsed = (packageName: string): boolean => {
   if (isPackageImported(packageName)) {

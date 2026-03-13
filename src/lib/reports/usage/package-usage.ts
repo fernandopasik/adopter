@@ -3,8 +3,8 @@ import {
   isModuleImported,
   isPackageImported,
   type Package,
-} from '../../packages/index.js';
-import isPackageUsed from './is-package-used.js';
+} from '../../packages/index.ts';
+import isPackageUsed from './is-package-used.ts';
 
 export interface PackageUsed {
   isImported: boolean;

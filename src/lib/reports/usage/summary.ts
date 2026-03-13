@@ -1,5 +1,5 @@
-import { getPackageNames } from '../../packages/index.js';
-import isPackageUsed from './is-package-used.js';
+import { getPackageNames } from '../../packages/index.ts';
+import isPackageUsed from './is-package-used.ts';
 
 export interface UsageSummary {
   packagesTracked: number;

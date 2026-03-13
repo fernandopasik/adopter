@@ -1,6 +1,6 @@
-import filterTrackedDependencies from './filter-tracked-dependencies.js';
-import getPackageJson from './get-package-json.js';
-import { getPackage, getPackageNames } from './packages.js';
+import filterTrackedDependencies from './filter-tracked-dependencies.ts';
+import getPackageJson from './get-package-json.ts';
+import { getPackage, getPackageNames } from './packages.ts';
 
 const setPackageDependencies = async (name: string): Promise<void> => {
   const pkg = getPackage(name);

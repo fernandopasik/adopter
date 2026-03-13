@@ -1,16 +1,16 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { getFiles } from '../../files/index.js';
-import type { Import } from '../../imports/index.js';
-import coverage from './coverage.js';
-import getTrackedImports from './get-tracked-imports.js';
-import summary from './summary.js';
+import { getFiles } from '../../files/index.ts';
+import type { Import } from '../../imports/index.ts';
+import coverage from './coverage.ts';
+import getTrackedImports from './get-tracked-imports.ts';
+import summary from './summary.ts';
 
-jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
-jest.mock('../../files/index.js', () => ({
+jest.mock('../../packages/resolve-package.ts', () => jest.fn((specifier: string) => specifier));
+jest.mock('../../files/index.ts', () => ({
   getFiles: jest.fn().mockReturnValue([]),
 }));
-jest.mock('./get-tracked-imports.js');
-jest.mock('./summary.js', () =>
+jest.mock('./get-tracked-imports.ts');
+jest.mock('./summary.ts', () =>
   jest.fn().mockReturnValue({ filesTracked: 0, filesWithImports: 0 }),
 );
 

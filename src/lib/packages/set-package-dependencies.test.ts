@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import type { Import } from '../imports/index.js';
-import filterTrackedDependencies from './filter-tracked-dependencies.js';
-import getPackageJson from './get-package-json.js';
-import { getPackage, type Package } from './packages.js';
-import setPackageDependencies from './set-package-dependencies.js';
+import type { Import } from '../imports/index.ts';
+import filterTrackedDependencies from './filter-tracked-dependencies.ts';
+import getPackageJson from './get-package-json.ts';
+import { getPackage, type Package } from './packages.ts';
+import setPackageDependencies from './set-package-dependencies.ts';
 
-jest.mock('./get-package-json.js', () => jest.fn(async () => Promise.resolve({})));
-jest.mock('./filter-tracked-dependencies.js', () => jest.fn(() => []));
-jest.mock('./packages.js', () => ({ getPackage: jest.fn(), getPackageNames: jest.fn(() => []) }));
+jest.mock('./get-package-json.ts', () => jest.fn(async () => Promise.resolve({})));
+jest.mock('./filter-tracked-dependencies.ts', () => jest.fn(() => []));
+jest.mock('./packages.ts', () => ({ getPackage: jest.fn(), getPackageNames: jest.fn(() => []) }));
 
 describe('set package dependencies', () => {
   beforeEach(() => {

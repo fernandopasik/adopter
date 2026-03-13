@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import log from 'loglevel';
-import resolvePackage from './resolve-package.js';
+import resolvePackage from './resolve-package.ts';
 
 const getPackageModules = async (packageName: string): Promise<string[] | null> =>
   resolvePackage(packageName)

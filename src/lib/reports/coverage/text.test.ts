@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import coverage from './coverage.js';
-import text from './text.js';
+import coverage from './coverage.ts';
+import text from './text.ts';
 
-jest.mock('./coverage.js');
-jest.mock('../../packages/resolve-package.js', () =>
+jest.mock('./coverage.ts');
+jest.mock('../../packages/resolve-package.ts', () =>
   jest.fn(async (specifier: string) => Promise.resolve(specifier)),
 );
 

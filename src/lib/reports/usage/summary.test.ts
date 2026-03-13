@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { getPackageNames } from '../../packages/index.js';
-import isPackageUsed from './is-package-used.js';
-import summary from './summary.js';
+import { getPackageNames } from '../../packages/index.ts';
+import isPackageUsed from './is-package-used.ts';
+import summary from './summary.ts';
 
-jest.mock('../../packages/index.js', () => ({
+jest.mock('../../packages/index.ts', () => ({
   getPackageNames: jest.fn(() => []),
 }));
-jest.mock('./is-package-used.js');
+jest.mock('./is-package-used.ts');
 
 const getPackageNamesMock = jest.mocked(getPackageNames);
 const isPackageUsedMock = jest.mocked(isPackageUsed);

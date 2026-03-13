@@ -1,16 +1,16 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import type { Import } from '../../imports/index.js';
+import type { Import } from '../../imports/index.ts';
 import {
   getPackage,
   isModuleImported,
   isPackageImported,
   type Package,
-} from '../../packages/index.js';
-import isPackageUsed from './is-package-used.js';
-import packageUsage from './package-usage.js';
+} from '../../packages/index.ts';
+import isPackageUsed from './is-package-used.ts';
+import packageUsage from './package-usage.ts';
 
-jest.mock('./is-package-used.js', () => jest.fn(() => false));
-jest.mock('../../packages/index.js', () => ({
+jest.mock('./is-package-used.ts', () => jest.fn(() => false));
+jest.mock('../../packages/index.ts', () => ({
   getPackage: jest.fn(),
   isModuleImported: jest.fn(() => false),
   isPackageImported: jest.fn(() => false),

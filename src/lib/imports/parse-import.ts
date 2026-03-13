@@ -1,8 +1,8 @@
 import type { ImportDeclaration, ImportSpecifier, LiteralExpression } from 'typescript';
-import areNamedImports from './are-named-imports.js';
-import extractPackageName from './extract-package-name.js';
-import getImportModuleNames from './get-import-module-names.js';
-import type { Import } from './imports.js';
+import areNamedImports from './are-named-imports.ts';
+import extractPackageName from './extract-package-name.ts';
+import getImportModuleNames from './get-import-module-names.ts';
+import type { Import } from './imports.ts';
 
 const parseImport = (statement: ImportDeclaration, filePath: string): Import => {
   const { text: moduleSpecifier } = statement.moduleSpecifier as LiteralExpression;

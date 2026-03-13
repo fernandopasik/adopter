@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
-import { addFile, addFileImports, files, getFile, getFilePaths, getFiles } from './files.js';
+import { addFile, addFileImports, files, getFile, getFilePaths, getFiles } from './files.ts';
 
 describe('files', () => {
   beforeEach(() => {

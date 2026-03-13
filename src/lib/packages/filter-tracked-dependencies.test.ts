@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import filterTrackedDependencies from './filter-tracked-dependencies.js';
+import filterTrackedDependencies from './filter-tracked-dependencies.ts';
 
 describe('filter tracked dependencies', () => {
   const packageJson = {

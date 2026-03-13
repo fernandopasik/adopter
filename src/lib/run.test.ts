@@ -1,17 +1,17 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import log from 'loglevel';
 import ProgressBar from 'progress';
-import { listFiles, processFiles } from './files/index.js';
-import { analyzePackages } from './packages/index.js';
-import * as reports from './reports/index.js';
-import run, { type OnFile } from './run.js';
+import { listFiles, processFiles } from './files/index.ts';
+import { analyzePackages } from './packages/index.ts';
+import * as reports from './reports/index.ts';
+import run, { type OnFile } from './run.ts';
 
-jest.mock('./packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
+jest.mock('./packages/resolve-package.ts', () => jest.fn((specifier: string) => specifier));
 
 jest.mock('loglevel');
 jest.mock('progress');
 
-jest.mock('./files/index.js', () => ({
+jest.mock('./files/index.ts', () => ({
   listFiles: jest.fn(() => []),
   processFiles: jest.fn(
     (
@@ -26,11 +26,11 @@ jest.mock('./files/index.js', () => ({
     },
   ),
 }));
-jest.mock('./packages/index.js', () => ({
+jest.mock('./packages/index.ts', () => ({
   analyzePackages: jest.fn(),
   getPackageNames: jest.fn(() => []),
 }));
-jest.mock('./reports/index.js', () => ({
+jest.mock('./reports/index.ts', () => ({
   coverage: { text: jest.fn() },
   print: jest.fn(),
   usage: { text: jest.fn() },

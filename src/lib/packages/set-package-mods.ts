@@ -1,5 +1,5 @@
-import getPackageModules from './get-package-mods.js';
-import { getPackage } from './packages.js';
+import getPackageModules from './get-package-mods.ts';
+import { getPackage } from './packages.ts';
 
 const setPackageMods = async (name: string): Promise<void> => {
   const pkg = getPackage(name);

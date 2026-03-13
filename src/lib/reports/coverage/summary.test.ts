@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { getFile, getFilePaths } from '../../files/index.js';
-import summary from './summary.js';
+import { getFile, getFilePaths } from '../../files/index.ts';
+import summary from './summary.ts';
 
-jest.mock('../../packages/resolve-package.js', () => jest.fn((specifier: string) => specifier));
-jest.mock('../../files/index.js', () => ({
+jest.mock('../../packages/resolve-package.ts', () => jest.fn((specifier: string) => specifier));
+jest.mock('../../files/index.ts', () => ({
   getFile: jest.fn(),
   getFilePaths: jest.fn(() => []),
 }));

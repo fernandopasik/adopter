@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import log from 'loglevel';
-import print from './print.js';
+import print from './print.ts';
 
 jest.mock('loglevel');
 

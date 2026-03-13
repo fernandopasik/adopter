@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import getImportModuleNames from './get-import-module-names.js';
+import getImportModuleNames from './get-import-module-names.ts';
 
 describe('get import module names', () => {
   it('with no modules', () => {

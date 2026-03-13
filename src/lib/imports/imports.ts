@@ -1,4 +1,4 @@
-import { addPackageImport } from '../packages/index.js';
+import { addPackageImport } from '../packages/index.ts';
 
 export interface Import {
   defaultName?: string | undefined;

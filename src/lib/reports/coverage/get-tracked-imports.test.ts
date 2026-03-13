@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { isModuleImported, isPackageImported } from '../../packages/index.js';
-import getTrackedImports from './get-tracked-imports.js';
+import { isModuleImported, isPackageImported } from '../../packages/index.ts';
+import getTrackedImports from './get-tracked-imports.ts';
 
-jest.mock('../../packages/index.js', () => ({
+jest.mock('../../packages/index.ts', () => ({
   isModuleImported: jest.fn(() => false),
   isPackageImported: jest.fn(() => false),
 }));

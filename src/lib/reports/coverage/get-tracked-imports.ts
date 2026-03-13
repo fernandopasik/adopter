@@ -1,5 +1,5 @@
-import type { Import } from '../../imports/index.js';
-import { isModuleImported, isPackageImported } from '../../packages/index.js';
+import type { Import } from '../../imports/index.ts';
+import { isModuleImported, isPackageImported } from '../../packages/index.ts';
 
 export interface TrackedImport {
   packageName: string;

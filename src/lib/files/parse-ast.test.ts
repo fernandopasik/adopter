@@ -1,6 +1,6 @@
 import { describe, expect, it, jest } from '@jest/globals';
 import ts, { ScriptTarget, type SourceFile } from 'typescript';
-import parseAst from './parse-ast.js';
+import parseAst from './parse-ast.ts';
 
 jest.mock('typescript', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention

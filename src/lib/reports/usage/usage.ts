@@ -1,6 +1,6 @@
-import { getPackageNames } from '../../packages/index.js';
-import packageUsage, { type PackageUsage } from './package-usage.js';
-import summary, { type UsageSummary } from './summary.js';
+import { getPackageNames } from '../../packages/index.ts';
+import packageUsage, { type PackageUsage } from './package-usage.ts';
+import summary, { type UsageSummary } from './summary.ts';
 
 export interface Usage {
   packages: PackageUsage[];

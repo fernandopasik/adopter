@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import log from 'loglevel';
-import getPackageModules from './get-package-mods.js';
+import getPackageModules from './get-package-mods.ts';
 
-jest.mock('./resolve-package.js', () =>
+jest.mock('./resolve-package.ts', () =>
   jest.fn(async (specifier: string) => Promise.resolve(specifier)),
 );
 jest.mock('loglevel');

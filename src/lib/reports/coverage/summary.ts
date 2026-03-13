@@ -1,4 +1,4 @@
-import { getFile, getFilePaths } from '../../files/index.js';
+import { getFile, getFilePaths } from '../../files/index.ts';
 
 export interface CoverageSummary {
   filesTracked: number;

@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import type { Import } from '../imports/index.js';
-import getPackageModules from './get-package-mods.js';
-import { getPackage, type Package } from './packages.js';
-import setPackageMods from './set-package-mods.js';
+import type { Import } from '../imports/index.ts';
+import getPackageModules from './get-package-mods.ts';
+import { getPackage, type Package } from './packages.ts';
+import setPackageMods from './set-package-mods.ts';
 
-jest.mock('./get-package-mods.js', () => jest.fn(async () => Promise.resolve([])));
-jest.mock('./packages.js', () => ({ getPackage: jest.fn() }));
+jest.mock('./get-package-mods.ts', () => jest.fn(async () => Promise.resolve([])));
+jest.mock('./packages.ts', () => ({ getPackage: jest.fn() }));
 
 describe('set package modules', () => {
   beforeEach(() => {

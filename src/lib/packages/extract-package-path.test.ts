@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import extractPackagePath from './extract-package-path.js';
+import extractPackagePath from './extract-package-path.ts';
 
 describe('extract package path', () => {
   it('with empty module url', () => {

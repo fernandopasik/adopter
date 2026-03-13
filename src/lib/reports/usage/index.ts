@@ -1,2 +1,2 @@
-export { default as text } from './text.js';
-export { default as json } from './usage.js';
+export { default as text } from './text.ts';
+export { default as json } from './usage.ts';

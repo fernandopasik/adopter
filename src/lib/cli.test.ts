@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import cli from './cli.js';
-import run from './run.js';
+import cli from './cli.ts';
+import run from './run.ts';
 
-jest.mock('./run.js', () => jest.fn());
+jest.mock('./run.ts', () => jest.fn());
 
 describe('adopter cli', () => {
   beforeEach(() => {
