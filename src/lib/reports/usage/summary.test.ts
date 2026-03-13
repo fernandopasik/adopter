@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
 import { getPackageNames } from '../../packages/index.ts';
 import isPackageUsed from './is-package-used.ts';
@@ -18,7 +18,7 @@ describe('usage summary', () => {
   });
 
   it('empty', () => {
-    expect(summary()).toStrictEqual({
+    assert.deepStrictEqual(summary(), {
       packagesTracked: 0,
       packagesUsage: 0,
       packagesUsed: 0,

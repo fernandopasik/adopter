@@ -59,7 +59,7 @@ describe('get package.json', () => {
     const pkgJson = { name: 'typescript' };
     const spy = jest.spyOn(fs, 'readFileSync').mockReturnValueOnce(JSON.stringify(pkgJson));
 
-    await expect(getPackageJson('typescript')).resolves.toStrictEqual(pkgJson);
+    assert.deepStrictEqual(await getPackageJson('typescript'), pkgJson);
 
     spy.mockRestore();
   });

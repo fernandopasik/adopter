@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
 import { isModuleImported, isPackageImported } from '../../packages/index.ts';
 import getTrackedImports from './get-tracked-imports.ts';
@@ -38,11 +38,11 @@ describe('get tracked imports', () => {
   ];
 
   it('with no imports', () => {
-    expect(getTrackedImports()).toStrictEqual([]);
+    assert.deepStrictEqual(getTrackedImports(), []);
   });
 
   it('with non tracked packages', () => {
-    expect(getTrackedImports(imports)).toStrictEqual([]);
+    assert.deepStrictEqual(getTrackedImports(imports), []);
   });
 
   it('with all tracked packages', () => {
@@ -72,7 +72,7 @@ describe('get tracked imports', () => {
 
     const trackedImports = getTrackedImports(imports);
 
-    expect(trackedImports).toStrictEqual([
+    assert.deepStrictEqual(trackedImports, [
       { moduleNames: [], packageName: 'dep1' },
       { moduleNames: [], packageName: 'dep2' },
       { moduleNames: [], packageName: 'dep3' },
@@ -85,7 +85,7 @@ describe('get tracked imports', () => {
 
     const trackedImports = getTrackedImports(imports);
 
-    expect(trackedImports).toStrictEqual([
+    assert.deepStrictEqual(trackedImports, [
       { moduleNames: ['default'], packageName: 'dep1' },
       { moduleNames: ['methodA', 'methodB'], packageName: 'dep2' },
       { moduleNames: ['default', 'methodA'], packageName: 'dep3' },
@@ -103,7 +103,7 @@ describe('get tracked imports', () => {
 
     const trackedImports = getTrackedImports(imports);
 
-    expect(trackedImports).toStrictEqual([
+    assert.deepStrictEqual(trackedImports, [
       { moduleNames: ['default'], packageName: 'dep1' },
       { moduleNames: ['methodB'], packageName: 'dep2' },
       { moduleNames: ['methodA'], packageName: 'dep3' },

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
 import { getFile, getFilePaths } from '../../files/index.ts';
 import summary from './summary.ts';
@@ -18,7 +18,7 @@ describe('coverage summary', () => {
   });
 
   it('empty report', () => {
-    expect(summary()).toStrictEqual({
+    assert.deepStrictEqual(summary(), {
       filesTracked: 0,
       filesWithImports: 0,
     });
