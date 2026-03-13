@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import fs from 'fs';
 import log from 'loglevel';
+import assert from 'node:assert/strict';
 import extractPackagePath from './extract-package-path.ts';
 import getPackageJson from './get-package-json.ts';
 import resolvePackage from './resolve-package.ts';
@@ -72,7 +73,7 @@ describe('get package.json', () => {
 
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(errorMessage);
-    expect(packageJson).toBeNull();
+    assert.strictEqual(packageJson, null);
 
     spy.mockRestore();
   });

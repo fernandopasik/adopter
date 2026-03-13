@@ -1,9 +1,10 @@
 import { describe, expect, it } from '@jest/globals';
+import assert from 'node:assert/strict';
 import extractPackageName from './extract-package-name.ts';
 
 describe('get package name', () => {
   it('with empty', () => {
-    expect(extractPackageName()).toBeNull();
+    assert.strictEqual(extractPackageName(), null);
   });
 
   it('with valid package name', () => {
@@ -23,6 +24,6 @@ describe('get package name', () => {
   });
 
   it('with relative path', () => {
-    expect(extractPackageName('./src/world.ts')).toBeNull();
+    assert.strictEqual(extractPackageName('./src/world.ts'), null);
   });
 });
