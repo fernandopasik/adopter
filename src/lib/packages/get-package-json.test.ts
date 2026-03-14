@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import fs from 'fs';
 import log from 'loglevel';
 import assert from 'node:assert/strict';
@@ -13,6 +13,9 @@ jest.mock('./resolve-package.ts', () =>
 jest.mock('fs');
 jest.mock('loglevel');
 
+const extractPackagePathMock = jest.mocked(extractPackagePath);
+const resolvePackageMock = jest.mocked(resolvePackage);
+
 describe('get package.json', () => {
   beforeEach(() => {
     jest.resetModules();
@@ -25,8 +28,8 @@ describe('get package.json', () => {
 
     await getPackageJson(packageName);
 
-    expect(resolvePackage).toHaveBeenCalledTimes(1);
-    expect(resolvePackage).toHaveBeenCalledWith(packageName);
+    assert.strictEqual(resolvePackageMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(resolvePackageMock.mock.calls.at(0), [packageName]);
   });
 
   it('extracts package path from main module url', async () => {
@@ -37,8 +40,8 @@ describe('get package.json', () => {
 
     await getPackageJson(packageName);
 
-    expect(extractPackagePath).toHaveBeenCalledTimes(1);
-    expect(extractPackagePath).toHaveBeenCalledWith(mainModuleUrl, packageName);
+    assert.strictEqual(extractPackagePathMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(extractPackagePathMock.mock.calls.at(0), [packageName]);
   });
 
   it('reads package.json file', async () => {
@@ -49,8 +52,8 @@ describe('get package.json', () => {
 
     await getPackageJson(packageName);
 
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(`${packagePath}/package.json`);
+    assert.strictEqual(spy.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(spy.mock.calls.at(0), [`${packagePath}/package.json`]);
 
     spy.mockRestore();
   });
@@ -71,8 +74,8 @@ describe('get package.json', () => {
 
     const packageJson = await getPackageJson('typescript');
 
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(errorMessage);
+    assert.strictEqual(spy.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(spy.mock.calls.at(0), [errorMessage]);
     assert.strictEqual(packageJson, null);
 
     spy.mockRestore();

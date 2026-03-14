@@ -1,8 +1,11 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import cli from './cli.ts';
 import run from './run.ts';
 
 jest.mock('./run.ts', () => jest.fn());
+
+const runMock = jest.mocked(run);
 
 describe('adopter cli', () => {
   beforeEach(() => {
@@ -14,8 +17,8 @@ describe('adopter cli', () => {
 
     await cli(args);
 
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(expect.objectContaining({ packages: args }));
+    assert.strictEqual(runMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ packages: args }]);
   });
 
   it('runs with default root directory', async () => {
@@ -23,8 +26,8 @@ describe('adopter cli', () => {
 
     await cli(args);
 
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(expect.objectContaining({ rootDir: '.' }));
+    assert.strictEqual(runMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ rootDir: '.' }]);
   });
 
   it('can set root directory', async () => {
@@ -33,8 +36,8 @@ describe('adopter cli', () => {
 
     await cli(args);
 
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(expect.objectContaining({ rootDir }));
+    assert.strictEqual(runMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ rootDir }]);
   });
 
   it('by default tracks all js and ts files', async () => {
@@ -42,8 +45,8 @@ describe('adopter cli', () => {
 
     await cli(args);
 
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(expect.objectContaining({ srcMatch: ['**/*.[jt]s?(x)'] }));
+    assert.strictEqual(runMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ srcMatch: ['**/*.[jt]s?(x)'] }]);
   });
 
   it('can track other files', async () => {
@@ -52,8 +55,8 @@ describe('adopter cli', () => {
 
     await cli(args);
 
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(expect.objectContaining({ srcMatch: [track] }));
+    assert.strictEqual(runMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ srcMatch: [track] }]);
   });
 
   it('by default does not ignore any files', async () => {
@@ -61,8 +64,8 @@ describe('adopter cli', () => {
 
     await cli(args);
 
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(expect.objectContaining({ srcIgnoreMatch: [] }));
+    assert.strictEqual(runMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ srcIgnoreMatch: [] }]);
   });
 
   it('can ignore files to track', async () => {
@@ -71,8 +74,8 @@ describe('adopter cli', () => {
 
     await cli(args);
 
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(expect.objectContaining({ srcIgnoreMatch: [ignores] }));
+    assert.strictEqual(runMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ srcIgnoreMatch: [ignores] }]);
   });
 
   it('can track and ignore files', async () => {
@@ -82,10 +85,10 @@ describe('adopter cli', () => {
 
     await cli(args);
 
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(
-      expect.objectContaining({ srcIgnoreMatch: [ignores], srcMatch: [track] }),
-    );
+    assert.strictEqual(runMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [
+      { srcIgnoreMatch: [ignores], srcMatch: [track] },
+    ]);
   });
 
   it('by default hides coverage', async () => {
@@ -93,8 +96,8 @@ describe('adopter cli', () => {
 
     await cli(args);
 
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(expect.objectContaining({ coverage: false }));
+    assert.strictEqual(runMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ coverage: false }]);
   });
 
   it('can display coverage', async () => {
@@ -102,8 +105,8 @@ describe('adopter cli', () => {
 
     await cli(args);
 
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(expect.objectContaining({ coverage: true }));
+    assert.strictEqual(runMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ coverage: true }]);
   });
 
   it('by default hides debug information', async () => {
@@ -111,8 +114,8 @@ describe('adopter cli', () => {
 
     await cli(args);
 
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(expect.objectContaining({ debug: false }));
+    assert.strictEqual(runMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ debug: false }]);
   });
 
   it('can display debug information', async () => {
@@ -120,7 +123,7 @@ describe('adopter cli', () => {
 
     await cli(args);
 
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(expect.objectContaining({ debug: true }));
+    assert.strictEqual(runMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ debug: true }]);
   });
 });

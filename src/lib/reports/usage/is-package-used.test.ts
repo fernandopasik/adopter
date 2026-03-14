@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
 import type { Import } from '../../imports/index.ts';
 import { getPackage, isPackageImported, type Package } from '../../packages/index.ts';
@@ -29,20 +29,23 @@ describe('is package used', () => {
   };
 
   it('with a non imported package', () => {
-    jest.mocked(getPackage).mockReturnValueOnce(pkg);
-    jest.mocked(isPackageImported).mockReturnValueOnce(false);
+    const getPackageMock = jest.mocked(getPackage).mockReturnValueOnce(pkg);
+    const isPackageImportedMock = jest.mocked(isPackageImported);
+    isPackageImportedMock.mockReturnValueOnce(false);
 
     assert.strictEqual(isPackageUsed('example'), false);
-    expect(isPackageImported).toHaveBeenCalledTimes(1);
-    expect(getPackage).toHaveBeenCalledTimes(1);
+    assert.strictEqual(isPackageImportedMock.mock.calls.length, 1);
+    assert.strictEqual(getPackageMock.mock.calls.length, 1);
   });
 
   it('with an imported package', () => {
-    jest.mocked(isPackageImported).mockReturnValueOnce(true);
+    const getPackageMock = jest.mocked(getPackage);
+    const isPackageImportedMock = jest.mocked(isPackageImported);
+    isPackageImportedMock.mockReturnValueOnce(true);
 
     assert.strictEqual(isPackageUsed('example'), true);
-    expect(isPackageImported).toHaveBeenCalledTimes(1);
-    expect(getPackage).not.toHaveBeenCalled();
+    assert.strictEqual(isPackageImportedMock.mock.calls.length, 1);
+    assert.strictEqual(getPackageMock.mock.calls.length, 0);
   });
 
   it('with an imported dependent package', () => {
@@ -50,38 +53,39 @@ describe('is package used', () => {
       ...pkg,
       dependents: new Set([pkg2]),
     });
-    jest.mocked(isPackageImported).mockReturnValueOnce(false);
-    jest.mocked(isPackageImported).mockReturnValueOnce(true);
+    const isPackageImportedMock = jest.mocked(isPackageImported);
+    isPackageImportedMock.mockReturnValueOnce(false);
+    isPackageImportedMock.mockReturnValueOnce(true);
 
     assert.strictEqual(isPackageUsed('example'), true);
-    expect(isPackageImported).toHaveBeenCalledTimes(2);
+    assert.strictEqual(isPackageImportedMock.mock.calls.length, 2);
   });
 
   it('with not imported dependent packages', () => {
-    jest.mocked(getPackage).mockReturnValueOnce({
-      ...pkg,
-      dependents: new Set([pkg2]),
-    });
-    jest.mocked(getPackage).mockReturnValueOnce(pkg2);
-    jest.mocked(isPackageImported).mockReturnValueOnce(false);
-    jest.mocked(isPackageImported).mockReturnValueOnce(false);
+    const getPackageMock = jest.mocked(getPackage);
+    getPackageMock.mockReturnValueOnce({ ...pkg, dependents: new Set([pkg2]) });
+    getPackageMock.mockReturnValueOnce(pkg2);
+
+    const isPackageImportedMock = jest.mocked(isPackageImported);
+    isPackageImportedMock.mockReturnValueOnce(false);
+    isPackageImportedMock.mockReturnValueOnce(false);
 
     assert.strictEqual(isPackageUsed('example'), false);
-    expect(isPackageImported).toHaveBeenCalledTimes(2);
-    expect(getPackage).toHaveBeenCalledTimes(2);
+    assert.strictEqual(isPackageImportedMock.mock.calls.length, 2);
+    assert.strictEqual(getPackageMock.mock.calls.length, 2);
   });
 
   it('with a non tracked dependent packages', () => {
-    jest.mocked(getPackage).mockReturnValueOnce({
-      ...pkg,
-      dependents: new Set([pkg2]),
-    });
-    jest.mocked(getPackage).mockReturnValueOnce(undefined);
-    jest.mocked(isPackageImported).mockReturnValueOnce(false);
-    jest.mocked(isPackageImported).mockReturnValueOnce(false);
+    const getPackageMock = jest.mocked(getPackage);
+    getPackageMock.mockReturnValueOnce({ ...pkg, dependents: new Set([pkg2]) });
+    getPackageMock.mockReturnValueOnce(undefined);
+
+    const isPackageImportedMock = jest.mocked(isPackageImported);
+    isPackageImportedMock.mockReturnValueOnce(false);
+    isPackageImportedMock.mockReturnValueOnce(false);
 
     assert.strictEqual(isPackageUsed('example'), false);
-    expect(isPackageImported).toHaveBeenCalledTimes(2);
-    expect(getPackage).toHaveBeenCalledTimes(2);
+    assert.strictEqual(isPackageImportedMock.mock.calls.length, 2);
+    assert.strictEqual(getPackageMock.mock.calls.length, 2);
   });
 });

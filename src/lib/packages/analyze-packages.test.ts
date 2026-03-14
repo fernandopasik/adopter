@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
+import assert from 'node:assert/strict';
 import analyzePackages from './analyze-packages.ts';
 import { addPackage } from './packages.ts';
 import setPackageDependencies from './set-package-dependencies.ts';
@@ -17,32 +18,35 @@ describe('analyze packages', () => {
   });
 
   it('adds each package', async () => {
+    const addPackageMock = jest.mocked(addPackage);
     const packageList = ['example1', 'example2'];
 
     await analyzePackages(packageList);
 
-    expect(addPackage).toHaveBeenCalledTimes(2);
-    expect(addPackage).toHaveBeenCalledWith('example1');
-    expect(addPackage).toHaveBeenCalledWith('example2');
+    assert.strictEqual(addPackageMock.mock.calls.length, 2);
+    assert.partialDeepStrictEqual(addPackageMock.mock.calls.at(0), ['example1']);
+    assert.partialDeepStrictEqual(addPackageMock.mock.calls.at(1), ['example2']);
   });
 
   it('sets each package modules', async () => {
+    const setPackageModsMock = jest.mocked(setPackageMods);
     const packageList = ['example1', 'example2'];
 
     await analyzePackages(packageList);
 
-    expect(setPackageMods).toHaveBeenCalledTimes(2);
-    expect(setPackageMods).toHaveBeenCalledWith('example1');
-    expect(setPackageMods).toHaveBeenCalledWith('example2');
+    assert.strictEqual(setPackageModsMock.mock.calls.length, 2);
+    assert.partialDeepStrictEqual(setPackageModsMock.mock.calls.at(0), ['example1']);
+    assert.partialDeepStrictEqual(setPackageModsMock.mock.calls.at(1), ['example2']);
   });
 
   it('sets each package dependencies', async () => {
+    const setPackageDependenciesMock = jest.mocked(setPackageDependencies);
     const packageList = ['example1', 'example2'];
 
     await analyzePackages(packageList);
 
-    expect(setPackageDependencies).toHaveBeenCalledTimes(2);
-    expect(setPackageDependencies).toHaveBeenCalledWith('example1');
-    expect(setPackageDependencies).toHaveBeenCalledWith('example2');
+    assert.strictEqual(setPackageDependenciesMock.mock.calls.length, 2);
+    assert.partialDeepStrictEqual(setPackageDependenciesMock.mock.calls.at(0), ['example1']);
+    assert.partialDeepStrictEqual(setPackageDependenciesMock.mock.calls.at(1), ['example2']);
   });
 });

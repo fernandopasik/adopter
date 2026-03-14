@@ -1,5 +1,6 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import { globbySync } from 'globby';
+import assert from 'node:assert/strict';
 import listFiles from './list-files.ts';
 import sortPaths from './sort-paths.ts';
 
@@ -7,6 +8,9 @@ jest.mock('globby', () => ({
   globbySync: jest.fn(() => []),
 }));
 jest.mock('./sort-paths', () => jest.fn((paths: string[]): string[] => paths));
+
+const globbySyncMock = jest.mocked(globbySync);
+const sortPathsMock = jest.mocked(sortPaths);
 
 describe('list files from globs', () => {
   beforeEach(() => {
@@ -16,28 +20,28 @@ describe('list files from globs', () => {
   it('defaults to js and ts files', () => {
     listFiles();
 
-    expect(globbySync).toHaveBeenCalledTimes(1);
-    expect(globbySync).toHaveBeenCalledWith(['**/*.[j|t]s'], expect.anything());
+    assert.strictEqual(globbySyncMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(globbySyncMock.mock.calls.at(0), [['**/*.[j|t]s']]);
   });
 
   it('uses project gitignore', () => {
     listFiles();
 
-    expect(globbySync).toHaveBeenCalledTimes(1);
-    expect(globbySync).toHaveBeenCalledWith(expect.anything(), { gitignore: true });
+    assert.strictEqual(globbySyncMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(globbySyncMock.mock.calls.at(0), [{ gitignore: true }]);
   });
 
   it('can search custom globs', () => {
     const globs = ['src/asdf.txt'];
     listFiles(globs);
 
-    expect(globbySync).toHaveBeenCalledTimes(1);
-    expect(globbySync).toHaveBeenCalledWith(globs, expect.anything());
+    assert.strictEqual(globbySyncMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(globbySyncMock.mock.calls.at(0), [globs]);
   });
 
   it('sorts paths', () => {
     listFiles();
 
-    expect(sortPaths).toHaveBeenCalledTimes(1);
+    assert.strictEqual(sortPathsMock.mock.calls.length, 1);
   });
 });
