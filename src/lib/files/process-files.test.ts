@@ -1,10 +1,14 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import fs from 'fs';
+import assert from 'node:assert/strict';
 import type { SourceFile } from 'typescript';
 import { parseImports, type Import } from '../imports/index.ts';
 import { addFile, addFileImports } from './files.ts';
 import parseAst from './parse-ast.ts';
 import processFiles, { type Callback } from './process-files.ts';
+
+const addFileMock = jest.mocked(addFile);
+const addFileImportsMock = jest.mocked(addFileImports);
 
 jest.mock('fs');
 jest.mock('./parse-ast.ts', () => jest.fn());
@@ -26,7 +30,7 @@ describe('process files', () => {
 
     processFiles(files);
 
-    expect(spy).toHaveBeenCalledTimes(files.length);
+    assert.strictEqual(spy.mock.calls.length, files.length);
     expect(spy).toHaveBeenCalledWith(files[0], 'utf8');
     expect(spy).toHaveBeenCalledWith(files[1], 'utf8');
     expect(spy).toHaveBeenCalledWith(files[2], 'utf8');
@@ -39,7 +43,7 @@ describe('process files', () => {
 
     processFiles();
 
-    expect(spy).toHaveBeenCalledTimes(0);
+    assert.strictEqual(spy.mock.calls.length, 0);
 
     spy.mockRestore();
   });
@@ -56,8 +60,8 @@ describe('process files', () => {
 
       processFiles(files, callback);
 
-      expect(spy).toHaveBeenCalledTimes(files.length);
-      expect(callback).toHaveBeenCalledTimes(files.length);
+      assert.strictEqual(spy.mock.calls.length, files.length);
+      assert.strictEqual(callback.mock.calls.length, files.length);
 
       spy.mockRestore();
     });
@@ -179,10 +183,10 @@ describe('process files', () => {
 
       processFiles(files);
 
-      expect(addFile).toHaveBeenCalledTimes(2);
+      assert.strictEqual(addFileMock.mock.calls.length, files.length);
       expect(addFile).toHaveBeenCalledWith(files[0]);
       expect(addFile).toHaveBeenCalledWith(files[1]);
-      expect(addFileImports).toHaveBeenCalledTimes(2);
+      assert.strictEqual(addFileImportsMock.mock.calls.length, files.length);
       expect(addFileImports).toHaveBeenCalledWith(files[0], imports);
       expect(addFileImports).toHaveBeenCalledWith(files[1], undefined);
     });

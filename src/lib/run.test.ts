@@ -1,10 +1,17 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import log from 'loglevel';
+import assert from 'node:assert/strict';
 import ProgressBar from 'progress';
 import { listFiles, processFiles } from './files/index.ts';
 import { analyzePackages } from './packages/index.ts';
 import * as reports from './reports/index.ts';
 import run, { type OnFile } from './run.ts';
+
+const analyzePackagesMock = jest.mocked(analyzePackages);
+const listFilesMock = jest.mocked(listFiles);
+const processFilesMock = jest.mocked(processFiles);
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const ProgressBarMock = jest.mocked(ProgressBar);
 
 jest.mock('./packages/resolve-package.ts', () => jest.fn((specifier: string) => specifier));
 
@@ -47,7 +54,7 @@ describe('run', () => {
 
     await run({ packages });
 
-    expect(spy).toHaveBeenCalledTimes(1);
+    assert.strictEqual(spy.mock.calls.length, 1);
     expect(spy).toHaveBeenCalledWith('ERROR');
 
     spy.mockRestore();
@@ -59,7 +66,7 @@ describe('run', () => {
 
     await run({ debug: true, packages });
 
-    expect(spy).toHaveBeenCalledTimes(1);
+    assert.strictEqual(spy.mock.calls.length, 1);
     expect(spy).toHaveBeenCalledWith('DEBUG');
 
     spy.mockRestore();
@@ -70,7 +77,7 @@ describe('run', () => {
 
     await run({ packages });
 
-    expect(analyzePackages).toHaveBeenCalledTimes(1);
+    assert.strictEqual(analyzePackagesMock.mock.calls.length, 1);
     expect(analyzePackages).toHaveBeenCalledWith(packages);
   });
 
@@ -79,7 +86,7 @@ describe('run', () => {
 
     await run({ packages });
 
-    expect(ProgressBar).toHaveBeenCalledTimes(1);
+    assert.strictEqual(ProgressBarMock.mock.calls.length, 1);
   });
 
   it('updates progress bar after processing each file', async () => {
@@ -92,7 +99,7 @@ describe('run', () => {
 
     await run({ packages });
 
-    expect(spy1).toHaveBeenCalledTimes(2);
+    assert.strictEqual(spy1.mock.calls.length, 2);
     expect(spy1).toHaveBeenCalledWith(1);
 
     spy1.mockRestore();
@@ -105,7 +112,7 @@ describe('run', () => {
 
     await run({ packages, srcMatch });
 
-    expect(listFiles).toHaveBeenCalledTimes(1);
+    assert.strictEqual(listFilesMock.mock.calls.length, 1);
     expect(listFiles).toHaveBeenCalledWith(srcMatch);
   });
 
@@ -116,7 +123,7 @@ describe('run', () => {
 
     await run({ packages, rootDir, srcMatch });
 
-    expect(listFiles).toHaveBeenCalledTimes(1);
+    assert.strictEqual(listFilesMock.mock.calls.length, 1);
     expect(listFiles).toHaveBeenCalledWith(['src/*', 'src/*.js']);
   });
 
@@ -127,7 +134,7 @@ describe('run', () => {
 
     await run({ packages, srcIgnoreMatch: [ignore], srcMatch });
 
-    expect(listFiles).toHaveBeenCalledTimes(1);
+    assert.strictEqual(listFilesMock.mock.calls.length, 1);
     expect(listFiles).toHaveBeenCalledWith([...srcMatch, `!${ignore}`]);
   });
 
@@ -139,7 +146,7 @@ describe('run', () => {
 
     await run({ packages });
 
-    expect(processFiles).toHaveBeenCalledTimes(1);
+    assert.strictEqual(processFilesMock.mock.calls.length, 1);
     expect(processFiles).toHaveBeenCalledWith(files, expect.any(Function));
   });
 
@@ -152,7 +159,7 @@ describe('run', () => {
 
     await run({ onFile, packages });
 
-    expect(onFile).toHaveBeenCalledTimes(2);
+    assert.strictEqual(onFile.mock.calls.length, 2);
     expect(onFile).toHaveBeenCalledWith(files[0], files[0], '', undefined, []);
     expect(onFile).toHaveBeenCalledWith(files[1], files[1], '', undefined, []);
   });
@@ -161,7 +168,7 @@ describe('run', () => {
     const spy = jest.spyOn(reports, 'print');
     await run({ packages: [] });
 
-    expect(spy).toHaveBeenCalledTimes(1);
+    assert.strictEqual(spy.mock.calls.length, 1);
     spy.mockRestore();
   });
 
@@ -169,7 +176,7 @@ describe('run', () => {
     const spy = jest.spyOn(reports.usage, 'text');
     await run({ packages: [] });
 
-    expect(spy).toHaveBeenCalledTimes(1);
+    assert.strictEqual(spy.mock.calls.length, 1);
     spy.mockRestore();
   });
 
@@ -177,7 +184,7 @@ describe('run', () => {
     const spy = jest.spyOn(reports.coverage, 'text');
     await run({ coverage: true, packages: [] });
 
-    expect(spy).toHaveBeenCalledTimes(1);
+    assert.strictEqual(spy.mock.calls.length, 1);
     spy.mockRestore();
   });
 });
