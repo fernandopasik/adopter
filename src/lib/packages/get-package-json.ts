@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import { readFileSync } from 'fs';
 import log from 'loglevel';
+import { readFileSync } from 'node:fs';
 import type { PackageJson } from 'type-fest';
 import extractPackagePath from './extract-package-path.ts';
 import resolvePackage from './resolve-package.ts';

@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import { createSourceFile, ScriptTarget, type SourceFile } from 'typescript';
 
 const parseAst = (filename: string, content: string): SourceFile | undefined => {

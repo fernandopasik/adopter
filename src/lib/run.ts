@@ -2,7 +2,7 @@
 
 import chalk from 'chalk';
 import log from 'loglevel';
-import path from 'path';
+import path from 'node:path';
 import ProgressBar from 'progress';
 import type { SourceFile } from 'typescript';
 import { listFiles, processFiles } from './files/index.ts';

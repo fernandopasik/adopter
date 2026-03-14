@@ -1,6 +1,6 @@
 import { beforeEach, describe, it, jest } from '@jest/globals';
-import fs from 'fs';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import type { SourceFile } from 'typescript';
 import { parseImports, type Import } from '../imports/index.ts';
 import { addFile, addFileImports } from './files.ts';
@@ -10,7 +10,7 @@ import processFiles, { type Callback } from './process-files.ts';
 const addFileMock = jest.mocked(addFile);
 const addFileImportsMock = jest.mocked(addFileImports);
 
-jest.mock('fs');
+jest.mock('node:fs');
 jest.mock('./parse-ast.ts', () => jest.fn());
 jest.mock('../imports/index.ts', () => ({ parseImports: jest.fn() }));
 jest.mock('./files.ts');

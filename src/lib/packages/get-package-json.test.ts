@@ -1,7 +1,7 @@
 import { beforeEach, describe, it, jest } from '@jest/globals';
-import fs from 'fs';
 import log from 'loglevel';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import extractPackagePath from './extract-package-path.ts';
 import getPackageJson from './get-package-json.ts';
 import resolvePackage from './resolve-package.ts';
@@ -10,7 +10,7 @@ jest.mock('./extract-package-path.ts');
 jest.mock('./resolve-package.ts', () =>
   jest.fn(async (specifier: string) => Promise.resolve(specifier)),
 );
-jest.mock('fs');
+jest.mock('node:fs');
 jest.mock('loglevel');
 
 const extractPackagePathMock = jest.mocked(extractPackagePath);

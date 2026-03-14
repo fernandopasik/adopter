@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import type { SourceFile } from 'typescript';
 import { parseImports, type Import } from '../imports/index.ts';
 import { addFile, addFileImports } from './files.ts';
@@ -14,11 +14,7 @@ export type Callback = (
   imports?: Import[],
 ) => void;
 
-const processFiles = (
-  filePaths: string[] = [],
-
-  callback?: Callback,
-): void => {
+const processFiles = (filePaths: string[] = [], callback?: Callback): void => {
   filePaths.forEach((filePath) => {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     const content = fs.readFileSync(filePath, 'utf8');

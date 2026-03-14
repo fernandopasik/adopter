@@ -1,4 +1,4 @@
-import { pathToFileURL } from 'url';
+import { pathToFileURL } from 'node:url';
 
 // eslint-disable-next-line @typescript-eslint/require-await
 const resolvePackage = async (specifier: string): Promise<string> => {
