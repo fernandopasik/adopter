@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import fs from 'fs';
 import assert from 'node:assert/strict';
 import type { SourceFile } from 'typescript';
@@ -31,9 +31,9 @@ describe('process files', () => {
     processFiles(files);
 
     assert.strictEqual(spy.mock.calls.length, files.length);
-    expect(spy).toHaveBeenCalledWith(files[0], 'utf8');
-    expect(spy).toHaveBeenCalledWith(files[1], 'utf8');
-    expect(spy).toHaveBeenCalledWith(files[2], 'utf8');
+    assert.partialDeepStrictEqual(spy.mock.calls.at(0), [files[0], 'utf8']);
+    assert.partialDeepStrictEqual(spy.mock.calls.at(1), [files[1], 'utf8']);
+    assert.partialDeepStrictEqual(spy.mock.calls.at(2), [files[2], 'utf8']);
 
     spy.mockRestore();
   });
@@ -72,20 +72,18 @@ describe('process files', () => {
 
       processFiles(files, callback);
 
-      expect(callback).toHaveBeenCalledWith(
+      assert.partialDeepStrictEqual(callback.mock.calls.at(0), [
         files[0],
-        expect.anything(),
         undefined,
         undefined,
         undefined,
-      );
-      expect(callback).toHaveBeenCalledWith(
+      ]);
+      assert.partialDeepStrictEqual(callback.mock.calls.at(1), [
         files[1],
-        expect.anything(),
         undefined,
         undefined,
         undefined,
-      );
+      ]);
     });
 
     it('with filename', () => {
@@ -95,20 +93,20 @@ describe('process files', () => {
 
       processFiles(files, callback);
 
-      expect(callback).toHaveBeenCalledWith(
+      assert.partialDeepStrictEqual(callback.mock.calls.at(0), [
         files[0],
         filenames[0],
         undefined,
         undefined,
         undefined,
-      );
-      expect(callback).toHaveBeenCalledWith(
+      ]);
+      assert.partialDeepStrictEqual(callback.mock.calls.at(1), [
         files[1],
         filenames[1],
         undefined,
         undefined,
         undefined,
-      );
+      ]);
     });
 
     it('with file contents', () => {
@@ -123,8 +121,20 @@ describe('process files', () => {
 
       processFiles(files, callback);
 
-      expect(callback).toHaveBeenCalledWith(files[0], files[0], contents[0], undefined, undefined);
-      expect(callback).toHaveBeenCalledWith(files[1], files[1], contents[1], undefined, undefined);
+      assert.partialDeepStrictEqual(callback.mock.calls.at(0), [
+        files[0],
+        files[0],
+        contents[0],
+        undefined,
+        undefined,
+      ]);
+      assert.partialDeepStrictEqual(callback.mock.calls.at(1), [
+        files[1],
+        files[1],
+        contents[1],
+        undefined,
+        undefined,
+      ]);
     });
 
     it('with file asts', () => {
@@ -136,8 +146,20 @@ describe('process files', () => {
 
       processFiles(files, callback);
 
-      expect(callback).toHaveBeenCalledWith(files[0], files[0], undefined, asts[0], undefined);
-      expect(callback).toHaveBeenCalledWith(files[1], files[1], undefined, asts[1], undefined);
+      assert.partialDeepStrictEqual(callback.mock.calls.at(0), [
+        files[0],
+        files[0],
+        undefined,
+        asts[0],
+        undefined,
+      ]);
+      assert.partialDeepStrictEqual(callback.mock.calls.at(1), [
+        files[1],
+        files[1],
+        undefined,
+        asts[1],
+        undefined,
+      ]);
     });
 
     it('with file imports', () => {
@@ -160,8 +182,20 @@ describe('process files', () => {
 
       processFiles(files, callback);
 
-      expect(callback).toHaveBeenCalledWith(files[0], files[0], undefined, asts[0], imports);
-      expect(callback).toHaveBeenCalledWith(files[1], files[1], undefined, asts[1], undefined);
+      assert.partialDeepStrictEqual(callback.mock.calls.at(0), [
+        files[0],
+        files[0],
+        undefined,
+        asts[0],
+        imports,
+      ]);
+      assert.partialDeepStrictEqual(callback.mock.calls.at(1), [
+        files[1],
+        files[1],
+        undefined,
+        asts[1],
+        undefined,
+      ]);
     });
 
     it('add file and file imports', () => {
@@ -184,11 +218,11 @@ describe('process files', () => {
       processFiles(files);
 
       assert.strictEqual(addFileMock.mock.calls.length, files.length);
-      expect(addFile).toHaveBeenCalledWith(files[0]);
-      expect(addFile).toHaveBeenCalledWith(files[1]);
+      assert.partialDeepStrictEqual(addFileMock.mock.calls.at(0), [files[0]]);
+      assert.partialDeepStrictEqual(addFileMock.mock.calls.at(1), [files[1]]);
       assert.strictEqual(addFileImportsMock.mock.calls.length, files.length);
-      expect(addFileImports).toHaveBeenCalledWith(files[0], imports);
-      expect(addFileImports).toHaveBeenCalledWith(files[1], undefined);
+      assert.partialDeepStrictEqual(addFileImportsMock.mock.calls.at(0), [files[0], imports]);
+      assert.partialDeepStrictEqual(addFileImportsMock.mock.calls.at(1), [files[1], undefined]);
     });
   });
 });

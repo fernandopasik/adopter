@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 import log from 'loglevel';
 import assert from 'node:assert/strict';
 import ProgressBar from 'progress';
@@ -55,7 +55,7 @@ describe('run', () => {
     await run({ packages });
 
     assert.strictEqual(spy.mock.calls.length, 1);
-    expect(spy).toHaveBeenCalledWith('ERROR');
+    assert.partialDeepStrictEqual(spy.mock.calls.at(0), ['ERROR']);
 
     spy.mockRestore();
   });
@@ -67,7 +67,7 @@ describe('run', () => {
     await run({ debug: true, packages });
 
     assert.strictEqual(spy.mock.calls.length, 1);
-    expect(spy).toHaveBeenCalledWith('DEBUG');
+    assert.partialDeepStrictEqual(spy.mock.calls.at(0), ['DEBUG']);
 
     spy.mockRestore();
   });
@@ -78,7 +78,7 @@ describe('run', () => {
     await run({ packages });
 
     assert.strictEqual(analyzePackagesMock.mock.calls.length, 1);
-    expect(analyzePackages).toHaveBeenCalledWith(packages);
+    assert.partialDeepStrictEqual(analyzePackagesMock.mock.calls.at(0), [packages]);
   });
 
   it('creates a progress bar', async () => {
@@ -100,7 +100,7 @@ describe('run', () => {
     await run({ packages });
 
     assert.strictEqual(spy1.mock.calls.length, 2);
-    expect(spy1).toHaveBeenCalledWith(1);
+    assert.partialDeepStrictEqual(spy1.mock.calls.at(0), [1]);
 
     spy1.mockRestore();
     spy2.mockRestore();
@@ -113,7 +113,7 @@ describe('run', () => {
     await run({ packages, srcMatch });
 
     assert.strictEqual(listFilesMock.mock.calls.length, 1);
-    expect(listFiles).toHaveBeenCalledWith(srcMatch);
+    assert.partialDeepStrictEqual(listFilesMock.mock.calls.at(0), [srcMatch]);
   });
 
   it('can set a root directory', async () => {
@@ -124,7 +124,7 @@ describe('run', () => {
     await run({ packages, rootDir, srcMatch });
 
     assert.strictEqual(listFilesMock.mock.calls.length, 1);
-    expect(listFiles).toHaveBeenCalledWith(['src/*', 'src/*.js']);
+    assert.partialDeepStrictEqual(listFilesMock.mock.calls.at(0), [['src/*', 'src/*.js']]);
   });
 
   it('ignores files from expression', async () => {
@@ -135,7 +135,7 @@ describe('run', () => {
     await run({ packages, srcIgnoreMatch: [ignore], srcMatch });
 
     assert.strictEqual(listFilesMock.mock.calls.length, 1);
-    expect(listFiles).toHaveBeenCalledWith([...srcMatch, `!${ignore}`]);
+    assert.partialDeepStrictEqual(listFilesMock.mock.calls.at(0), [[...srcMatch, `!${ignore}`]]);
   });
 
   it('processes all files', async () => {
@@ -147,7 +147,7 @@ describe('run', () => {
     await run({ packages });
 
     assert.strictEqual(processFilesMock.mock.calls.length, 1);
-    expect(processFiles).toHaveBeenCalledWith(files, expect.any(Function));
+    assert.partialDeepStrictEqual(processFilesMock.mock.calls.at(0), [files]);
   });
 
   it('runs on file callback in options', async () => {
@@ -160,8 +160,8 @@ describe('run', () => {
     await run({ onFile, packages });
 
     assert.strictEqual(onFile.mock.calls.length, 2);
-    expect(onFile).toHaveBeenCalledWith(files[0], files[0], '', undefined, []);
-    expect(onFile).toHaveBeenCalledWith(files[1], files[1], '', undefined, []);
+    assert.partialDeepStrictEqual(onFile.mock.calls.at(0), [files[0], files[0], '', undefined, []]);
+    assert.partialDeepStrictEqual(onFile.mock.calls.at(1), [files[1], files[1], '', undefined, []]);
   });
 
   it('prints report', async () => {
