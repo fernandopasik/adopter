@@ -1,17 +1,27 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
+import { after, beforeEach, describe, it, mock } from 'node:test';
 import type { Import } from '../../imports/index.ts';
-import { getPackage, isPackageImported, type Package } from '../../packages/index.ts';
-import isPackageUsed from './is-package-used.ts';
+import type { Package } from '../../packages/index.ts';
 
-jest.mock('../../packages/index.ts', () => ({
-  getPackage: jest.fn(),
-  isPackageImported: jest.fn(() => false),
-}));
+describe('is package used', async () => {
+  const getPackageMock = mock.fn<() => Package | undefined>();
+  const isPackageImportedMock = mock.fn(() => false);
+  const packagesModule = mock.module('../../packages/index.ts', {
+    namedExports: {
+      getPackage: getPackageMock,
+      isPackageImported: isPackageImportedMock,
+    },
+  });
 
-describe('is package used', () => {
+  const isPackageUsed = (await import('./is-package-used.ts')).default;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    getPackageMock.mock.resetCalls();
+    isPackageImportedMock.mock.resetCalls();
+  });
+
+  after(() => {
+    packagesModule.restore();
   });
 
   const pkg = {
@@ -29,9 +39,8 @@ describe('is package used', () => {
   };
 
   it('with a non imported package', () => {
-    const getPackageMock = jest.mocked(getPackage).mockReturnValueOnce(pkg);
-    const isPackageImportedMock = jest.mocked(isPackageImported);
-    isPackageImportedMock.mockReturnValueOnce(false);
+    getPackageMock.mock.mockImplementationOnce(() => pkg);
+    isPackageImportedMock.mock.mockImplementationOnce(() => false);
 
     assert.strictEqual(isPackageUsed('example'), false);
     assert.strictEqual(isPackageImportedMock.mock.calls.length, 1);
@@ -39,9 +48,7 @@ describe('is package used', () => {
   });
 
   it('with an imported package', () => {
-    const getPackageMock = jest.mocked(getPackage);
-    const isPackageImportedMock = jest.mocked(isPackageImported);
-    isPackageImportedMock.mockReturnValueOnce(true);
+    isPackageImportedMock.mock.mockImplementationOnce(() => true);
 
     assert.strictEqual(isPackageUsed('example'), true);
     assert.strictEqual(isPackageImportedMock.mock.calls.length, 1);
@@ -49,26 +56,25 @@ describe('is package used', () => {
   });
 
   it('with an imported dependent package', () => {
-    jest.mocked(getPackage).mockReturnValueOnce({
+    getPackageMock.mock.mockImplementationOnce(() => ({
       ...pkg,
       dependents: new Set([pkg2]),
-    });
-    const isPackageImportedMock = jest.mocked(isPackageImported);
-    isPackageImportedMock.mockReturnValueOnce(false);
-    isPackageImportedMock.mockReturnValueOnce(true);
+    }));
+
+    const isImportedMocks = [false, true];
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    isPackageImportedMock.mock.mockImplementation(() => isImportedMocks.shift()!);
 
     assert.strictEqual(isPackageUsed('example'), true);
     assert.strictEqual(isPackageImportedMock.mock.calls.length, 2);
   });
 
   it('with not imported dependent packages', () => {
-    const getPackageMock = jest.mocked(getPackage);
-    getPackageMock.mockReturnValueOnce({ ...pkg, dependents: new Set([pkg2]) });
-    getPackageMock.mockReturnValueOnce(pkg2);
+    const packageMocks = [{ ...pkg, dependents: new Set([pkg2]) }, pkg2];
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    getPackageMock.mock.mockImplementation(() => packageMocks.shift()!);
 
-    const isPackageImportedMock = jest.mocked(isPackageImported);
-    isPackageImportedMock.mockReturnValueOnce(false);
-    isPackageImportedMock.mockReturnValueOnce(false);
+    isPackageImportedMock.mock.mockImplementation(() => false);
 
     assert.strictEqual(isPackageUsed('example'), false);
     assert.strictEqual(isPackageImportedMock.mock.calls.length, 2);
@@ -76,13 +82,9 @@ describe('is package used', () => {
   });
 
   it('with a non tracked dependent packages', () => {
-    const getPackageMock = jest.mocked(getPackage);
-    getPackageMock.mockReturnValueOnce({ ...pkg, dependents: new Set([pkg2]) });
-    getPackageMock.mockReturnValueOnce(undefined);
+    getPackageMock.mock.mockImplementationOnce(() => ({ ...pkg, dependents: new Set([pkg2]) }));
 
-    const isPackageImportedMock = jest.mocked(isPackageImported);
-    isPackageImportedMock.mockReturnValueOnce(false);
-    isPackageImportedMock.mockReturnValueOnce(false);
+    isPackageImportedMock.mock.mockImplementation(() => false);
 
     assert.strictEqual(isPackageUsed('example'), false);
     assert.strictEqual(isPackageImportedMock.mock.calls.length, 2);

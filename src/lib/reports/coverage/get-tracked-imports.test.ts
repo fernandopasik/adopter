@@ -1,19 +1,26 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
-import { isModuleImported, isPackageImported } from '../../packages/index.ts';
-import getTrackedImports from './get-tracked-imports.ts';
+import { after, beforeEach, describe, it, mock } from 'node:test';
 
-jest.mock('../../packages/index.ts', () => ({
-  isModuleImported: jest.fn(() => false),
-  isPackageImported: jest.fn(() => false),
-}));
+describe('get tracked imports', async () => {
+  const isPackageImportedMock = mock.fn<() => boolean>();
+  const isModuleImportedMock = mock.fn<() => boolean>();
 
-const isPackageImportedMock = jest.mocked(isPackageImported);
-const isModuleImportedMock = jest.mocked(isModuleImported);
+  const filesModule = mock.module('../../packages/index.ts', {
+    namedExports: {
+      isModuleImported: isModuleImportedMock,
+      isPackageImported: isPackageImportedMock,
+    },
+  });
 
-describe('get tracked imports', () => {
+  const getTrackedImports = (await import('./get-tracked-imports.ts')).default;
+
   beforeEach(() => {
-    jest.resetAllMocks();
+    isPackageImportedMock.mock.resetCalls();
+    isModuleImportedMock.mock.resetCalls();
+  });
+
+  after(() => {
+    filesModule.restore();
   });
 
   const imports = [
@@ -46,7 +53,7 @@ describe('get tracked imports', () => {
   });
 
   it('with all tracked packages', () => {
-    isPackageImportedMock.mockReturnValue(true);
+    isPackageImportedMock.mock.mockImplementation(() => true);
 
     const trackedImports = getTrackedImports(imports);
 
@@ -56,10 +63,9 @@ describe('get tracked imports', () => {
   });
 
   it('with some tracked packages', () => {
-    isPackageImportedMock
-      .mockReturnValueOnce(true)
-      .mockReturnValueOnce(false)
-      .mockReturnValueOnce(true);
+    const arePackagesImported = [true, false, true];
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    isPackageImportedMock.mock.mockImplementation(() => arePackagesImported.shift()!);
 
     const trackedImports = getTrackedImports(imports);
 
@@ -68,7 +74,7 @@ describe('get tracked imports', () => {
   });
 
   it('with no tracked modules', () => {
-    isPackageImportedMock.mockReturnValue(true);
+    isPackageImportedMock.mock.mockImplementation(() => true);
 
     const trackedImports = getTrackedImports(imports);
 
@@ -80,8 +86,8 @@ describe('get tracked imports', () => {
   });
 
   it('with all tracked modules', () => {
-    isModuleImportedMock.mockReturnValue(true);
-    isPackageImportedMock.mockReturnValue(true);
+    isModuleImportedMock.mock.mockImplementation(() => true);
+    isPackageImportedMock.mock.mockImplementation(() => true);
 
     const trackedImports = getTrackedImports(imports);
 
@@ -93,13 +99,10 @@ describe('get tracked imports', () => {
   });
 
   it('with some tracked modules', () => {
-    isModuleImportedMock
-      .mockReturnValueOnce(true)
-      .mockReturnValueOnce(false)
-      .mockReturnValueOnce(true)
-      .mockReturnValueOnce(false)
-      .mockReturnValueOnce(true);
-    isPackageImportedMock.mockReturnValue(true);
+    const areModulesImported = [true, false, true, false, true];
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    isModuleImportedMock.mock.mockImplementation(() => areModulesImported.shift()!);
+    isPackageImportedMock.mock.mockImplementation(() => true);
 
     const trackedImports = getTrackedImports(imports);
 

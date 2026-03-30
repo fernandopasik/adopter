@@ -1,18 +1,39 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
+import { after, beforeEach, describe, it, mock } from 'node:test';
+import type { PackageJson } from 'type-fest';
 import type { Import } from '../imports/index.ts';
-import filterTrackedDependencies from './filter-tracked-dependencies.ts';
-import getPackageJson from './get-package-json.ts';
-import { getPackage, type Package } from './packages.ts';
-import setPackageDependencies from './set-package-dependencies.ts';
+import type { Dependency } from './filter-tracked-dependencies.ts';
+import type { Package } from './packages.ts';
 
-jest.mock('./get-package-json.ts', () => jest.fn(async () => Promise.resolve({})));
-jest.mock('./filter-tracked-dependencies.ts', () => jest.fn(() => []));
-jest.mock('./packages.ts', () => ({ getPackage: jest.fn(), getPackageNames: jest.fn(() => []) }));
+describe('set package dependencies', async () => {
+  const filterTrackedDependenciesMock = mock.fn<() => Dependency[]>(() => []);
+  const getPackageJsonMock = mock.fn<() => Promise<PackageJson | null>>();
+  const getPackageMock = mock.fn<() => Package | undefined>();
+  const getPackageNamesMock = mock.fn<() => string[]>(() => []);
 
-describe('set package dependencies', () => {
+  const filterTrackedDependenciesModule = mock.module('./filter-tracked-dependencies.ts', {
+    defaultExport: filterTrackedDependenciesMock,
+  });
+  const packagesModule = mock.module('./packages.ts', {
+    namedExports: { getPackage: getPackageMock, getPackageNames: getPackageNamesMock },
+  });
+  const getPackageJsonModule = mock.module('./get-package-json.ts', {
+    defaultExport: getPackageJsonMock,
+  });
+
+  const setPackageDependencies = (await import('./set-package-dependencies.ts')).default;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    filterTrackedDependenciesMock.mock.resetCalls();
+    getPackageMock.mock.resetCalls();
+    getPackageNamesMock.mock.resetCalls();
+    getPackageJsonMock.mock.resetCalls();
+  });
+
+  after(() => {
+    filterTrackedDependenciesModule.restore();
+    packagesModule.restore();
+    getPackageJsonModule.restore();
   });
 
   it('with none', async () => {
@@ -25,7 +46,7 @@ describe('set package dependencies', () => {
       name: 'example',
     };
 
-    jest.mocked(getPackage).mockReturnValueOnce(pkg);
+    getPackageMock.mock.mockImplementationOnce(() => pkg);
 
     assert.strictEqual(pkg.dependencies.size, 0);
 
@@ -62,13 +83,13 @@ describe('set package dependencies', () => {
       name: 'example1',
     };
 
-    jest.mocked(getPackage).mockReturnValueOnce(pkg);
-    jest.mocked(filterTrackedDependencies).mockReturnValueOnce([
+    const depsMock = [pkg, dep1, dep2];
+
+    getPackageMock.mock.mockImplementation(() => depsMock.shift());
+    filterTrackedDependenciesMock.mock.mockImplementationOnce(() => [
       { name: 'dep1', version: '*' },
       { name: 'dep2', version: '*' },
     ]);
-    jest.mocked(getPackage).mockReturnValueOnce(dep1);
-    jest.mocked(getPackage).mockReturnValueOnce(dep2);
 
     assert.strictEqual(pkg.dependencies.size, 0);
     assert.strictEqual(pkg.dependencies.has(dep1), false);
@@ -91,7 +112,7 @@ describe('set package dependencies', () => {
       name: 'example',
     };
 
-    jest.mocked(getPackage).mockReturnValueOnce(pkg);
+    getPackageMock.mock.mockImplementationOnce(() => pkg);
 
     assert.strictEqual(pkg.isInstalled, false);
 
@@ -110,8 +131,8 @@ describe('set package dependencies', () => {
       name: 'example',
     };
 
-    jest.mocked(getPackageJson).mockResolvedValueOnce(null);
-    jest.mocked(getPackage).mockReturnValueOnce(pkg);
+    getPackageJsonMock.mock.mockImplementationOnce(async () => Promise.resolve(null));
+    getPackageMock.mock.mockImplementationOnce(() => pkg);
 
     assert.strictEqual(pkg.isInstalled, false);
 
@@ -121,8 +142,7 @@ describe('set package dependencies', () => {
   });
 
   it('with non existent package', async () => {
-    const getPackageJsonMock = jest.mocked(getPackageJson);
-    jest.mocked(getPackage).mockReturnValueOnce(undefined);
+    getPackageMock.mock.mockImplementationOnce(() => undefined);
 
     await setPackageDependencies('nonexistent');
 

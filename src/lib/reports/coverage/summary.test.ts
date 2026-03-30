@@ -1,20 +1,24 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
-import { getFile, getFilePaths } from '../../files/index.ts';
-import summary from './summary.ts';
+import { after, beforeEach, describe, it, mock } from 'node:test';
+import type { File } from '../../files/files.ts';
 
-jest.mock('../../packages/resolve-package.ts', () => jest.fn((specifier: string) => specifier));
-jest.mock('../../files/index.ts', () => ({
-  getFile: jest.fn(),
-  getFilePaths: jest.fn(() => []),
-}));
+describe('coverage summary', async () => {
+  const getFileMock = mock.fn<() => File>();
+  const getFilePathsMock = mock.fn<() => string[]>(() => []);
 
-const getFileMock = jest.mocked(getFile);
-const getFilePathsMock = jest.mocked(getFilePaths);
+  const filesModule = mock.module('../../files/index.ts', {
+    namedExports: { getFile: getFileMock, getFilePaths: getFilePathsMock },
+  });
 
-describe('coverage summary', () => {
+  const summary = (await import('./summary.ts')).default;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    getFileMock.mock.resetCalls();
+    getFilePathsMock.mock.resetCalls();
+  });
+
+  after(() => {
+    filesModule.restore();
   });
 
   it('empty report', () => {
@@ -26,7 +30,7 @@ describe('coverage summary', () => {
 
   it('tracks ammount of files', () => {
     const filePaths = ['src/example1.ts', 'src/example2.ts'];
-    getFilePathsMock.mockReturnValueOnce(filePaths);
+    getFilePathsMock.mock.mockImplementationOnce(() => filePaths);
     assert.partialDeepStrictEqual(summary(), { filesTracked: 2 });
   });
 
@@ -40,8 +44,11 @@ describe('coverage summary', () => {
         packageName: 'dep1',
       },
     ];
-    getFilePathsMock.mockReturnValueOnce(filePaths);
-    getFileMock.mockReturnValueOnce({ filePath: 'src/example1.ts', imports: new Set(imports) });
+    getFilePathsMock.mock.mockImplementationOnce(() => filePaths);
+    getFileMock.mock.mockImplementationOnce(() => ({
+      filePath: 'src/example1.ts',
+      imports: new Set(imports),
+    }));
     assert.partialDeepStrictEqual(summary(), { filesWithImports: 1 });
   });
 });

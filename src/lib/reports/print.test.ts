@@ -1,39 +1,47 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
-import log from 'loglevel';
 import assert from 'node:assert/strict';
-import print from './print.ts';
+import { after, beforeEach, describe, it, mock } from 'node:test';
 
-jest.mock('loglevel');
+describe('print', async () => {
+  const getLevelMock = mock.fn<() => number>();
+  const infoMock = mock.fn();
+  const setLevelMock = mock.fn();
+  const loglevelMock = mock.module('loglevel', {
+    namedExports: {
+      getLevel: getLevelMock,
+      info: infoMock,
+      setLevel: setLevelMock,
+    },
+  });
 
-describe('print', () => {
+  const print = (await import('./print.ts')).default;
+
   beforeEach(() => {
-    jest.resetAllMocks();
+    getLevelMock.mock.resetCalls();
+    infoMock.mock.resetCalls();
+    setLevelMock.mock.resetCalls();
+  });
+
+  after(() => {
+    loglevelMock.restore();
   });
 
   it('sets temporary log level to info', () => {
-    const spy1 = jest.spyOn(log, 'getLevel').mockReturnValueOnce(1);
-    const spy2 = jest.spyOn(log, 'setLevel');
+    getLevelMock.mock.mockImplementationOnce(() => 1);
 
     print();
 
-    assert.strictEqual(spy1.mock.calls.length, 1);
-    assert.strictEqual(spy2.mock.calls.length, 2);
-    assert.partialDeepStrictEqual(spy2.mock.calls.at(0), ['INFO']);
-    assert.partialDeepStrictEqual(spy2.mock.calls.at(1), [1]);
-
-    spy1.mockRestore();
-    spy2.mockRestore();
+    assert.strictEqual(getLevelMock.mock.calls.length, 1);
+    assert.strictEqual(setLevelMock.mock.calls.length, 2);
+    assert.deepStrictEqual(setLevelMock.mock.calls.at(0)?.arguments, ['INFO']);
+    assert.deepStrictEqual(setLevelMock.mock.calls.at(1)?.arguments, [1]);
   });
 
   it('outputs provided text', () => {
     const text = 'My example output.';
-    const spy = jest.spyOn(log, 'info');
 
     print(text);
 
-    assert.strictEqual(spy.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(spy.mock.calls.at(0), [text]);
-
-    spy.mockRestore();
+    assert.strictEqual(infoMock.mock.calls.length, 1);
+    assert.deepStrictEqual(infoMock.mock.calls.at(0)?.arguments, [text]);
   });
 });

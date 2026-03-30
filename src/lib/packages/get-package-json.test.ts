@@ -1,26 +1,39 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
-import log from 'loglevel';
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
-import extractPackagePath from './extract-package-path.ts';
-import getPackageJson from './get-package-json.ts';
-import resolvePackage from './resolve-package.ts';
+import { after, beforeEach, describe, it, mock } from 'node:test';
 
-jest.mock('./extract-package-path.ts');
-jest.mock('./resolve-package.ts', () =>
-  jest.fn(async (specifier: string) => Promise.resolve(specifier)),
-);
-jest.mock('node:fs');
-jest.mock('loglevel');
+describe('get package.json', async () => {
+  const extractPackagePathMock = mock.fn<() => string>();
+  const readFileSyncMock = mock.fn<() => string>();
+  const resolvePackageMock = mock.fn<() => Promise<string>>(async () => Promise.resolve(''));
+  const warnMock = mock.fn<() => string>();
 
-const extractPackagePathMock = jest.mocked(extractPackagePath);
-const resolvePackageMock = jest.mocked(resolvePackage);
+  const chalkModule = mock.module('chalk', {
+    defaultExport: { yellow: mock.fn((txt: string) => txt) },
+  });
+  const extractPackagePathModule = mock.module('./extract-package-path.ts', {
+    defaultExport: extractPackagePathMock,
+  });
+  const fsModule = mock.module('node:fs', { namedExports: { readFileSync: readFileSyncMock } });
+  const loglevelModule = mock.module('loglevel', { namedExports: { warn: warnMock } });
+  const resolvePackageModule = mock.module('./resolve-package.ts', {
+    defaultExport: resolvePackageMock,
+  });
 
-describe('get package.json', () => {
+  const getPackageJson = (await import('./get-package-json.ts')).default;
+
   beforeEach(() => {
-    jest.resetModules();
-    jest.dontMock('typescript');
-    jest.clearAllMocks();
+    extractPackagePathMock.mock.resetCalls();
+    readFileSyncMock.mock.resetCalls();
+    resolvePackageMock.mock.resetCalls();
+    warnMock.mock.resetCalls();
+  });
+
+  after(() => {
+    chalkModule.restore();
+    extractPackagePathModule.restore();
+    fsModule.restore();
+    loglevelModule.restore();
+    resolvePackageModule.restore();
   });
 
   it('resolves from package name', async () => {
@@ -29,55 +42,57 @@ describe('get package.json', () => {
     await getPackageJson(packageName);
 
     assert.strictEqual(resolvePackageMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(resolvePackageMock.mock.calls.at(0), [packageName]);
+    assert.deepStrictEqual(resolvePackageMock.mock.calls.at(0)?.arguments, [packageName]);
   });
 
   it('extracts package path from main module url', async () => {
     const packageName = 'typescript';
     const packageUrl = '/home/project/node_modules/typescript';
     const mainModuleUrl = `${packageUrl}/lib/main.js`;
-    jest.mocked(resolvePackage).mockResolvedValueOnce(mainModuleUrl);
+
+    resolvePackageMock.mock.mockImplementationOnce(async () => Promise.resolve(mainModuleUrl));
 
     await getPackageJson(packageName);
 
     assert.strictEqual(extractPackagePathMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(extractPackagePathMock.mock.calls.at(0), [packageName]);
+    assert.deepStrictEqual(extractPackagePathMock.mock.calls.at(0)?.arguments, [
+      mainModuleUrl,
+      packageName,
+    ]);
   });
 
   it('reads package.json file', async () => {
     const packageName = 'typescript';
     const packagePath = '/home/project/node_modules/typescript';
-    jest.mocked(extractPackagePath).mockReturnValueOnce(packagePath);
-    const spy = jest.spyOn(fs, 'readFileSync');
+    extractPackagePathMock.mock.mockImplementationOnce(() => packagePath);
 
     await getPackageJson(packageName);
 
-    assert.strictEqual(spy.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(spy.mock.calls.at(0), [`${packagePath}/package.json`]);
-
-    spy.mockRestore();
+    assert.strictEqual(readFileSyncMock.mock.calls.length, 1);
+    assert.deepStrictEqual(readFileSyncMock.mock.calls.at(0)?.arguments, [
+      `${packagePath}/package.json`,
+    ]);
   });
 
   it('returns the package.json content', async () => {
     const pkgJson = { name: 'typescript' };
-    const spy = jest.spyOn(fs, 'readFileSync').mockReturnValueOnce(JSON.stringify(pkgJson));
+
+    readFileSyncMock.mock.mockImplementationOnce(() => JSON.stringify(pkgJson));
 
     assert.deepStrictEqual(await getPackageJson('typescript'), pkgJson);
-
-    spy.mockRestore();
   });
 
   it('with a non installed module', async () => {
-    const spy = jest.spyOn(log, 'warn').mockImplementation(jest.fn<typeof log.warn>());
     const errorMessage = 'Cannot find module';
-    jest.mocked(resolvePackage).mockRejectedValueOnce({ message: errorMessage });
+    resolvePackageMock.mock.mockImplementationOnce(async () =>
+      // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+      Promise.reject({ message: errorMessage }),
+    );
 
     const packageJson = await getPackageJson('typescript');
 
-    assert.strictEqual(spy.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(spy.mock.calls.at(0), [errorMessage]);
+    assert.strictEqual(warnMock.mock.calls.length, 1);
+    assert.deepStrictEqual(warnMock.mock.calls.at(0)?.arguments, [errorMessage]);
     assert.strictEqual(packageJson, null);
-
-    spy.mockRestore();
   });
 });

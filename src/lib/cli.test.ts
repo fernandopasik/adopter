@@ -1,15 +1,18 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
-import cli from './cli.ts';
-import run from './run.ts';
+import { after, beforeEach, describe, it, mock } from 'node:test';
 
-jest.mock('./run.ts', () => jest.fn());
+describe('adopter cli', async () => {
+  const runMock = mock.fn();
+  const runModule = mock.module('./run.ts', { defaultExport: runMock });
 
-const runMock = jest.mocked(run);
+  const cli = (await import('./cli.ts')).default;
 
-describe('adopter cli', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    runMock.mock.resetCalls();
+  });
+
+  after(() => {
+    runModule.restore();
   });
 
   it('runs with arguments as list of packages', async () => {
@@ -18,7 +21,7 @@ describe('adopter cli', () => {
     await cli(args);
 
     assert.strictEqual(runMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ packages: args }]);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0)?.arguments, [{ packages: args }]);
   });
 
   it('runs with default root directory', async () => {
@@ -27,7 +30,7 @@ describe('adopter cli', () => {
     await cli(args);
 
     assert.strictEqual(runMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ rootDir: '.' }]);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0)?.arguments, [{ rootDir: '.' }]);
   });
 
   it('can set root directory', async () => {
@@ -37,7 +40,7 @@ describe('adopter cli', () => {
     await cli(args);
 
     assert.strictEqual(runMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ rootDir }]);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0)?.arguments, [{ rootDir }]);
   });
 
   it('by default tracks all js and ts files', async () => {
@@ -46,7 +49,9 @@ describe('adopter cli', () => {
     await cli(args);
 
     assert.strictEqual(runMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ srcMatch: ['**/*.[jt]s?(x)'] }]);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0)?.arguments, [
+      { srcMatch: ['**/*.[jt]s?(x)'] },
+    ]);
   });
 
   it('can track other files', async () => {
@@ -56,7 +61,7 @@ describe('adopter cli', () => {
     await cli(args);
 
     assert.strictEqual(runMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ srcMatch: [track] }]);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0)?.arguments, [{ srcMatch: [track] }]);
   });
 
   it('by default does not ignore any files', async () => {
@@ -65,7 +70,7 @@ describe('adopter cli', () => {
     await cli(args);
 
     assert.strictEqual(runMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ srcIgnoreMatch: [] }]);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0)?.arguments, [{ srcIgnoreMatch: [] }]);
   });
 
   it('can ignore files to track', async () => {
@@ -75,7 +80,9 @@ describe('adopter cli', () => {
     await cli(args);
 
     assert.strictEqual(runMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ srcIgnoreMatch: [ignores] }]);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0)?.arguments, [
+      { srcIgnoreMatch: [ignores] },
+    ]);
   });
 
   it('can track and ignore files', async () => {
@@ -86,7 +93,7 @@ describe('adopter cli', () => {
     await cli(args);
 
     assert.strictEqual(runMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0)?.arguments, [
       { srcIgnoreMatch: [ignores], srcMatch: [track] },
     ]);
   });
@@ -97,7 +104,7 @@ describe('adopter cli', () => {
     await cli(args);
 
     assert.strictEqual(runMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ coverage: false }]);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0)?.arguments, [{ coverage: false }]);
   });
 
   it('can display coverage', async () => {
@@ -106,7 +113,7 @@ describe('adopter cli', () => {
     await cli(args);
 
     assert.strictEqual(runMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ coverage: true }]);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0)?.arguments, [{ coverage: true }]);
   });
 
   it('by default hides debug information', async () => {
@@ -115,7 +122,7 @@ describe('adopter cli', () => {
     await cli(args);
 
     assert.strictEqual(runMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ debug: false }]);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0)?.arguments, [{ debug: false }]);
   });
 
   it('can display debug information', async () => {
@@ -124,6 +131,6 @@ describe('adopter cli', () => {
     await cli(args);
 
     assert.strictEqual(runMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(runMock.mock.calls.at(0), [{ debug: true }]);
+    assert.partialDeepStrictEqual(runMock.mock.calls.at(0)?.arguments, [{ debug: true }]);
   });
 });

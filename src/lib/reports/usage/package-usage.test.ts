@@ -1,30 +1,37 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
+import { after, beforeEach, describe, it, mock } from 'node:test';
 import type { Import } from '../../imports/index.ts';
-import {
-  getPackage,
-  isModuleImported,
-  isPackageImported,
-  type Package,
-} from '../../packages/index.ts';
-import isPackageUsed from './is-package-used.ts';
-import packageUsage from './package-usage.ts';
+import type { Package } from '../../packages/index.ts';
 
-jest.mock('./is-package-used.ts', () => jest.fn(() => false));
-jest.mock('../../packages/index.ts', () => ({
-  getPackage: jest.fn(),
-  isModuleImported: jest.fn(() => false),
-  isPackageImported: jest.fn(() => false),
-}));
+describe('package usage', async () => {
+  const isModuleImportedMock = mock.fn<() => boolean>(() => false);
+  const isPackageImportedMock = mock.fn<() => boolean>(() => false);
+  const isPackageUsedMock = mock.fn<() => boolean>(() => false);
+  const getPackageMock = mock.fn<() => Package | undefined>();
 
-const isModuleImportedMock = jest.mocked(isModuleImported);
-const isPackageImportedMock = jest.mocked(isPackageImported);
-const isPackageUsedMock = jest.mocked(isPackageUsed);
-const getPackageMock = jest.mocked(getPackage);
+  const isPackageUSedModule = mock.module('./is-package-used.ts', {
+    defaultExport: isPackageUsedMock,
+  });
+  const packagesModule = mock.module('../../packages/index.ts', {
+    namedExports: {
+      getPackage: getPackageMock,
+      isModuleImported: isModuleImportedMock,
+      isPackageImported: isPackageImportedMock,
+    },
+  });
 
-describe('package usage', () => {
+  const packageUsage = (await import('./package-usage.ts')).default;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    isModuleImportedMock.mock.resetCalls();
+    isPackageImportedMock.mock.resetCalls();
+    isPackageUsedMock.mock.resetCalls();
+    getPackageMock.mock.resetCalls();
+  });
+
+  after(() => {
+    isPackageUSedModule.restore();
+    packagesModule.restore();
   });
 
   const pkg = {
@@ -40,7 +47,7 @@ describe('package usage', () => {
     packageUsage('example');
 
     assert.strictEqual(getPackageMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(getPackageMock.mock.calls.at(0), ['example']);
+    assert.deepStrictEqual(getPackageMock.mock.calls.at(0)?.arguments, ['example']);
   });
 
   it('returns the package name', () => {
@@ -50,37 +57,33 @@ describe('package usage', () => {
   });
 
   it('returns if package is imported', () => {
-    isPackageImportedMock.mockReturnValueOnce(true);
+    isPackageImportedMock.mock.mockImplementationOnce(() => true);
     const name = 'example';
 
     const usage = packageUsage(name);
 
     assert.strictEqual(isPackageImportedMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(isPackageImportedMock.mock.calls.at(0), [name]);
+    assert.deepStrictEqual(isPackageImportedMock.mock.calls.at(0)?.arguments, [name]);
     assert.partialDeepStrictEqual(usage, { isImported: true });
   });
 
   it('returns if package is used', () => {
-    isPackageUsedMock.mockReturnValueOnce(true);
+    isPackageUsedMock.mock.mockImplementationOnce(() => true);
     const name = 'example';
 
     const usage = packageUsage(name);
 
     assert.strictEqual(isPackageUsedMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(isPackageUsedMock.mock.calls.at(0), [name]);
+    assert.deepStrictEqual(isPackageUsedMock.mock.calls.at(0)?.arguments, [name]);
     assert.partialDeepStrictEqual(usage, { isUsed: true });
   });
 
   it('tracks its modules', () => {
     const modules = new Set(['example1', 'example2', 'example3']);
-    getPackageMock.mockReturnValueOnce({ ...pkg, modules });
-    isModuleImportedMock
-      .mockReturnValueOnce(false)
-      .mockReturnValueOnce(true)
-      .mockReturnValueOnce(false)
-      .mockReturnValueOnce(false)
-      .mockReturnValueOnce(true)
-      .mockReturnValueOnce(false);
+    getPackageMock.mock.mockImplementationOnce(() => ({ ...pkg, modules }));
+    const areModuleImported = [false, true, false, false, true, false];
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    isModuleImportedMock.mock.mockImplementation(() => areModuleImported.shift()!);
 
     const usage = packageUsage('example');
 
@@ -93,7 +96,7 @@ describe('package usage', () => {
   it('tracks its dependencies and dependents', () => {
     const dependents = new Set([{ ...pkg, name: 'example1' }]);
     const dependencies = new Set([{ ...pkg, name: 'example2' }]);
-    getPackageMock.mockReturnValueOnce({ ...pkg, dependencies, dependents });
+    getPackageMock.mock.mockImplementationOnce(() => ({ ...pkg, dependencies, dependents }));
 
     const usage = packageUsage('example');
 

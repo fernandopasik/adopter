@@ -1,14 +1,21 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
-import { addPackageImport } from '../packages/index.ts';
-import { addImport, getImport, importKey, imports } from './imports.ts';
+import { after, beforeEach, describe, it, mock } from 'node:test';
 
-jest.mock('../packages/index.ts', () => ({ addPackageImport: jest.fn() }));
+describe('imports', async () => {
+  const addPackageImportMock = mock.fn();
+  const packagesModule = mock.module('../packages/index.ts', {
+    namedExports: { addPackageImport: addPackageImportMock },
+  });
 
-describe('imports', () => {
+  const { addImport, getImport, importKey, imports } = await import('./imports.ts');
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    addPackageImportMock.mock.resetCalls();
     imports.clear();
+  });
+
+  after(() => {
+    packagesModule.restore();
   });
 
   describe('key', () => {
@@ -71,7 +78,6 @@ describe('imports', () => {
   });
 
   it('tracks imports in packages', () => {
-    const addPackageImportMock = jest.mocked(addPackageImport);
     const imprt = {
       filePath: 'example.js',
       moduleNames: ['default'],
@@ -82,7 +88,7 @@ describe('imports', () => {
     addImport(imprt);
 
     assert.strictEqual(addPackageImportMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(addPackageImportMock.mock.calls.at(0), [imprt]);
+    assert.deepStrictEqual(addPackageImportMock.mock.calls.at(0)?.arguments, [imprt]);
   });
 
   it('can get an existing import', () => {

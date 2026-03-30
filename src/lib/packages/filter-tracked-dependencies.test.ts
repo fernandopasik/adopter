@@ -1,5 +1,5 @@
-import { describe, it } from '@jest/globals';
 import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import filterTrackedDependencies from './filter-tracked-dependencies.ts';
 
 describe('filter tracked dependencies', () => {

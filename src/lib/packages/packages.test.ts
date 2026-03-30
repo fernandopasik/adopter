@@ -1,5 +1,5 @@
-import { beforeEach, describe, it } from '@jest/globals';
 import assert from 'node:assert/strict';
+import { beforeEach, describe, it } from 'node:test';
 import {
   addPackage,
   addPackageImport,

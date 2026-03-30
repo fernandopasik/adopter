@@ -1,5 +1,5 @@
-import { describe, it } from '@jest/globals';
 import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import extractPackagePath from './extract-package-path.ts';
 
 describe('extract package path', () => {

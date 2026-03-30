@@ -1,80 +1,106 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
-import log from 'loglevel';
 import assert from 'node:assert/strict';
-import getPackageModules from './get-package-mods.ts';
-
-jest.mock('./resolve-package.ts', () =>
-  jest.fn(async (specifier: string) => Promise.resolve(specifier)),
-);
-jest.mock('loglevel');
+import { after, beforeEach, describe, it, mock } from 'node:test';
 
 describe('get package modules', () => {
+  const warnMock = mock.fn((txt?: string) => txt);
+  const resolvePackageMock = mock.fn(async (specifier: string) => Promise.resolve(specifier));
+
+  const chalkModule = mock.module('chalk', {
+    defaultExport: { yellow: mock.fn((txt: string) => txt) },
+  });
+  const loglevelModule = mock.module('loglevel', { namedExports: { warn: warnMock } });
+  const resolvePackageModule = mock.module('./resolve-package.ts', {
+    defaultExport: resolvePackageMock,
+  });
+
   beforeEach(() => {
-    jest.resetModules();
-    jest.dontMock('typescript');
+    resolvePackageMock.mock.resetCalls();
+    warnMock.mock.resetCalls();
+  });
+
+  after(() => {
+    chalkModule.restore();
+    loglevelModule.restore();
+    resolvePackageModule.restore();
   });
 
   it('with an empty module', async () => {
-    jest.doMock('typescript', () => ({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      __esModule: true,
-    }));
+    const moduleMock = mock.module('eslint-plugin-prettier', {});
+    const getPackageModules = (await import('./get-package-mods.ts')).default;
 
-    const exports = await getPackageModules('typescript');
+    const exports = await getPackageModules('eslint-plugin-prettier');
 
-    assert.deepStrictEqual(exports, []);
+    assert.deepStrictEqual(exports, ['default', 'module.exports']);
+
+    moduleMock.restore();
   });
 
   it('with a non installed module', async () => {
-    const spy = jest.spyOn(log, 'warn').mockImplementation(jest.fn<typeof log.warn>());
+    const getPackageModules = (await import('./get-package-mods.ts')).default;
+
     const packageName = 'typescriptzzz';
 
     const exports = await getPackageModules(packageName);
 
-    assert.strictEqual(spy.mock.calls.length, 1);
+    assert.strictEqual(warnMock.mock.calls.length, 1);
     assert.match(
-      spy.mock.calls.at(0)?.at(0) as string,
-      new RegExp(`Cannot find module '${packageName}' from`, 'u'),
+      warnMock.mock.calls.at(0)?.arguments.at(0) ?? '',
+      new RegExp(`Cannot find package '${packageName}' imported from`, 'u'),
     );
 
     assert.strictEqual(exports, null);
-
-    spy.mockRestore();
   });
 
   it('with a default export', async () => {
-    jest.doMock('typescript', () => (): null => null);
+    const moduleMock = mock.module('eslint-plugin-security', {
+      defaultExport: (): null => null,
+    });
+    const getPackageModules = (await import('./get-package-mods.ts')).default;
 
-    const exports = await getPackageModules('typescript');
+    const exports = await getPackageModules('eslint-plugin-security');
 
-    assert.deepStrictEqual(exports, ['length', 'name', 'default']);
+    assert.deepStrictEqual(exports, ['default', 'module.exports']);
+
+    moduleMock.restore();
   });
 
   it('with a default and named exports', async () => {
-    jest.doMock('typescript', () => ({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      __esModule: true,
-      default: (): null => null,
-      example1: (): null => null,
-      example2: (): null => null,
-    }));
+    const moduleMock = mock.module('eslint-plugin-yml', {
+      defaultExport: (): null => null,
+      namedExports: {
+        example1: (): null => null,
+        example2: (): null => null,
+      },
+    });
+    const getPackageModules = (await import('./get-package-mods.ts')).default;
 
-    const exports = await getPackageModules('typescript');
+    const exports = await getPackageModules('eslint-plugin-yml');
 
     assert.deepStrictEqual(exports, ['default', 'example1', 'example2']);
+
+    moduleMock.restore();
   });
 
   it('with named exports', async () => {
-    jest.doMock('typescript', () => ({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      __esModule: true,
-      example1: 'constant',
-      example2: (): null => null,
-      example3: {},
-    }));
+    const moduleMock = mock.module('eslint-config-prettier', {
+      namedExports: {
+        example1: 'constant',
+        example2: (): null => null,
+        example3: {},
+      },
+    });
+    const getPackageModules = (await import('./get-package-mods.ts')).default;
 
-    const exports = await getPackageModules('typescript');
+    const exports = await getPackageModules('eslint-config-prettier');
 
-    assert.deepStrictEqual(exports, ['example1', 'example2', 'example3']);
+    assert.deepStrictEqual(exports, [
+      'default',
+      'example1',
+      'example2',
+      'example3',
+      'module.exports',
+    ]);
+
+    moduleMock.restore();
   });
 });

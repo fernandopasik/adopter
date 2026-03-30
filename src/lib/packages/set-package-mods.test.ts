@@ -1,16 +1,31 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
+import { after, beforeEach, describe, it, mock } from 'node:test';
 import type { Import } from '../imports/index.ts';
-import getPackageModules from './get-package-mods.ts';
-import { getPackage, type Package } from './packages.ts';
-import setPackageMods from './set-package-mods.ts';
+import type { Package } from './packages.ts';
 
-jest.mock('./get-package-mods.ts', () => jest.fn(async () => Promise.resolve([])));
-jest.mock('./packages.ts', () => ({ getPackage: jest.fn() }));
+describe('set package modules', async () => {
+  const getPackageModulesMock = mock.fn<() => Promise<string[] | null>>(async () =>
+    Promise.resolve([]),
+  );
+  const getPackageMock = mock.fn<() => Package | undefined>();
 
-describe('set package modules', () => {
+  const packagesModule = mock.module('./packages.ts', {
+    namedExports: { getPackage: getPackageMock },
+  });
+  const getPackageModsModule = mock.module('./get-package-mods.ts', {
+    defaultExport: getPackageModulesMock,
+  });
+
+  const setPackageMods = (await import('./set-package-mods.ts')).default;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    getPackageMock.mock.resetCalls();
+    getPackageModulesMock.mock.resetCalls();
+  });
+
+  after(() => {
+    packagesModule.restore();
+    getPackageModsModule.restore();
   });
 
   it('with no modules', async () => {
@@ -23,7 +38,7 @@ describe('set package modules', () => {
       name: 'example',
     };
 
-    jest.mocked(getPackage).mockReturnValueOnce(pkg);
+    getPackageMock.mock.mockImplementationOnce(() => pkg);
 
     assert.strictEqual(pkg.modules.size, 0);
 
@@ -42,8 +57,8 @@ describe('set package modules', () => {
       name: 'example',
     };
 
-    jest.mocked(getPackageModules).mockResolvedValueOnce(['default']);
-    jest.mocked(getPackage).mockReturnValueOnce(pkg);
+    getPackageModulesMock.mock.mockImplementationOnce(async () => Promise.resolve(['default']));
+    getPackageMock.mock.mockImplementationOnce(() => pkg);
 
     assert.strictEqual(pkg.modules.size, 0);
     assert.strictEqual(pkg.modules.has('default'), false);
@@ -64,8 +79,10 @@ describe('set package modules', () => {
       name: 'example',
     };
 
-    jest.mocked(getPackageModules).mockResolvedValueOnce(['default', 'moduleA', 'moduleB']);
-    jest.mocked(getPackage).mockReturnValueOnce(pkg);
+    getPackageModulesMock.mock.mockImplementationOnce(async () =>
+      Promise.resolve(['default', 'moduleA', 'moduleB']),
+    );
+    getPackageMock.mock.mockImplementationOnce(() => pkg);
 
     assert.strictEqual(pkg.modules.size, 0);
 
@@ -84,7 +101,7 @@ describe('set package modules', () => {
       name: 'example',
     };
 
-    jest.mocked(getPackage).mockReturnValueOnce(pkg);
+    getPackageMock.mock.mockImplementationOnce(() => pkg);
 
     assert.strictEqual(pkg.isInstalled, false);
 
@@ -103,8 +120,8 @@ describe('set package modules', () => {
       name: 'example',
     };
 
-    jest.mocked(getPackage).mockReturnValueOnce(pkg);
-    jest.mocked(getPackageModules).mockResolvedValueOnce(null);
+    getPackageMock.mock.mockImplementationOnce(() => pkg);
+    getPackageModulesMock.mock.mockImplementationOnce(async () => Promise.resolve(null));
 
     assert.strictEqual(pkg.isInstalled, false);
 
@@ -114,8 +131,7 @@ describe('set package modules', () => {
   });
 
   it('with non existent package', async () => {
-    const getPackageModulesMock = jest.mocked(getPackageModules);
-    jest.mocked(getPackage).mockReturnValueOnce(undefined);
+    getPackageMock.mock.mockImplementationOnce(() => undefined);
 
     await setPackageMods('nonexistent');
 

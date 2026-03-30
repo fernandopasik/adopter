@@ -1,31 +1,39 @@
-import { describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
-import ts, { ScriptTarget, type SourceFile } from 'typescript';
-import parseAst from './parse-ast.ts';
+import { after, beforeEach, describe, it, mock } from 'node:test';
+import { ScriptTarget, type createSourceFile, type SourceFile } from 'typescript';
 
-jest.mock('typescript', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  ScriptTarget: { Latest: 99 },
-  createSourceFile: jest.fn(),
-}));
+describe('parse ast', async () => {
+  const createSourceFileMock = mock.fn<typeof createSourceFile>();
+  const tsModule = mock.module('typescript', {
+    namedExports: {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      ScriptTarget: { Latest: 99 },
+      createSourceFile: createSourceFileMock,
+    },
+  });
 
-describe('parse ast', () => {
+  const parseAst = (await import('./parse-ast.ts')).default;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    createSourceFileMock.mock.resetCalls();
+  });
+
+  after(() => {
+    tsModule.restore();
   });
 
   it('creates a typescript file', () => {
     const fileName = 'example1.ts';
     const content = 'console.log(true)';
 
-    const spy = jest.spyOn(ts, 'createSourceFile');
-
     parseAst(fileName, content);
 
-    assert.strictEqual(spy.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(spy.mock.calls.at(0), [fileName, content, ScriptTarget.Latest]);
-
-    spy.mockRestore();
+    assert.strictEqual(createSourceFileMock.mock.calls.length, 1);
+    assert.partialDeepStrictEqual(createSourceFileMock.mock.calls.at(0)?.arguments, [
+      fileName,
+      content,
+      ScriptTarget.Latest,
+    ]);
   });
 
   it('returns the ast', () => {
@@ -33,14 +41,12 @@ describe('parse ast', () => {
     const content = 'console.log(true)';
     const ast = { fileName };
 
-    const spy = jest.spyOn(ts, 'createSourceFile').mockReturnValueOnce(ast as SourceFile);
+    createSourceFileMock.mock.mockImplementationOnce(() => ast as SourceFile);
 
     const result = parseAst(fileName, content);
 
-    assert.strictEqual(spy.mock.calls.length, 1);
+    assert.strictEqual(createSourceFileMock.mock.calls.length, 1);
     assert.deepStrictEqual(result, ast);
-
-    spy.mockRestore();
   });
 
   it('returns undefined when no ts file provided', () => {

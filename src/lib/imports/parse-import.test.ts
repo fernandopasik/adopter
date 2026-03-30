@@ -1,9 +1,7 @@
-import { describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import { createSourceFile, ScriptTarget, type ImportDeclaration } from 'typescript';
 import parseImport from './parse-import.ts';
-
-jest.mock('../packages/resolve-package.ts', () => jest.fn((specifier: string) => specifier));
 
 describe('parse import', () => {
   it('without default nor named imports', () => {

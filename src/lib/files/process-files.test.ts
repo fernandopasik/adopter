@@ -1,23 +1,40 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
+import { after, beforeEach, describe, it, mock } from 'node:test';
 import type { SourceFile } from 'typescript';
-import { parseImports, type Import } from '../imports/index.ts';
-import { addFile, addFileImports } from './files.ts';
-import parseAst from './parse-ast.ts';
-import processFiles, { type Callback } from './process-files.ts';
+import type { Import } from '../imports/index.ts';
+import type { Callback } from './process-files.ts';
 
-const addFileMock = jest.mocked(addFile);
-const addFileImportsMock = jest.mocked(addFileImports);
+describe('process files', async () => {
+  const addFileMock = mock.fn();
+  const addFileImportsMock = mock.fn();
+  const parseAstMock = mock.fn<() => SourceFile>();
+  const parseImportsMock = mock.fn<() => Import[]>();
+  const readFileSyncMock = mock.fn<() => string>();
 
-jest.mock('node:fs');
-jest.mock('./parse-ast.ts', () => jest.fn());
-jest.mock('../imports/index.ts', () => ({ parseImports: jest.fn() }));
-jest.mock('./files.ts');
+  const filesModule = mock.module('./files.ts', {
+    namedExports: { addFile: addFileMock, addFileImports: addFileImportsMock },
+  });
+  const fsModule = mock.module('node:fs', { namedExports: { readFileSync: readFileSyncMock } });
+  const importsModule = mock.module('../imports/index.ts', {
+    namedExports: { parseImports: parseImportsMock },
+  });
+  const parseAstModule = mock.module('./parse-ast.ts', { defaultExport: parseAstMock });
 
-describe('process files', () => {
+  const processFiles = (await import('./process-files.ts')).default;
+
   beforeEach(() => {
-    jest.resetAllMocks();
+    addFileMock.mock.resetCalls();
+    addFileImportsMock.mock.resetCalls();
+    parseAstMock.mock.resetCalls();
+    parseImportsMock.mock.resetCalls();
+    readFileSyncMock.mock.resetCalls();
+  });
+
+  after(() => {
+    filesModule.restore();
+    fsModule.restore();
+    importsModule.restore();
+    parseAstModule.restore();
   });
 
   it('reads reads from provided list', () => {
@@ -26,26 +43,19 @@ describe('process files', () => {
       'folder/example2.js',
       '/another/example3.ts',
     ];
-    const spy = jest.spyOn(fs, 'readFileSync');
 
     processFiles(files);
 
-    assert.strictEqual(spy.mock.calls.length, files.length);
-    assert.partialDeepStrictEqual(spy.mock.calls.at(0), [files[0], 'utf8']);
-    assert.partialDeepStrictEqual(spy.mock.calls.at(1), [files[1], 'utf8']);
-    assert.partialDeepStrictEqual(spy.mock.calls.at(2), [files[2], 'utf8']);
-
-    spy.mockRestore();
+    assert.strictEqual(readFileSyncMock.mock.calls.length, files.length);
+    assert.deepStrictEqual(readFileSyncMock.mock.calls.at(0)?.arguments, [files[0], 'utf8']);
+    assert.deepStrictEqual(readFileSyncMock.mock.calls.at(1)?.arguments, [files[1], 'utf8']);
+    assert.deepStrictEqual(readFileSyncMock.mock.calls.at(2)?.arguments, [files[2], 'utf8']);
   });
 
   it('with empty list', () => {
-    const spy = jest.spyOn(fs, 'readFileSync');
-
     processFiles();
 
-    assert.strictEqual(spy.mock.calls.length, 0);
-
-    spy.mockRestore();
+    assert.strictEqual(readFileSyncMock.mock.calls.length, 0);
   });
 
   describe('executes callback', () => {
@@ -55,31 +65,32 @@ describe('process files', () => {
         'folder/example2.js',
         '/another/example3.ts',
       ];
-      const spy = jest.spyOn(fs, 'readFileSync');
-      const callback = jest.fn<Callback>();
+
+      const callback = mock.fn<Callback>();
 
       processFiles(files, callback);
 
-      assert.strictEqual(spy.mock.calls.length, files.length);
+      assert.strictEqual(readFileSyncMock.mock.calls.length, files.length);
       assert.strictEqual(callback.mock.calls.length, files.length);
-
-      spy.mockRestore();
     });
 
     it('with file path', () => {
-      const files: [string, string] = ['example1.js', 'folder/example2.js'];
-      const callback = jest.fn<Callback>();
+      const filenames: [string, string] = ['example1.js', 'example2.js'];
+      const files: [string, string] = [filenames[0], `folder/${filenames[1]}`];
+      const callback = mock.fn<Callback>();
 
       processFiles(files, callback);
 
-      assert.partialDeepStrictEqual(callback.mock.calls.at(0), [
+      assert.deepStrictEqual(callback.mock.calls.at(0)?.arguments, [
         files[0],
+        filenames[0],
         undefined,
         undefined,
         undefined,
       ]);
-      assert.partialDeepStrictEqual(callback.mock.calls.at(1), [
+      assert.deepStrictEqual(callback.mock.calls.at(1)?.arguments, [
         files[1],
+        filenames[1],
         undefined,
         undefined,
         undefined,
@@ -89,18 +100,18 @@ describe('process files', () => {
     it('with filename', () => {
       const filenames: [string, string] = ['example1.js', 'example2.js'];
       const files: [string, string] = [filenames[0], `folder/${filenames[1]}`];
-      const callback = jest.fn<Callback>();
+      const callback = mock.fn<Callback>();
 
       processFiles(files, callback);
 
-      assert.partialDeepStrictEqual(callback.mock.calls.at(0), [
+      assert.deepStrictEqual(callback.mock.calls.at(0)?.arguments, [
         files[0],
         filenames[0],
         undefined,
         undefined,
         undefined,
       ]);
-      assert.partialDeepStrictEqual(callback.mock.calls.at(1), [
+      assert.deepStrictEqual(callback.mock.calls.at(1)?.arguments, [
         files[1],
         filenames[1],
         undefined,
@@ -112,23 +123,24 @@ describe('process files', () => {
     it('with file contents', () => {
       const files: [string, string] = ['example1.js', 'example2.js'];
       const contents: [string, string] = ['this is example1', 'this is example2'];
-      const callback = jest.fn<Callback>();
+      const callback = mock.fn<Callback>();
 
-      jest
-        .mocked(fs.readFileSync)
-        .mockReturnValueOnce(contents[0])
-        .mockReturnValueOnce(contents[1]);
+      const contentsMock = [...contents];
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      readFileSyncMock.mock.mockImplementation(() => contentsMock.shift()!);
 
       processFiles(files, callback);
 
-      assert.partialDeepStrictEqual(callback.mock.calls.at(0), [
+      assert.strictEqual(callback.mock.callCount(), 2);
+
+      assert.deepStrictEqual(callback.mock.calls.at(0)?.arguments, [
         files[0],
         files[0],
         contents[0],
         undefined,
         undefined,
       ]);
-      assert.partialDeepStrictEqual(callback.mock.calls.at(1), [
+      assert.deepStrictEqual(callback.mock.calls.at(1)?.arguments, [
         files[1],
         files[1],
         contents[1],
@@ -140,20 +152,22 @@ describe('process files', () => {
     it('with file asts', () => {
       const files: [string, string] = ['example1.js', 'example2.js'];
       const asts = [{ fileName: files[0] }, { fileName: files[1] }] as [SourceFile, SourceFile];
-      const callback = jest.fn<Callback>();
+      const callback = mock.fn<Callback>();
 
-      jest.mocked(parseAst).mockReturnValueOnce(asts[0]).mockReturnValueOnce(asts[1]);
+      const astsMock = [...asts];
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      parseAstMock.mock.mockImplementation(() => astsMock.shift()!);
 
       processFiles(files, callback);
 
-      assert.partialDeepStrictEqual(callback.mock.calls.at(0), [
+      assert.deepStrictEqual(callback.mock.calls.at(0)?.arguments, [
         files[0],
         files[0],
         undefined,
         asts[0],
         undefined,
       ]);
-      assert.partialDeepStrictEqual(callback.mock.calls.at(1), [
+      assert.deepStrictEqual(callback.mock.calls.at(1)?.arguments, [
         files[1],
         files[1],
         undefined,
@@ -174,22 +188,24 @@ describe('process files', () => {
           packageName: 'dep1',
         },
       ];
-      const callback = jest.fn<Callback>();
+      const callback = mock.fn<Callback>();
 
-      jest.mocked(parseAst).mockReturnValueOnce(asts[0]).mockReturnValueOnce(asts[1]);
+      const astsMock = [...asts];
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      parseAstMock.mock.mockImplementation(() => astsMock.shift()!);
 
-      jest.mocked(parseImports).mockReturnValueOnce(imports);
+      parseImportsMock.mock.mockImplementationOnce(() => imports);
 
       processFiles(files, callback);
 
-      assert.partialDeepStrictEqual(callback.mock.calls.at(0), [
+      assert.deepStrictEqual(callback.mock.calls.at(0)?.arguments, [
         files[0],
         files[0],
         undefined,
         asts[0],
         imports,
       ]);
-      assert.partialDeepStrictEqual(callback.mock.calls.at(1), [
+      assert.deepStrictEqual(callback.mock.calls.at(1)?.arguments, [
         files[1],
         files[1],
         undefined,
@@ -211,18 +227,19 @@ describe('process files', () => {
         },
       ];
 
-      jest.mocked(parseAst).mockReturnValueOnce(asts[0]).mockReturnValueOnce(asts[1]);
+      parseAstMock.mock.mockImplementationOnce(() => asts[0]);
+      parseAstMock.mock.mockImplementationOnce(() => asts[1]);
 
-      jest.mocked(parseImports).mockReturnValueOnce(imports);
+      parseImportsMock.mock.mockImplementationOnce(() => imports);
 
       processFiles(files);
 
       assert.strictEqual(addFileMock.mock.calls.length, files.length);
-      assert.partialDeepStrictEqual(addFileMock.mock.calls.at(0), [files[0]]);
-      assert.partialDeepStrictEqual(addFileMock.mock.calls.at(1), [files[1]]);
+      assert.deepStrictEqual(addFileMock.mock.calls.at(0)?.arguments, [files[0]]);
+      assert.deepStrictEqual(addFileMock.mock.calls.at(1)?.arguments, [files[1]]);
       assert.strictEqual(addFileImportsMock.mock.calls.length, files.length);
-      assert.partialDeepStrictEqual(addFileImportsMock.mock.calls.at(0), [files[0], imports]);
-      assert.partialDeepStrictEqual(addFileImportsMock.mock.calls.at(1), [files[1], undefined]);
+      assert.deepStrictEqual(addFileImportsMock.mock.calls.at(0)?.arguments, [files[0], imports]);
+      assert.deepStrictEqual(addFileImportsMock.mock.calls.at(1)?.arguments, [files[1], undefined]);
     });
   });
 });

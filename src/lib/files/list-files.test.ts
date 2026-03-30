@@ -1,34 +1,44 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
-import { globbySync } from 'globby';
 import assert from 'node:assert/strict';
-import listFiles from './list-files.ts';
-import sortPaths from './sort-paths.ts';
+import { after, beforeEach, describe, it, mock } from 'node:test';
 
-jest.mock('globby', () => ({
-  globbySync: jest.fn(() => []),
-}));
-jest.mock('./sort-paths', () => jest.fn((paths: string[]): string[] => paths));
+describe('list files from globs', async () => {
+  const globbySyncMock = mock.fn();
+  const sortPathsMock = mock.fn((paths: string[]) => paths);
 
-const globbySyncMock = jest.mocked(globbySync);
-const sortPathsMock = jest.mocked(sortPaths);
+  const globbyModule = mock.module('globby', {
+    namedExports: { globbySync: globbySyncMock },
+  });
 
-describe('list files from globs', () => {
+  const sortPathsModule = mock.module('./sort-paths.ts', {
+    defaultExport: sortPathsMock,
+  });
+
+  const listFiles = (await import('./list-files.ts')).default;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    globbySyncMock.mock.resetCalls();
+    sortPathsMock.mock.resetCalls();
+  });
+
+  after(() => {
+    globbyModule.restore();
+    sortPathsModule.restore();
   });
 
   it('defaults to js and ts files', () => {
     listFiles();
 
     assert.strictEqual(globbySyncMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(globbySyncMock.mock.calls.at(0), [['**/*.[j|t]s']]);
+    assert.partialDeepStrictEqual(globbySyncMock.mock.calls.at(0)?.arguments, [['**/*.[j|t]s']]);
   });
 
   it('uses project gitignore', () => {
     listFiles();
 
     assert.strictEqual(globbySyncMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(globbySyncMock.mock.calls.at(0), [{ gitignore: true }]);
+    assert.partialDeepStrictEqual(globbySyncMock.mock.calls.at(0)?.arguments, [
+      { gitignore: true },
+    ]);
   });
 
   it('can search custom globs', () => {
@@ -36,7 +46,7 @@ describe('list files from globs', () => {
     listFiles(globs);
 
     assert.strictEqual(globbySyncMock.mock.calls.length, 1);
-    assert.partialDeepStrictEqual(globbySyncMock.mock.calls.at(0), [globs]);
+    assert.partialDeepStrictEqual(globbySyncMock.mock.calls.at(0)?.arguments, [globs]);
   });
 
   it('sorts paths', () => {

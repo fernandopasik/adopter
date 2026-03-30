@@ -1,15 +1,19 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
+import { after, beforeEach, describe, it, mock } from 'node:test';
 import { createSourceFile, ScriptTarget } from 'typescript';
-import { addImport } from './imports.ts';
-import parseImports from './parse-imports.ts';
 
-jest.mock('./imports.ts');
-jest.mock('../packages/resolve-package.ts', () => jest.fn((specifier: string) => specifier));
+describe('parse imports', async () => {
+  const addImportMock = mock.fn();
+  const importsModule = mock.module('./imports.ts', { namedExports: { addImport: addImportMock } });
 
-describe('parse imports', () => {
+  const parseImports = (await import('./parse-imports.ts')).default;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    addImportMock.mock.resetCalls();
+  });
+
+  after(() => {
+    importsModule.restore();
   });
 
   it('with default imports', () => {
@@ -120,7 +124,6 @@ describe('parse imports', () => {
   });
 
   it('stores each import', () => {
-    const addImportMock = jest.mocked(addImport);
     const filePath = 'example.ts';
     const source = createSourceFile(
       filePath,

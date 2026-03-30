@@ -1,26 +1,31 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
-import { getPackageNames } from '../../packages/index.ts';
-import packageUsage from './package-usage.ts';
-import summary from './summary.ts';
-import usage from './usage.ts';
+import { after, beforeEach, describe, it, mock } from 'node:test';
+import type { PackageUsage } from './package-usage.ts';
+import type { UsageSummary } from './summary.ts';
 
-jest.mock('./summary');
-jest.mock('../../packages/index.ts', () => ({
-  getPackageNames: jest.fn(() => []),
-}));
-jest.mock('./package-usage.ts');
-jest.mock('../../packages/resolve-package.ts', () =>
-  jest.fn(async (specifier: string) => Promise.resolve(specifier)),
-);
+describe('usage', async () => {
+  const getPackageNamesMock = mock.fn<() => string[]>(() => []);
+  const packageUsageMock = mock.fn();
+  const summaryMock = mock.fn<() => UsageSummary>();
 
-const summaryMock = jest.mocked(summary);
-const getPackageNamesMock = jest.mocked(getPackageNames);
-const packageUsageMock = jest.mocked(packageUsage);
+  const packagesModule = mock.module('../../packages/index.ts', {
+    namedExports: { getPackageNames: getPackageNamesMock },
+  });
+  const packageUsageModule = mock.module('./package-usage.ts', { defaultExport: packageUsageMock });
+  const summaryModule = mock.module('./summary.ts', { defaultExport: summaryMock });
 
-describe('usage', () => {
+  const usage = (await import('./usage.ts')).default;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    getPackageNamesMock.mock.resetCalls();
+    packageUsageMock.mock.resetCalls();
+    summaryMock.mock.resetCalls();
+  });
+
+  after(() => {
+    packagesModule.restore();
+    packageUsageModule.restore();
+    summaryModule.restore();
   });
 
   it('has a summary', () => {
@@ -30,14 +35,14 @@ describe('usage', () => {
       packagesUsed: 2,
     };
 
-    summaryMock.mockReturnValueOnce(sum);
+    summaryMock.mock.mockImplementationOnce(() => sum);
 
     assert.partialDeepStrictEqual(usage(), { summary: sum });
     assert.strictEqual(summaryMock.mock.calls.length, 1);
   });
 
   it('has packages', () => {
-    const pkgUsage = {
+    const pkgUsage: PackageUsage = {
       dependencies: [],
       dependents: [],
       isImported: false,
@@ -47,11 +52,15 @@ describe('usage', () => {
       name: 'example',
     };
 
-    getPackageNamesMock.mockReturnValueOnce(['example1', 'example2', 'example3']);
-    packageUsageMock
-      .mockReturnValueOnce({ ...pkgUsage, name: 'example1' })
-      .mockReturnValueOnce({ ...pkgUsage, name: 'example2' })
-      .mockReturnValueOnce({ ...pkgUsage, name: 'example3' });
+    getPackageNamesMock.mock.mockImplementationOnce(() => ['example1', 'example2', 'example3']);
+    const usageMocks: PackageUsage[] = [
+      { ...pkgUsage, name: 'example1' },
+      { ...pkgUsage, name: 'example2' },
+      { ...pkgUsage, name: 'example3' },
+    ];
+    // @ts-expect-error undefined
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    packageUsageMock.mock.mockImplementation(() => usageMocks.shift()!);
 
     usage();
 

@@ -1,52 +1,62 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
-import analyzePackages from './analyze-packages.ts';
-import { addPackage } from './packages.ts';
-import setPackageDependencies from './set-package-dependencies.ts';
-import setPackageMods from './set-package-mods.ts';
+import { after, beforeEach, describe, it, mock } from 'node:test';
 
-jest.mock('./packages.ts', () => ({ addPackage: jest.fn() }));
-jest.mock('./set-package-dependencies.ts');
-jest.mock('./set-package-mods.ts');
-jest.mock('./resolve-package.ts', () =>
-  jest.fn(async (specifier: string) => Promise.resolve(specifier)),
-);
+describe('analyze packages', async () => {
+  const addPackageMock = mock.fn();
+  const setPackageDependenciesMock = mock.fn();
+  const setPackageModsMock = mock.fn();
 
-describe('analyze packages', () => {
+  const packagesModule = mock.module('./packages.ts', {
+    namedExports: { addPackage: addPackageMock },
+  });
+  const setPackageDependenciesModule = mock.module('./set-package-dependencies.ts', {
+    defaultExport: setPackageDependenciesMock,
+  });
+  const setPackageModsModule = mock.module('./set-package-mods.ts', {
+    defaultExport: setPackageModsMock,
+  });
+
+  const analyzePackages = (await import('./analyze-packages.ts')).default;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    addPackageMock.mock.resetCalls();
+    setPackageDependenciesMock.mock.resetCalls();
+    setPackageModsMock.mock.resetCalls();
+  });
+
+  after(() => {
+    packagesModule.restore();
+    setPackageDependenciesModule.restore();
+    setPackageModsModule.restore();
   });
 
   it('adds each package', async () => {
-    const addPackageMock = jest.mocked(addPackage);
     const packageList = ['example1', 'example2'];
 
     await analyzePackages(packageList);
 
     assert.strictEqual(addPackageMock.mock.calls.length, 2);
-    assert.partialDeepStrictEqual(addPackageMock.mock.calls.at(0), ['example1']);
-    assert.partialDeepStrictEqual(addPackageMock.mock.calls.at(1), ['example2']);
+    assert.deepStrictEqual(addPackageMock.mock.calls.at(0)?.arguments, ['example1']);
+    assert.deepStrictEqual(addPackageMock.mock.calls.at(1)?.arguments, ['example2']);
   });
 
   it('sets each package modules', async () => {
-    const setPackageModsMock = jest.mocked(setPackageMods);
     const packageList = ['example1', 'example2'];
 
     await analyzePackages(packageList);
 
     assert.strictEqual(setPackageModsMock.mock.calls.length, 2);
-    assert.partialDeepStrictEqual(setPackageModsMock.mock.calls.at(0), ['example1']);
-    assert.partialDeepStrictEqual(setPackageModsMock.mock.calls.at(1), ['example2']);
+    assert.deepStrictEqual(setPackageModsMock.mock.calls.at(0)?.arguments, ['example1']);
+    assert.deepStrictEqual(setPackageModsMock.mock.calls.at(1)?.arguments, ['example2']);
   });
 
   it('sets each package dependencies', async () => {
-    const setPackageDependenciesMock = jest.mocked(setPackageDependencies);
     const packageList = ['example1', 'example2'];
 
     await analyzePackages(packageList);
 
     assert.strictEqual(setPackageDependenciesMock.mock.calls.length, 2);
-    assert.partialDeepStrictEqual(setPackageDependenciesMock.mock.calls.at(0), ['example1']);
-    assert.partialDeepStrictEqual(setPackageDependenciesMock.mock.calls.at(1), ['example2']);
+    assert.deepStrictEqual(setPackageDependenciesMock.mock.calls.at(0)?.arguments, ['example1']);
+    assert.deepStrictEqual(setPackageDependenciesMock.mock.calls.at(1)?.arguments, ['example2']);
   });
 });

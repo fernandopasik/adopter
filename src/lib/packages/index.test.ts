@@ -1,5 +1,5 @@
-import { describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import analyzePackages from './analyze-packages.ts';
 import extractPackagePath from './extract-package-path.ts';
 import filterTrackedDependencies from './filter-tracked-dependencies.ts';
@@ -15,8 +15,6 @@ import {
   isModuleImported,
   isPackageImported,
 } from './packages.ts';
-
-jest.mock('./resolve-package.ts', () => jest.fn((specifier: string) => specifier));
 
 describe('packages', () => {
   it('add package import', () => {

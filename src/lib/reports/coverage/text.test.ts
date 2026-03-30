@@ -1,18 +1,19 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
-import coverage from './coverage.ts';
-import text from './text.ts';
+import { after, beforeEach, describe, it, mock } from 'node:test';
+import type { Coverage } from './coverage.ts';
 
-jest.mock('./coverage.ts');
-jest.mock('../../packages/resolve-package.ts', () =>
-  jest.fn(async (specifier: string) => Promise.resolve(specifier)),
-);
+describe('usage text report', async () => {
+  const coverageMock = mock.fn<() => Coverage>();
+  const coverageModule = mock.module('./coverage.ts', { defaultExport: coverageMock });
 
-const coverageMock = jest.mocked(coverage);
+  const text = (await import('./text.ts')).default;
 
-describe('usage text report', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    coverageMock.mock.resetCalls();
+  });
+
+  after(() => {
+    coverageModule.restore();
   });
 
   const summary = {
@@ -21,13 +22,13 @@ describe('usage text report', () => {
   };
 
   it('displays a title', () => {
-    coverageMock.mockReturnValueOnce({ files: [], summary });
+    coverageMock.mock.mockImplementationOnce(() => ({ files: [], summary }));
 
     assert.match(text(), /Imported Packages and Modules Coverage/u);
   });
 
   it('displays a sumary', () => {
-    coverageMock.mockReturnValueOnce({ files: [], summary });
+    coverageMock.mock.mockImplementationOnce(() => ({ files: [], summary }));
 
     const usageText = text();
 
@@ -41,7 +42,7 @@ describe('usage text report', () => {
       { filePath: 'src/example2.ts', trackedImports: [] },
       { filePath: 'src/example3.ts', trackedImports: [] },
     ];
-    coverageMock.mockReturnValueOnce({ files, summary });
+    coverageMock.mock.mockImplementationOnce(() => ({ files, summary }));
 
     const usageText = text();
 
@@ -61,7 +62,7 @@ describe('usage text report', () => {
       { filePath: 'src/example2.ts', trackedImports },
       { filePath: 'src/example3.ts', trackedImports: [] },
     ];
-    coverageMock.mockReturnValueOnce({ files, summary });
+    coverageMock.mock.mockImplementationOnce(() => ({ files, summary }));
 
     const usageText = text();
 

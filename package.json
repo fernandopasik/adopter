@@ -40,8 +40,8 @@
     "prepare": "husky",
     "preversion": "npm run verify",
     "start": "tsc -p tsconfig.build.json -w",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
+    "test": "node --test --experimental-test-module-mocks --disable-warning=ExperimentalWarning",
+    "test:coverage": "NODE_V8_COVERAGE=./coverage c8 -r lcov node --test --experimental-test-module-mocks --disable-warning=ExperimentalWarning --experimental-test-coverage",
     "verify": "npm run format:check && npm run lint && npm run check-types && npm run test:coverage && npm run build"
   },
   "dependencies": {
@@ -58,11 +58,10 @@
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^10.0.1",
-    "@jest/globals": "^30.3.0",
     "@tsconfig/strictest": "^2.0.8",
-    "@types/jest": "^30.0.0",
     "@types/node": "^25.5.0",
     "@types/progress": "^2.0.7",
+    "c8": "^11.0.0",
     "del-cli": "^7.0.0",
     "eslint": "^10.1.0",
     "eslint-config-prettier": "^10.1.8",
@@ -73,14 +72,11 @@
     "eslint-plugin-yml": "^3.3.1",
     "globals": "^17.4.0",
     "husky": "^9.1.7",
-    "jest": "^30.3.0",
-    "jest-junit": "^16.0.0",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.1",
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-pkg": "^0.22.0",
     "prettier-plugin-sh": "^0.18.0",
-    "ts-jest": "^29.4.6",
     "type-fest": "^5.5.0",
     "typescript-eslint": "^8.57.2"
   }

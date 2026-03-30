@@ -1,18 +1,36 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
 import assert from 'node:assert/strict';
-import text from './text.ts';
-import usage from './usage.ts';
+import { after, beforeEach, describe, it, mock } from 'node:test';
+import type { Usage } from './usage.ts';
 
-jest.mock('./usage.ts');
-jest.mock('../../packages/resolve-package.ts', () =>
-  jest.fn(async (specifier: string) => Promise.resolve(specifier)),
-);
+describe('usage text report', async () => {
+  const chalkMock = {
+    bold: mock.fn((txt: string) => txt),
+    dim: mock.fn((txt: string) => txt),
+    green: mock.fn((txt: string) => txt),
+    red: mock.fn((txt: string) => txt),
+    yellow: mock.fn((txt: string) => txt),
+  };
+  const usageMock = mock.fn<() => Usage>();
+  const usageModule = mock.module('./usage.ts', { defaultExport: usageMock });
+  const chalkModule = mock.module('chalk', {
+    defaultExport: {
+      ...chalkMock,
+    },
+    namedExports: {
+      chalkStderr: chalkMock,
+      ...chalkMock,
+    },
+  });
 
-const usageMock = jest.mocked(usage);
+  const text = (await import('./text.ts')).default;
 
-describe('usage text report', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    usageMock.mock.resetCalls();
+  });
+
+  after(() => {
+    usageModule.restore();
+    chalkModule.restore();
   });
 
   const summary = {
@@ -32,13 +50,13 @@ describe('usage text report', () => {
   };
 
   it('displays a title', () => {
-    usageMock.mockReturnValueOnce({ packages: [], summary });
+    usageMock.mock.mockImplementationOnce(() => ({ packages: [], summary }));
 
     assert.match(text(), /Package and Modules Usage/u);
   });
 
   it('displays a sumary', () => {
-    usageMock.mockReturnValueOnce({ packages: [], summary });
+    usageMock.mock.mockImplementationOnce(() => ({ packages: [], summary }));
 
     const usageText = text();
 
@@ -48,14 +66,14 @@ describe('usage text report', () => {
   });
 
   it('displays packages', () => {
-    usageMock.mockReturnValueOnce({
+    usageMock.mock.mockImplementationOnce(() => ({
       packages: [
         { ...pkg, name: 'example1' },
         { ...pkg, name: 'example2' },
         { ...pkg, name: 'example3' },
       ],
       summary,
-    });
+    }));
 
     const usageText = text();
 
@@ -65,14 +83,14 @@ describe('usage text report', () => {
   });
 
   it('displays used and imported packages', () => {
-    usageMock.mockReturnValueOnce({
+    usageMock.mock.mockImplementationOnce(() => ({
       packages: [
         { ...pkg, isImported: true, isUsed: true, name: 'example1' },
         { ...pkg, isImported: false, isUsed: true, name: 'example2' },
         { ...pkg, isImported: false, isUsed: false, name: 'example3' },
       ],
       summary,
-    });
+    }));
 
     const usageText = text();
 
@@ -82,7 +100,7 @@ describe('usage text report', () => {
   });
 
   it('displays package modules', () => {
-    usageMock.mockReturnValueOnce({
+    usageMock.mock.mockImplementationOnce(() => ({
       packages: [
         {
           ...pkg,
@@ -92,7 +110,7 @@ describe('usage text report', () => {
         },
       ],
       summary,
-    });
+    }));
 
     const usageText = text();
 
@@ -101,7 +119,7 @@ describe('usage text report', () => {
   });
 
   it('displays dependents and dependencies', () => {
-    usageMock.mockReturnValueOnce({
+    usageMock.mock.mockImplementationOnce(() => ({
       packages: [
         {
           ...pkg,
@@ -114,7 +132,7 @@ describe('usage text report', () => {
         },
       ],
       summary,
-    });
+    }));
 
     const usageText = text();
 
