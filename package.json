@@ -48,7 +48,7 @@
     "chalk": "^5.6.2",
     "chalk-template": "^1.1.2",
     "execa": "^9.6.1",
-    "globby": "^16.1.1",
+    "globby": "^16.2.0",
     "loglevel": "^1.9.2",
     "progress": "^2.0.3",
     "typescript": "^5.9.3",
@@ -61,6 +61,7 @@
     "@tsconfig/strictest": "^2.0.8",
     "@types/node": "^25.5.0",
     "@types/progress": "^2.0.7",
+    "@types/yargs": "^17.0.35",
     "c8": "^11.0.0",
     "del-cli": "^7.0.0",
     "eslint": "^10.1.0",
@@ -78,6 +79,6 @@
     "prettier-plugin-pkg": "^0.22.0",
     "prettier-plugin-sh": "^0.18.0",
     "type-fest": "^5.5.0",
-    "typescript-eslint": "^8.57.2"
+    "typescript-eslint": "^8.58.0"
   }
 }
