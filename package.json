@@ -38,11 +38,11 @@
     "format:check": "prettier --check .",
     "lint": "eslint",
     "prepare": "husky",
-    "preversion": "npm run verify",
     "start": "tsc -p tsconfig.build.json -w",
     "test": "node --test --experimental-test-module-mocks --disable-warning=ExperimentalWarning",
     "test:coverage": "NODE_V8_COVERAGE=./coverage c8 -r lcov node --test --experimental-test-module-mocks --disable-warning=ExperimentalWarning --experimental-test-coverage",
-    "verify": "npm run format:check && npm run lint && npm run check-types && npm run test:coverage && npm run build"
+    "verify": "npm run format:check && npm run lint && npm run check-types && npm run test:coverage && npm run build",
+    "preversion": "npm run verify"
   },
   "dependencies": {
     "chalk": "^5.6.2",
@@ -59,26 +59,26 @@
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^10.0.1",
     "@tsconfig/strictest": "^2.0.8",
-    "@types/node": "^25.5.0",
+    "@types/node": "^25.6.0",
     "@types/progress": "^2.0.7",
     "@types/yargs": "^17.0.35",
     "c8": "^11.0.0",
     "del-cli": "^7.0.0",
-    "eslint": "^10.1.0",
+    "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-security": "^4.0.0",
     "eslint-plugin-yml": "^3.3.1",
-    "globals": "^17.4.0",
+    "globals": "^17.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
-    "prettier": "^3.8.1",
+    "prettier": "^3.8.2",
     "prettier-plugin-organize-imports": "^4.3.0",
-    "prettier-plugin-pkg": "^0.22.0",
-    "prettier-plugin-sh": "^0.18.0",
+    "prettier-plugin-pkg": "^0.22.1",
+    "prettier-plugin-sh": "^0.18.1",
     "type-fest": "^5.5.0",
-    "typescript-eslint": "^8.58.0"
+    "typescript-eslint": "^8.58.1"
   }
 }
