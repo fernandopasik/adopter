@@ -1,6 +1,6 @@
 import chalkTemplate from 'chalk-template';
 import coverage, { type TrackedFile } from './coverage.ts';
-import type { CoverageSummary } from './summary';
+import type { CoverageSummary } from './summary.ts';
 
 const summaryTemplate = (summary: CoverageSummary): string => chalkTemplate`
 Imported Packages and Modules Coverage
