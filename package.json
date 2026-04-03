@@ -51,7 +51,7 @@
     "globby": "^16.2.0",
     "loglevel": "^1.9.2",
     "progress": "^2.0.3",
-    "typescript": "^6.0.2",
+    "typescript": "^6.0.3",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
@@ -64,7 +64,7 @@
     "@types/yargs": "^17.0.35",
     "c8": "^11.0.0",
     "del-cli": "^7.0.0",
-    "eslint": "^10.2.0",
+    "eslint": "^10.2.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import-x": "^4.16.2",
@@ -74,11 +74,11 @@
     "globals": "^17.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
-    "prettier": "^3.8.2",
+    "prettier": "^3.8.3",
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-pkg": "^0.22.1",
     "prettier-plugin-sh": "^0.18.1",
-    "type-fest": "^5.5.0",
-    "typescript-eslint": "^8.58.1"
+    "type-fest": "^5.6.0",
+    "typescript-eslint": "^8.58.2"
   }
 }
