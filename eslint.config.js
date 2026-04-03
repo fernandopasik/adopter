@@ -11,11 +11,11 @@ import { configs as tsConfigs } from 'typescript-eslint';
 export default defineConfig([
   { ignores: ['coverage/', 'lib/', 'bin/', 'adopter.*'] },
   eslint.configs.all,
-  securityPlugin.configs.recommended,
   importConfigs.recommended,
   importConfigs.typescript,
+  securityPlugin.configs.recommended,
   {
-    extends: [ymlConfigs['flat/standard'], ymlConfigs['flat/prettier']],
+    extends: [ymlConfigs.standard, ymlConfigs.prettier],
     files: ['*.yaml', '*.yml'],
   },
   {
