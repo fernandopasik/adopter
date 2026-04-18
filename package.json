@@ -55,8 +55,8 @@
     "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.5.0",
-    "@commitlint/config-conventional": "^20.5.0",
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
     "@eslint/js": "^10.0.1",
     "@tsconfig/strictest": "^2.0.8",
     "@types/node": "^25.6.0",
@@ -64,14 +64,14 @@
     "@types/yargs": "^17.0.35",
     "c8": "^11.0.0",
     "del-cli": "^7.0.0",
-    "eslint": "^10.2.1",
+    "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-security": "^4.0.0",
-    "eslint-plugin-yml": "^3.3.1",
-    "globals": "^17.5.0",
+    "eslint-plugin-yml": "^3.3.2",
+    "globals": "^17.6.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
@@ -79,6 +79,6 @@
     "prettier-plugin-pkg": "^0.22.1",
     "prettier-plugin-sh": "^0.18.1",
     "type-fest": "^5.6.0",
-    "typescript-eslint": "^8.58.2"
+    "typescript-eslint": "^8.59.1"
   }
 }
