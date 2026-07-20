@@ -5,14 +5,13 @@ import { parseImports, type Import } from '../imports/index.ts';
 import { addFile, addFileImports } from './files.ts';
 import parseAst from './parse-ast.ts';
 
-// eslint-disable-next-line @typescript-eslint/max-params
 export type Callback = (
   filePath: string,
   filename: string,
   content?: string,
   ast?: SourceFile,
   imports?: Import[],
-) => void;
+) => void; // eslint-disable-line @typescript-eslint/max-params
 
 const processFiles = (filePaths: string[] = [], callback?: Callback): void => {
   filePaths.forEach((filePath) => {

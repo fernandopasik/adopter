@@ -10,14 +10,13 @@ import type { Import } from './imports/index.ts';
 import { analyzePackages } from './packages/index.ts';
 import { coverage, print, usage } from './reports/index.ts';
 
-// eslint-disable-next-line @typescript-eslint/max-params
 export type OnFile = (
   filePath: string,
   filename: string,
   content?: string,
   ast?: SourceFile,
   imports?: Import[],
-) => void;
+) => void; // eslint-disable-line @typescript-eslint/max-params
 
 export interface Options {
   coverage?: boolean;
